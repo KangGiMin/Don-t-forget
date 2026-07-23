@@ -12,7 +12,7 @@
 <!-- 깃허브 아이콘 배지 버튼 -->
 <a href="https://github.com/KangGiMin">
   <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub Profile" />
-</a>
+</a> 👈 바로가기
 <br>
 <hr>
 <br>
