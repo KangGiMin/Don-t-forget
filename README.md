@@ -1,4 +1,4 @@
-# ✅ 돈폴겟 ✅
+## ✅ 돈폴겟 ✅
 <br>
 사용자의 할 일(일정)을 쉽고 편리하게 등록 및 관리할 수 있는 웹/앱 서비스입니다.
 <br>
@@ -13,10 +13,10 @@
 <hr>
 <br>
 
-# 🔥 적용된 기술 🔥
+## 🔥 적용된 기술 🔥
 <br>
 
-### 개발 환경
+#### 개발 환경
 <br>
 
 ![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-007ACC?style=for-the-badge&logo=visual-studio-code&logoColor=white)
@@ -24,7 +24,7 @@
 <br>
 <br>
 
-### 프론트엔드
+#### 프론트엔드
 <br>
 
 ![React](https://img.shields.io/badge/react.js-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
@@ -32,7 +32,7 @@
 <br>
 <br>
 
-### 백엔드
+#### 백엔드
 <br>
 
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
@@ -41,7 +41,7 @@
 <br>
 <br>
 
-### 데이터베이스
+#### 데이터베이스
 <br>
 
 ![PostgreSQL](https://img.shields.io/badge/postgresql-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
@@ -49,7 +49,7 @@
 <br>
 <br>
 
-### 인증
+#### 인증
 <br>
 
 ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
@@ -57,7 +57,7 @@
 <br>
 <br>
 
-### 배포
+#### 배포
 <br>
 
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
