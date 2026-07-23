@@ -16,6 +16,13 @@
 # 🔥 적용된 기술 🔥
 <br>
 
+### 개발 환경
+<br>
+
+![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-007ACC?style=for-the-badge&logo=visual-studio-code&logoColor=white)
+<br>
+<br>
+
 ### 프론트엔드
 <br>
 
