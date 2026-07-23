@@ -45,7 +45,7 @@
 <br>
 
 ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
-![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase&logoColor=FFCA28)
+![Firebase](https://img.shields.io/badge/firebase_Auth-%23039BE5.svg?style=for-the-badge&logo=firebase&logoColor=FFCA28)
 <br>
 <br>
 
