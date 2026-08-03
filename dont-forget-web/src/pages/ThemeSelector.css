@@ -1,0 +1,59 @@
+/* 드롭다운 전체 묶음 (위치 기준점) */
+.theme-selector-container {
+  position: relative; 
+  display: inline-block;
+  margin-right: 15px; /* 로그아웃 버튼이랑 살짝 띄우기 */
+}
+
+/* 메인 버튼 모양 */
+.theme-main-btn {
+  background-color: var(--box-bg-color, #1a2332);
+  color: var(--text-color, white);
+  border: 1px solid var(--border-color, #2d3748);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.theme-main-btn:hover {
+  background-color: #3b82f6; /* 마우스 올리면 파란색! */
+  color: white;
+}
+
+/* 촥! 내려오는 메뉴판 모양 */
+.theme-dropdown-menu {
+  position: absolute;
+  top: 45px; /* 버튼 바로 밑에 달기 */
+  right: 0;
+  background-color: var(--box-bg-color, #1a2332);
+  border: 1px solid var(--border-color, #2d3748);
+  border-radius: 8px;
+  padding: 5px 0;
+  margin: 0;
+  list-style: none; /* 리스트 점 없애기 */
+  min-width: 150px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5); /* 그림자 줘서 붕 뜨게 만들기 */
+  z-index: 1000; /* 제일 앞에 튀어나오게! */
+}
+
+/* 메뉴판 안의 각각의 버튼들 */
+.theme-dropdown-menu li {
+  padding: 10px 15px;
+  color: var(--text-color, white);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between; /* 글자는 왼쪽, 체크표시는 오른쪽 */
+  align-items: center;
+}
+
+.theme-dropdown-menu li:hover {
+  background-color: rgba(59, 130, 246, 0.2); /* 마우스 올리면 살짝 파랗게 */
+}
+
+.check-mark {
+  color: #3b82f6; /* 체크 표시는 파란색으로 포인트! */
+  font-weight: bold;
+}
