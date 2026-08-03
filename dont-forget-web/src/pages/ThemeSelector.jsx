@@ -1,25 +1,46 @@
 // 화면 테마 설정
 
 import { useState, useEffect, useRef } from 'react';
-import './ThemeSelector.css'; // 디자인을 위해 3단계에서 만들 파일!
+import './ThemeSelector.css';
 
 function ThemeSelector() {
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'system');
-  const [isOpen, setIsOpen] = useState(false); // 드롭다운 문이 열렸는지 닫혔는지!
-  const dropdownRef = useRef(null); // 바깥쪽 클릭했을 때 닫히게 하려는 레이더!
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
-  // 🌟 [핵심 기능 1] 화면 색깔 진짜로 바꾸기!
+  // 🌟 [핵심 기능 1] 화면 색깔 진짜로 바꾸기 & 시스템 실시간 감시!
   useEffect(() => {
     const root = window.document.documentElement;
-    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    // 컴퓨터의 현재 테마 상태를 확인하는 레이더망!
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-    if (theme === 'dark' || (theme === 'system' && systemPrefersDark)) {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
-    
+    // 색깔을 칠하는 마법 함수
+    const applyTheme = () => {
+      const systemPrefersDark = mediaQuery.matches;
+      if (theme === 'dark' || (theme === 'system' && systemPrefersDark)) {
+        root.classList.add('dark');
+      } else {
+        root.classList.remove('dark');
+      }
+    };
+
+    // 1. 일단 지금 당장 테마를 적용해!
+    applyTheme();
     localStorage.setItem('theme', theme);
+
+    // 2. 만약 컴퓨터 설정이 실시간으로 바뀌면?
+    const handleSystemThemeChange = () => {
+      // 유저가 '시스템 설정'을 골라놨을 때만 실시간으로 따라가기!
+      if (theme === 'system') {
+        applyTheme();
+      }
+    };
+
+    // 레이더망에 '변화(change)'가 생기면 함수 실행하라고 감시카메라 달기
+    mediaQuery.addEventListener('change', handleSystemThemeChange);
+
+    // 로봇이 퇴근할 때 감시카메라도 떼어가기 (청소)
+    return () => mediaQuery.removeEventListener('change', handleSystemThemeChange);
   }, [theme]);
 
   // 🌟 [핵심 기능 2] 드롭다운 바깥쪽 클릭하면 스르륵 닫히기!
@@ -33,29 +54,26 @@ function ThemeSelector() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // 유저가 메뉴를 클릭했을 때 실행할 함수
   const handleThemeChange = (newTheme) => {
     setTheme(newTheme);
-    setIsOpen(false); // 고르고 나면 문 닫기!
+    setIsOpen(false);
   };
 
   const getButtonText = () => {
-    if (theme === 'light') return '라이트 모드';
-    if (theme === 'dark') return '다크 모드';
-    return '시스템 설정';
+    if (theme === 'light') return '라이트 모드 🌞';
+    if (theme === 'dark') return '다크 모드 🌙';
+    return '시스템 설정 💻';
   };
 
   return (
     <div className="theme-selector-container" ref={dropdownRef}>
-      {/* 1. 화면 테마 메인 버튼 */}
       <button 
         className="theme-main-btn" 
         onClick={() => setIsOpen(!isOpen)}
       >
-        화면 테마 {theme === 'light' ? '🌞' : theme === 'dark' ? '🌙' : '💻'}
+        {getButtonText()}
       </button>
 
-      {/* 2. 드롭다운 메뉴 (isOpen이 true일 때만 촥! 나타남) */}
       {isOpen && (
         <ul className="theme-dropdown-menu">
           <li onClick={() => handleThemeChange('light')}>

@@ -1,8 +1,32 @@
+
+/* 1. 기본 상태 (라이트 모드)일 때 쓸 물감들 */
+:root {
+  --bg-color: black;
+  --box-bg-color: #f3f4f6;     
+  --text-color: #111111;      
+  --border-color: #e5e7eb;   
+}
+
+/* 2. html 태그에 'dark' 스티커가 붙었을 때(다크 모드) 쓸 물감들 */
+html.dark :root {
+  --bg-color: #111111;         
+  --box-bg-color: #1a2332;     
+  --text-color: #ffffff;      
+  --border-color: #2d3748;    
+}
+
+/* 3. 전체 웹페이지 몸통에 배경색 적용하기 */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 /* 드롭다운 전체 묶음 (위치 기준점) */
 .theme-selector-container {
   position: relative; 
   display: inline-block;
-  margin-right: 15px; /* 로그아웃 버튼이랑 살짝 띄우기 */
+  margin-right: 15px;
 }
 
 /* 메인 버튼 모양 */
