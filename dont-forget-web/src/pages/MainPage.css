@@ -461,7 +461,8 @@ html.dark {
   top: 0;
   right: -300px;
   width: 300px;
-  height: 100vh;
+  border-radius: 30px;
+  height: 90px;
   background-color: var(--main-bg);
   box-shadow: -2px 0 5px rgba(0,0,0,0.5);
   transition: right 0.3s ease;
@@ -486,21 +487,25 @@ html.dark {
 /* ========================================= */
 /* 🍔 사이드바 전체 뼈대 (테마 색상 마법 적용!) */
 /* ========================================= */
+/* ========================================= */
+/* 🌞 기본 (라이트 모드) 사이드바 뼈대 */
+/* ========================================= */
 .sidebar {
   position: fixed;
   top: 0;
-  right: -320px; /* 원래보다 아주 살짝 더 넓게! */
+  right: -320px;
   width: 320px;
   height: 100vh;
-  /* 🌟 배경색과 글자색을 마법의 물감(CSS 변수)으로 교체! */
-  background-color: var(--main-bg, #ffffff);
-  color: var(--text-color, #000000); /* 테마에 따라 글씨색 휙휙 바뀜! */
-  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.3);
-  transition: right 0.4s ease-in-out;
+  /* 🌟 라이트 모드일 때: 하얀색 배경에 까만색 글씨! */
+  background-color: #ffffff; 
+  color: #1f2937; 
+  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
+  /* transition에 색상 변하는 시간도 추가해서 스르륵~ 변하게! */
+  transition: right 0.4s ease-in-out, background-color 0.3s, color 0.3s;
   z-index: 1000;
-  padding: 30px 20px; /* 안쪽 여백을 넉넉하게 줘서 숨통 트이게 */
+  padding: 30px 20px;
   display: flex;
-  flex-direction: column; /* 위에서 아래로 예쁘게 줄 세우기! */
+  flex-direction: column;
 }
 
 .sidebar.open {
@@ -508,26 +513,37 @@ html.dark {
 }
 
 /* ========================================= */
-/* ✖ 닫기 버튼 예쁘게 다듬기 */
+/* 🌙 다크 모드 사이드바 (카멜레온 변신!) */
+/* ========================================= */
+/* html 태그에 'dark'라는 이름표가 붙으면 이 코드가 발동해! */
+html.dark .sidebar {
+  /* 🌟 다크 모드일 때: 어두운 배경에 하얀색 글씨! */
+  background-color: #1e293b; 
+  color: #f8fafc; 
+  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.7);
+}
+
+/* ========================================= */
+/* ✖ 닫기 버튼 */
 /* ========================================= */
 .close-button {
-  align-self: flex-end; /* 오른쪽 구석으로 찰싹 밀어버리기! */
+  align-self: flex-end;
   font-size: 28px;
   background: none;
   border: none;
-  color: inherit; /* 부모(사이드바) 글자색을 똑같이 따라 입으라는 뜻! */
+  color: inherit; /* 부모(sidebar)의 글자색을 그대로 따라가라! */
   cursor: pointer;
   margin-bottom: 30px;
 }
 
 /* ========================================= */
-/* 📋 메뉴판 안의 아이템들 꾸미기 */
+/* 📋 메뉴판 안의 아이템들 */
 /* ========================================= */
 .sidebar-menu {
   display: flex;
   flex-direction: column;
-  gap: 15px; /* 메뉴들 사이에 예쁜 틈(간격)을 벌려줌! */
-  flex: 1; /* 남은 공간을 얘가 다 차지하게 해서, 앱 버전 글씨를 맨 아래로 쫓아냄! */
+  gap: 15px;
+  flex: 1;
 }
 
 .menu-item {
@@ -536,45 +552,145 @@ html.dark {
   padding: 15px;
   font-size: 16px;
   font-weight: 500;
-  border-radius: 12px; /* 네모난 버튼의 모서리를 동글동글하게 */
+  border-radius: 12px;
   cursor: pointer;
-  color: inherit; /* 테마 글자색 찰떡같이 따라가기 */
-  transition: background-color 0.2s; /* 마우스 올렸을 때 색이 부드럽게 변함 */
+  color: inherit; /* 🌟 핵심! 배경에 맞춰 변한 부모의 글자색을 찰떡같이 따라감! */
+  transition: background-color 0.2s;
 }
 
-/* 마우스 올리면(호버) 살짝 배경색 깔아주기 */
+/* 🌞 라이트 모드에서 마우스 올렸을 때 */
 .menu-item:hover {
-  background-color: var(--hover-bg, rgba(150, 150, 150, 0.15));
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
-/* ========================================= */
-/* 🎨 테마 설정 버튼 전용 구역 */
-/* ========================================= */
+/* 🌙 다크 모드에서 마우스 올렸을 때 */
+html.dark .menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* 하얀색을 투명하게 깔아줌 */
+}
+
+/* 테마 설정 콤보박스 자리 벌리기 */
 .theme-menu-item {
-  justify-content: space-between; /* 글자는 왼쪽, 설정창은 오른쪽 끝으로 쫙 벌리기! */
+  justify-content: space-between;
   width: 100%;
 }
 
 /* ========================================= */
-/* 🚪 로그아웃 버튼 눈에 띄게! */
+/* 🚪 로그아웃 버튼 (얜 색깔 안 변하고 항상 빨갛게 고정!) */
 /* ========================================= */
 .menu-item.logout-btn-sidebar {
-  color: #ef4444; /* 위험을 알리는 강렬한 빨간색 */
-  background-color: rgba(239, 68, 68, 0.1); /* 배경도 살짝 붉은빛 */
-  justify-content: center; /* 로그아웃은 특별히 가운데 정렬 */
-  margin-top: auto; /* 🌟 얘 위에 있는 공간을 다 밀어내서 메뉴판 맨~ 밑바닥으로 떨어뜨림! */
+  color: #ef4444; /* 무조건 빨간색 글씨! */
+  background-color: rgba(239, 68, 68, 0.1); 
+  justify-content: center;
+  margin-top: auto; 
 }
 
 .menu-item.logout-btn-sidebar:hover {
   background-color: rgba(239, 68, 68, 0.2);
 }
 
-/* ========================================= */
-/* 📱 맨 아래 앱 버전 */
-/* ========================================= */
+/* 맨 아래 앱 버전 */
 .app-version {
   text-align: center;
   font-size: 13px;
   color: #888;
   margin-top: 20px;
+}
+
+/* ========================================= */
+/* 🎨 테마 설정 버튼 전용 구역 (대공사 완벽 수정본!) */
+/* ========================================= */
+.menu-item.theme-menu-item {
+  display: flex;
+  flex-direction: row; /* 가로 방향으로 나란히 줄 세우기 */
+  justify-content: space-between; /* 양 끝으로 쫙 밀어내기 */
+  align-items: center; /* 위아래 중앙 맞추기 */
+  gap: 15px; /* 글씨랑 뚱뚱한 버튼 사이에 숨통 틔워주기 (간격) */
+}
+
+/* 🌟 대망의 핵심 1: 글씨 절대 안 깨지게 막는 마법! */
+.theme-menu-item span {
+  white-space: nowrap; /* "설"이랑 "정"이 절대 두 줄로 안 쪼개지게 강력 본드로 붙임! */
+  flex-shrink: 0; /* 옆에 버튼이 아무리 뚱뚱해도 내 글씨 구역은 안 찌그러지게 방어! */
+  font-weight: bold; /* 글씨를 살짝 굵게 해서 잘 보이게! */
+}
+
+/* 🌟 대망의 핵심 2: 무식하게 큰 ThemeSelector 버튼 다이어트 시키기! */
+.theme-menu-item > div,
+.theme-menu-item > button {
+  transform: scale(0.85); /* 뚱뚱한 버튼 전체 크기를 85%로 확! 줄여버림! */
+  transform-origin: right center; /* 축소할 때 오른쪽 벽에 딱 붙은 채로 줄어들게 만듦! */
+  margin: 0; /* 쓸데없는 바깥 여백 싹 제거! */
+}
+
+/* ========================================= */
+/* 🌍 전체 도화지(웹 페이지) 배경 테마 연동 */
+/* ========================================= */
+body, .main-page {
+  /* 🌞 라이트 모드일 때: 아주 뽀얀 밝은 회색(거의 흰색) 배경! */
+  background-color: #f8fafc; 
+  /* 🌞 라이트 모드일 때: 기본 글씨들을 진한 숯검정색으로! */
+  color: #0f172a; 
+  min-height: 100vh; /* 화면 높이를 끝까지 꽉 채우기! */
+  transition: background-color 0.3s ease, color 0.3s ease; /* 부드럽게 스르륵~ 변하게! */
+  margin: 0; /* 테두리 쓸데없는 여백 싹 없애기 */
+}
+
+/* 🌙 다크 모드일 때 전체 도화지 색상 뒤집기! */
+html.dark body,
+html.dark .main-page {
+  /* 🌙 다크 모드일 때: 스샷처럼 완전 까만 배경! */
+  background-color: #000000; 
+  /* 🌙 다크 모드일 때: 기본 글씨들을 하얀색으로! */
+  color: #f8fafc; 
+}
+
+/* ========================================= */
+/* 👑 상단 헤더 구역 (유저네임 & 명언) 테마 연동 */
+/* ========================================= */
+.header-area {
+  /* 배경을 투명하게 해서 뒤에 깔린 전체 도화지 색깔이 그대로 비치게 함! */
+  background-color: transparent; 
+  /* 🌞 라이트 모드일 때: 헤더 아래쪽에 연한 회색으로 예쁜 구분선 긋기 */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1); 
+}
+
+html.dark .header-area {
+  /* 🌙 다크 모드일 때: 헤더 아래쪽에 연한 하얀색으로 구분선 긋기 */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+}
+
+/* 👤 유저네임 글씨 색상 */
+.title-text {
+  /* 🌞 라이트 모드일 때: 하얀 배경에 잘 어울리는 맑은 파란색! */
+  color: #0284c7; 
+  transition: color 0.3s ease;
+}
+
+html.dark .title-text {
+  /* 🌙 다크 모드일 때: 까만 배경에 확 튀는 네온 하늘색! (스샷 원래 색상) */
+  color: #38bdf8; 
+}
+
+/* 💬 명언 글씨 색상 */
+.subtitle-text {
+  /* 🌞 라이트 모드일 때: 너무 튀지 않게 차분한 진회색! */
+  color: #64748b; 
+  transition: color 0.3s ease;
+}
+
+html.dark .subtitle-text {
+  /* 🌙 다크 모드일 때: 부드러운 밝은 회색! */
+  color: #94a3b8; 
+}
+
+/* 🍔 햄버거 버튼 색상도 카멜레온처럼! */
+.hamburger-button {
+  /* 🌞 라이트 모드일 때: 까만색 햄버거 줄! */
+  color: #0f172a; 
+  transition: color 0.3s ease;
+}
+
+html.dark .hamburger-button {
+  /* 🌙 다크 모드일 때: 하얀색 햄버거 줄! */
+  color: #ffffff; 
 }

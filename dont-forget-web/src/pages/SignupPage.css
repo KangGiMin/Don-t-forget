@@ -1,37 +1,47 @@
+/* src/pages/SignupPage.css */
 * {
   box-sizing: border-box;
 }
 
+/* 🌟 1. 전체 배경 껍데기 (투명 망토 입기!) */
 .register-container {
   min-height: 100vh;
-  background-color: #0f172a;
+  /* 원래 있던 시커먼 배경 지우고 투명하게 만들어서 전체 배경색 비치게 함! */
+  background-color: transparent !important; 
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 20px;
-  font-family:
-    system-ui,
-    -apple-system,
-    sans-serif;
+  font-family: system-ui, -apple-system, sans-serif;
 }
 
+/* 🌟 2. 회원가입 네모 박스 (기본은 하얀색!) */
 .register-box {
   width: 100%;
   max-width: 460px;
-  background-color: #1e293b;
+  background-color: #ffffff; /* 🌞 라이트 모드: 하얀 박스 */
+  color: #1f2937; /* 🌞 라이트 모드: 까만 글씨 */
   padding: 45px 40px;
   border-radius: 20px;
-  box-shadow:
-    0 20px 25px -5px rgba(0, 0, 0, 0.3),
-    0 10px 10px -5px rgba(0, 0, 0, 0.2);
-  border: 1px solid #334155;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05); /* 부드러운 그림자 */
+  border: 1px solid #e2e8f0;
   text-align: center;
+  transition: all 0.3s ease; /* 색깔이 부드럽게 변하는 마법 */
 }
 
+/* 🌙 다크 모드일 때 박스 변신! */
+html.dark .register-box {
+  background-color: #1e293b; /* 어두운 남색 박스 */
+  color: #f8fafc; /* 하얀 글씨 */
+  border-color: #334155;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+/* 🌟 3. 회원가입 타이틀 */
 .register-title {
   font-size: 38px;
   font-weight: 800;
-  color: #38bdf8;
+  color: #0284c7; /* 🌞 라이트 모드: 진한 파란색 */
   margin-top: 0;
   margin-bottom: 35px;
   letter-spacing: -1px;
@@ -39,6 +49,12 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
+  transition: color 0.3s ease;
+}
+
+/* 🌙 다크 모드일 때 타이틀 변신! */
+html.dark .register-title {
+  color: #38bdf8; /* 네온 하늘색 */
 }
 
 .register-form {
@@ -47,6 +63,7 @@
   gap: 18px;
 }
 
+/* 🌟 4. 입력창 (글씨 쓰는 칸) */
 .register-input {
   width: 100%;
   height: 54px;
@@ -54,15 +71,27 @@
   font-size: 16px;
   line-height: normal;
   border-radius: 10px;
-  border: 1px solid #334155;
-  background-color: #0f172a;
-  color: #f8fafc;
+  /* 🌞 라이트 모드: 밝은 회색 바탕에 까만 글씨 */
+  border: 1px solid #cbd5e1;
+  background-color: #f8fafc;
+  color: #0f172a;
   outline: none;
   transition: all 0.2s ease;
 }
 
+/* 🌙 다크 모드일 때 입력창 변신! */
+html.dark .register-input {
+  background-color: #0f172a;
+  color: #f8fafc;
+  border-color: #334155;
+}
+
 .register-input::placeholder {
-  color: #64748b;
+  color: #94a3b8; /* 🌞 라이트 모드 힌트 글씨 */
+}
+
+html.dark .register-input::placeholder {
+  color: #64748b; /* 🌙 다크 모드 힌트 글씨 */
 }
 
 .register-input:focus {
@@ -70,6 +99,7 @@
   box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
 }
 
+/* 완료 버튼은 색깔 고정이라 안 건드림! */
 .register-submit-btn {
   width: 100%;
   height: 54px;
@@ -100,12 +130,50 @@
 }
 
 .footer-link {
-  color: #94a3b8;
+  color: #64748b; /* 🌞 라이트 모드 링크 색상 */
   text-decoration: none;
   transition: color 0.2s;
   cursor: pointer;
 }
 
+html.dark .footer-link {
+  color: #94a3b8; /* 🌙 다크 모드 링크 색상 */
+}
+
 .footer-link:hover {
   color: #38bdf8;
+}
+
+/* ======================================================== */
+/* 🛑 크롬 자동완성(Autofill) 글씨 증발 버그 완벽 차단! */
+/* ======================================================== */
+
+/* 🌞 라이트 모드일 때 (모든 입력창 강제 적용) */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+  /* 1. 하얀색 그림자로 빵빵하게 채워서 덮기! */
+  -webkit-box-shadow: 0 0 0px 1000px #f8fafc inset !important; 
+  /* 2. 특수 물감으로 까만색 글씨 강제 덧칠! */
+  -webkit-text-fill-color: #0f172a !important; 
+  /* 3. 깜빡이는 짝대기(커서)도 까만색으로 맞춤! */
+  caret-color: #0f172a !important; 
+  /* 🌟 4. 크롬 렉 걸리게 만들었던 시간 끌기 꼼수 압수!! (제일 중요) */
+  transition: none !important; 
+}
+
+/* 🌙 다크 모드일 때 (모든 입력창 강제 적용) */
+html.dark input:-webkit-autofill,
+html.dark input:-webkit-autofill:hover, 
+html.dark input:-webkit-autofill:focus, 
+html.dark input:-webkit-autofill:active {
+  /* 까만색 그림자로 덮기! */
+  -webkit-box-shadow: 0 0 0px 1000px #0f172a inset !important; 
+  /* 특수 물감으로 하얀색 글씨 덧칠! */
+  -webkit-text-fill-color: #f8fafc !important; 
+  /* 깜빡이는 커서도 하얀색으로 맞춤! */
+  caret-color: #f8fafc !important; 
+  /* 🌟 렉 방지! */
+  transition: none !important; 
 }

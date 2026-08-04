@@ -204,7 +204,11 @@ function MainPage() {
 
   // 🚪 로그아웃 (토큰 및 사용자 정보 삭제)
   const handleLogout = () => {
-    localStorage.clear();
+    
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userName');
+
     window.location.href = '/login';
   };
 
@@ -277,7 +281,7 @@ function MainPage() {
             background: 'none', 
             border: 'none', 
             cursor: 'pointer',
-            color: 'white'
+            
           }}
         >
           ☰
@@ -292,24 +296,24 @@ function MainPage() {
         <button className="close-button" onClick={toggleSidebar}>✖</button>
 
         {/* 메뉴판 내용물 */}
+      
         <div className="sidebar-menu">
-          <div className="menu-item">👤 내 프로필 (마이페이지)</div>
+          <div className="menu-item">👤 내 프로필</div>
+          <div className="menu-item">🌐 시스템 언어 설정</div>
+          <div className="menu-item">✉️ 관리자에게 메일 문의하기</div>
+          <div className="menu-item">📅 달력 시작 요일 (일/월)</div>
+          <div className="menu-item">✅ 모든 할 일 목록 정렬</div>
+          <div className="menu-item">⏰ 24시간제로 표시</div>
           
-          {/* 테마 설정 콤보박스 공간 (클래스 이름 추가됨!) */}
+          {/* 🌟 짠! 테마 설정 버튼이 로그아웃 바로 위로 이사 왔어! */}
           <div className="menu-item theme-menu-item">
             <span>🎨 화면 테마 설정</span> 
             <ThemeSelector />
           </div>
           
-          <div className="menu-item">🌐 시스템 언어 설정</div>
-          <div className="menu-item">✉️ 관리자에게 메일 문의하기</div>
-          <div className="menu-item">📅 달력 시작 요일 (일/월)</div>
-          <div className="menu-item">✅ 할 일 목록 정렬</div>
-          <div className="menu-item">⏰ 24시간제로 표시</div>
-          
-          {/* 로그아웃 버튼 (특별한 빨간색 클래스 추가됨!) */}
+          {/* 로그아웃 버튼 */}
           <div className="menu-item logout-btn-sidebar" onClick={handleLogout}>
-            로그아웃
+            🚪 로그아웃
           </div>
         </div>
 

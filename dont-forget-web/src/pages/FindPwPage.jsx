@@ -1,6 +1,6 @@
 // src/pages/FindPwPage.jsx
 import { useState } from "react";
-import "./LoginPage.css";
+import "./FindPwPage.css";
 
 function FindPwPage() {
   const [id, setId] = useState("");

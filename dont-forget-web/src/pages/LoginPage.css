@@ -3,38 +3,43 @@
   box-sizing: border-box;
 }
 
+/* 🌟 1. 전체 배경 투명하게! */
 .login-container {
   min-height: 100vh;
-  background-color: black;
+  background-color: transparent !important; /* 옛날 까만색 안녕! */
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 20px;
-  font-family:
-    system-ui,
-    -apple-system,
-    sans-serif;
+  font-family: system-ui, -apple-system, sans-serif;
 }
 
-/* 로그인 박스 */
+/* 🌟 2. 로그인 네모 박스 */
 .login-box {
   width: 100%;
   max-width: 460px;
-  background-color: #1e293b;
+  background-color: #ffffff; /* 🌞 라이트 모드 */
+  color: #1f2937;
   padding: 45px 40px;
   border-radius: 25px;
-  box-shadow:
-    0 20px 25px -5px rgba(0, 0, 0, 0.3),
-    0 10px 10px -5px rgba(0, 0, 0, 0.2);
-  border: 1px solid #334155;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
   text-align: center;
+  transition: all 0.3s ease;
 }
 
-/* 로그인 타이틀 */
+html.dark .login-box {
+  background-color: #1e293b; /* 🌙 다크 모드 */
+  color: #f8fafc;
+  border-color: #334155;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+/* 🌟 3. 타이틀 */
 .login-title {
   font-size: 38px;
   font-weight: 800;
-  color: #38bdf8; 
+  color: #0284c7; /* 🌞 라이트 모드 */
   margin-top: 0;
   margin-bottom: 35px;
   letter-spacing: -1px;
@@ -44,135 +49,104 @@
   gap: 10px;
 }
 
+html.dark .login-title {
+  color: #38bdf8; /* 🌙 다크 모드 */
+}
+
 .login-form {
   display: flex;
   flex-direction: column;
   gap: 18px;
 }
 
+/* 🌟 4. 입력창 */
 .login-input {
   width: 100%;
   height: 54px;
   padding: 0 18px;
   font-size: 16px;
-  line-height: normal;
   border-radius: 10px;
-  border: 1px solid #334155;
-  background-color: #0f172a;
-  color: #f8fafc;
+  border: 1px solid #cbd5e1;
+  background-color: #f8fafc; /* 🌞 라이트 모드 */
+  color: #0f172a;
   outline: none;
   transition: all 0.2s ease;
 }
 
-.login-input::placeholder {
-  color: #64748b;
+html.dark .login-input {
+  background-color: #0f172a; /* 🌙 다크 모드 */
+  color: #f8fafc;
+  border-color: #334155;
 }
+
+.login-input::placeholder { color: #94a3b8; }
+html.dark .login-input::placeholder { color: #64748b; }
 
 .login-input:focus {
   border-color: #38bdf8;
   box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
 }
 
-/* 로그인하기 버튼 */
 .login-submit-btn {
-  width: 100%;
-  height: 54px;
-  margin-top: 6px;
-  background-color: #3b82f6;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 18px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  width: 100%; height: 54px; margin-top: 6px;
+  background-color: #3b82f6; color: white; border: none;
+  border-radius: 10px; font-size: 18px; font-weight: 700;
+  cursor: pointer; transition: all 0.2s ease;
 }
+.login-submit-btn:hover { background-color: #2563eb; transform: translateY(-1px); }
 
-.login-submit-btn:hover {
-  background-color: #2563eb;
-  transform: translateY(-1px);
-}
-
-.login-footer {
-  margin-top: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  color: #64748b;
-  font-size: 14px;
-}
-
-.footer-link {
-  color: #94a3b8;
-  text-decoration: none;
-  transition: color 0.2s;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.footer-link:hover {
-  color: #38bdf8;
-}
-
+/* 🌟 5. 구분선 (가운데 줄 쫙 그어진 거) */
 .divider {
-  display: flex;
-  align-items: center;
-  color: #94a3b8; 
-  margin: 25px 0;
-  width: 100%; 
-  font-size: 14px;
+  display: flex; align-items: center; width: 100%; 
+  margin: 25px 0; font-size: 14px;
+  color: #94a3b8; /* 🌞 라이트 모드 글씨 */
 }
 
-.divider span {
-  white-space: nowrap;
-  padding: 0 10px; 
-}
+html.dark .divider { color: #64748b; } /* 🌙 다크 모드 글씨 */
+
+.divider span { padding: 0 10px; white-space: nowrap; }
 
 .divider::before, .divider::after {
-  content: ""; 
-  flex: 1; 
-  height: 1px; 
-  background: #2d3748; 
-}
- /* 구글 로그인 버튼 */
-.google-btn {
-  width: 100%; height: 50px; background: white; color: #1a202c;
-  border-radius: 10px; border: none; font-weight: bold;
-  display: flex; justify-content: center; align-items: center; gap: 10px;
-  cursor: pointer;
+  content: ""; flex: 1; height: 1px; 
+  background: #e2e8f0; /* 🌞 라이트 모드 줄 색깔 */
 }
 
-.login-links {
-  margin-top: 30px; color: #94a3b8; font-size: 14px;
+html.dark .divider::before, html.dark .divider::after {
+  background: #2d3748; /* 🌙 다크 모드 줄 색깔 */
 }
-.separator { margin: 0 10px; color: #2d3748; }
+
+/* 구글 버튼 */
+.google-btn {
+  width: 100%; height: 50px; border-radius: 10px; font-weight: bold;
+  display: flex; justify-content: center; align-items: center; gap: 10px;
+  cursor: pointer; border: 1px solid #cbd5e1;
+  background: white; color: #1a202c; /* 구글은 보통 하얀색 유지 */
+}
+
+/* 🌟 6. 하단 링크들 */
+.login-footer, .login-links {
+  margin-top: 30px; display: flex; justify-content: center;
+  align-items: center; gap: 20px; font-size: 14px;
+  color: #64748b;
+}
+
+.footer-link, .link-text {
+  color: #64748b; text-decoration: none; cursor: pointer; transition: color 0.2s;
+}
+html.dark .footer-link, html.dark .link-text { color: #94a3b8; }
+
+.footer-link:hover, .link-text:hover { color: #38bdf8; }
+
+.separator { margin: 0 10px; color: #cbd5e1; }
+html.dark .separator { color: #2d3748; }
 
 /* 이메일 회원가입 버튼 */
 .email-signup-btn {
-  width: 100%;
-  height: 55px;
-  background-color: transparent;
-  color: #5bb5ff; 
-  border: 1px solid #3b82f6; 
-  border-radius: 10px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 10px;
+  width: 100%; height: 55px; border-radius: 10px; margin-top: 10px;
+  font-size: 16px; font-weight: bold; cursor: pointer;
+  background-color: transparent; color: #3b82f6; border: 1px solid #3b82f6; 
   transition: all 0.2s ease-in-out;
 }
+html.dark .email-signup-btn { color: #5bb5ff; }
+.email-signup-btn:hover { background-color: rgba(59, 130, 246, 0.1); }
 
-.email-signup-btn:hover {
-  background-color: rgba(59, 130, 246, 0.1);
-}
-
-/* 링크 글자 스타일 */
-.link-text {
-  cursor: pointer;
-  transition: color 0.2s;
-}
-
-.link-text:hover {
-  color: #38bdf8;
-}

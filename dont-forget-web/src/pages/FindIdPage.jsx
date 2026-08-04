@@ -1,6 +1,6 @@
 // src/pages/FindIdPage.jsx
 import { useState } from "react";
-import "./LoginPage.css"; // 로그인 페이지 CSS 재사용
+import "./FindIdPage.css";
 
 function FindIdPage() {
   const [name, setName] = useState("");
@@ -30,21 +30,21 @@ function FindIdPage() {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-box">
-        <h1 className="login-title">아이디 찾기</h1>
+    <div className="find-id-container">
+      <div className="find-id-box">
+        <h1 className="find-id-title">아이디 찾기</h1>
 
         {!foundId ? (
-          <form className="login-form" onSubmit={handleFindId}>
+          <form className="find-id-form" onSubmit={handleFindId}>
             <input
               type="text"
-              className="login-input"
+              className="find-id-input"
               placeholder="가입할 때 입력한 이름을 입력하세요"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
             />
-            <button type="submit" className="login-submit-btn">
+            <button type="submit" className="find-id-submit-btn">
               아이디 찾기
             </button>
           </form>

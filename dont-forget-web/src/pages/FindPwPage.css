@@ -1,0 +1,95 @@
+/* src/pages/FindPwPage.css */
+* {
+  box-sizing: border-box;
+}
+
+/* 🌟 전체 껍데기 */
+.find-pw-container {
+  min-height: 100vh;
+  background-color: transparent !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* 🌟 하얀색 네모 박스 */
+.find-pw-box {
+  width: 100%;
+  max-width: 460px;
+  background-color: #ffffff;
+  color: #1f2937;
+  padding: 45px 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+/* 🌙 다크모드일 때 어두운 박스 */
+html.dark .find-pw-box {
+  background-color: #1e293b;
+  color: #f8fafc;
+  border-color: #334155;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+/* 🌟 제목 */
+.find-pw-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #0284c7;
+  margin-top: 0;
+  margin-bottom: 30px;
+}
+
+html.dark .find-pw-title {
+  color: #38bdf8;
+}
+
+/* 🌟 입력창 */
+.find-pw-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.find-pw-input {
+  width: 100%; height: 54px; padding: 0 18px;
+  font-size: 16px; border-radius: 10px; outline: none;
+  border: 1px solid #cbd5e1; background-color: #f8fafc; color: #0f172a;
+  transition: all 0.2s ease;
+}
+
+html.dark .find-pw-input {
+  background-color: #0f172a; border-color: #334155; color: #f8fafc;
+}
+
+.find-pw-input:focus {
+  border-color: #38bdf8; box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+}
+
+/* 버튼 */
+.find-pw-submit-btn {
+  width: 100%; height: 54px; margin-top: 6px;
+  background-color: #3b82f6; color: white; border: none;
+  border-radius: 10px; font-size: 18px; font-weight: 700;
+  cursor: pointer; transition: all 0.2s ease;
+}
+
+.find-pw-submit-btn:hover { background-color: #2563eb; }
+
+/* 아래쪽 링크 */
+.find-pw-footer {
+  margin-top: 25px; font-size: 14px;
+}
+
+.find-pw-link {
+  color: #64748b; text-decoration: none; cursor: pointer; transition: 0.2s;
+}
+
+html.dark .find-pw-link { color: #94a3b8; }
+.find-pw-link:hover { color: #38bdf8; }
+
