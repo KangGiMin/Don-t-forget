@@ -1,0 +1,152 @@
+* {
+  box-sizing: border-box;
+}
+
+.profile-container {
+  min-height: 100vh;
+  background-color: transparent !important; /* 전체 배경 비치게 하기 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.profile-box {
+  width: 100%;
+  max-width: 450px;
+  background-color: #ffffff;
+  color: #1f2937;
+  padding: 40px;
+  border-radius: 25px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+html.dark .profile-box {
+  background-color: #1e293b;
+  color: #f8fafc;
+  border-color: #334155;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+/* 상단 버튼 구역 */
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.back-btn, .edit-btn, .save-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 10px;
+  transition: all 0.2s;
+}
+
+.back-btn { color: #64748b; }
+html.dark .back-btn { color: #94a3b8; }
+.back-btn:hover { background-color: rgba(0,0,0,0.05); }
+html.dark .back-btn:hover { background-color: rgba(255,255,255,0.1); }
+
+.edit-btn { color: #3b82f6; }
+.save-btn { background-color: #10b981; color: white; }
+.save-btn:hover { background-color: #059669; }
+
+/* 프사 구역 */
+.profile-img-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.profile-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%; /* 완벽한 동그라미로 깎기! */
+  object-fit: cover; /* 사진이 찌그러지지 않게 꽉 채우기 */
+  border: 4px solid #e2e8f0;
+  transition: all 0.3s;
+}
+
+html.dark .profile-image {
+  border-color: #334155;
+}
+
+/* 수정 모드일 때 프사에 마우스 올리면 커서 변하게! */
+.profile-image.editable {
+  cursor: pointer;
+}
+.profile-image.editable:hover {
+  filter: brightness(0.8);
+}
+
+.img-edit-hint {
+  font-size: 13px;
+  color: #3b82f6;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+/* 텍스트 구역 */
+.profile-info-section {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+.profile-nickname {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 0 0 10px 0;
+  color: #0284c7;
+}
+html.dark .profile-nickname { color: #38bdf8; }
+
+.profile-status {
+  font-size: 16px;
+  color: #64748b;
+  margin: 0;
+  padding: 20px;
+}
+html.dark .profile-status { color: #94a3b8; }
+
+/* 수정용 입력창 */
+.edit-input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  background-color: #f8fafc;
+  color: #0f172a;
+  text-align: center;
+  font-size: 16px;
+  outline: none;
+}
+html.dark .edit-input {
+  background-color: #0f172a;
+  border-color: #334155;
+  color: #f8fafc;
+}
+.edit-input:focus { border-color: #38bdf8; }
+
+/* 명예의 전당 (통계) */
+.stat-card {
+  background-color: #f1f5f9;
+  padding: 20px;
+  border-radius: 15px;
+  text-align: center;
+}
+html.dark .stat-card { background-color: #0f172a; }
+
+.stat-card h3 { margin: 0 0 10px 0; font-size: 16px; color: #475569; }
+html.dark .stat-card h3 { color: #cbd5e1; }
+
+.stat-number { font-size: 32px; font-weight: 800; color: #f59e0b; }
+.stat-card p { margin: 10px 0 0 0; font-size: 14px; color: #64748b; }
+html.dark .stat-card p { color: #94a3b8; }

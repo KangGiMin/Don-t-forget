@@ -245,17 +245,6 @@ html.dark {
   width: fit-content;
 }
 
-.delete-btn {
-  padding: 8px 12px;
-  background-color: transparent;
-  color: #f43f5e;
-  border: 1px solid #f43f5e;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 14px;
-  flex-shrink: 0;
-}
 
 /* React Calendar 다크모드 커스텀 스타일 */
 .react-calendar {
@@ -411,6 +400,24 @@ html.dark {
   color: white;
 }
 
+/* 할 일 삭제 버튼 스타일 */
+.delete-btn {
+  padding: 8px 12px;
+  background-color: transparent;
+  color: #f43f5e;
+  border: 1px solid #f43f5e;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.delete-btn:hover {
+  background-color: #f43f5e;
+  color: white;
+}
+
 .button-group {
   display: flex;
   gap: 6px;
@@ -495,7 +502,7 @@ html.dark {
   top: 0;
   right: -320px;
   width: 320px;
-  height: 100vh;
+  height: 96vh;
   /* 🌟 라이트 모드일 때: 하얀색 배경에 까만색 글씨! */
   background-color: #ffffff; 
   color: #1f2937; 
@@ -575,10 +582,10 @@ html.dark .menu-item:hover {
 }
 
 /* ========================================= */
-/* 🚪 로그아웃 버튼 (얜 색깔 안 변하고 항상 빨갛게 고정!) */
+/* 🚪 로그아웃 버튼 */
 /* ========================================= */
 .menu-item.logout-btn-sidebar {
-  color: #ef4444; /* 무조건 빨간색 글씨! */
+  color: #ef4444;
   background-color: rgba(239, 68, 68, 0.1); 
   justify-content: center;
   margin-top: auto; 

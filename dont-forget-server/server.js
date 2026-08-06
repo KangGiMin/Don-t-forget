@@ -41,7 +41,9 @@ const app = express();
 const PORT = 3000;
 
 app.use(cors());
-app.use(express.json());
+// 기존 app.use(express.json()); 대신 아래 두 줄로 교체!
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 app.get("/", (req, res) => {
   res.send("Node(백엔드) 서버가 무사히 오픈되었습니다!");
@@ -251,6 +253,45 @@ app.post("/api/reset-password", async (req, res) => {
   }
 });
 
+// 👤 유저 프로필 정보 수정해 주는 창고 직원 (API)
+// ==========================================
+// 👤 유저 프로필 정보 수정해 주는 창고 직원 (API) - 강력 버전!
+// ==========================================
+app.put('/api/users/:id', async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { userName, statusMessage, profileImg } = req.body;
+
+    // 🌟 [핵심 수술] 아이디가 MongoDB 기본 _id인지, 커스텀 id인지 둘 다 커버하기!
+    let query = {};
+    if (mongoose.Types.ObjectId.isValid(userId)) {
+      query = { _id: userId }; // 24자리 기본 아이디일 경우
+    } else {
+      query = { id: userId };  // 네 스샷처럼 커스텀 아이디(Firebase 등)일 경우
+    }
+
+    // findByIdAndUpdate 대신 findOneAndUpdate를 써서 유도리 있게 검색!
+    const updatedUser = await User.findOneAndUpdate(
+      query,
+      { 
+        name: userName, // 프론트의 userName을 DB의 name 필드에 덮어쓰기
+        statusMessage: statusMessage,
+        profileImg: profileImg
+      },
+      { new: true } 
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ success: false, message: '장부에 없는 유저야 ㅠㅠ' });
+    }
+
+    res.json({ success: true, message: '프로필 업데이트 찢었다! 완료!', user: updatedUser });
+
+  } catch (error) {
+    console.log('프로필 업데이트 서버 에러 ㅠㅠ:', error);
+    res.status(500).json({ success: false, message: '서버가 아파요 ㅠㅠ' });
+  }
+});
 app.listen(PORT, () => {
   console.log(
     `백엔드(Node) 서버가 http://localhost:${PORT} 에서 켜졌습니다! 🚀`,

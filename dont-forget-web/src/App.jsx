@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import ProfilePage from "./pages/ProfilePage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import MainPage from "./pages/MainPage";
@@ -62,9 +63,10 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/Signup" element={<SignupPage />} />
-        <Route path="/find-id" element={<FindIdPage />} /> {/* 👈 추가 */}
-        <Route path="/find-pw" element={<FindPwPage />} /> {/* 👈 추가 */}
+        <Route path="/find-id" element={<FindIdPage />} /> 
+        <Route path="/find-pw" element={<FindPwPage />} /> 
         <Route path="/todo" element={<MainPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>

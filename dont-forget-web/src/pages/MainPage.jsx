@@ -1,5 +1,6 @@
 // src/pages/MainPage.jsx
 
+import { useNavigate } from 'react-router-dom';
 import ThemeSelector from './ThemeSelector';
 import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
@@ -8,6 +9,9 @@ import confetti from 'canvas-confetti';
 import './MainPage.css';
 
 function MainPage() {
+
+  const navigate = useNavigate();
+
   const [todos, setTodos] = useState([]);
   const [newText, setNewText] = useState('');
   const [category, setCategory] = useState('업무');
@@ -288,7 +292,7 @@ function MainPage() {
         </button>
       </div>
 
-      {/* 2. 오른쪽에서 스르륵 튀어나올 사이드바 구역 */}
+     
      {/* 2. 오른쪽에서 스르륵 튀어나올 사이드바 구역 */}
       <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
         
@@ -298,16 +302,14 @@ function MainPage() {
         {/* 메뉴판 내용물 */}
       
         <div className="sidebar-menu">
-          <div className="menu-item">👤 내 프로필</div>
-          <div className="menu-item">🌐 시스템 언어 설정</div>
-          <div className="menu-item">✉️ 관리자에게 메일 문의하기</div>
-          <div className="menu-item">📅 달력 시작 요일 (일/월)</div>
-          <div className="menu-item">✅ 모든 할 일 목록 정렬</div>
-          <div className="menu-item">⏰ 24시간제로 표시</div>
+          <div className="menu-item" onClick={() => navigate('/profile')}>내 프로필</div>
+          <div className="menu-item">시스템 언어</div>
+          <div className="menu-item">관리자에게 문의하기</div>
+          <div className="menu-item">모든 할 일 목록 보기</div>
+          <div className="menu-item">시간을 24시간제로 표시</div>
           
-          {/* 🌟 짠! 테마 설정 버튼이 로그아웃 바로 위로 이사 왔어! */}
           <div className="menu-item theme-menu-item">
-            <span>🎨 화면 테마 설정</span> 
+            <span>🎨 화면 테마 </span> 
             <ThemeSelector />
           </div>
           
@@ -328,7 +330,7 @@ function MainPage() {
           <div className="calendar-section">
             <div className="today-btn-wrapper">
               <button onClick={handleResetToToday} className="today-btn">
-                📅 오늘로
+                오늘
               </button>
             </div>
             <div className="calendar-wrapper">
