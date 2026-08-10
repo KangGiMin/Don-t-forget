@@ -2,6 +2,7 @@
 
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = 'don_forget_super_secret_key_1234!';
+const nodemailer = require('nodemailer');
 
 // 보안 미들웨어 - 요청에 유효한 토큰이 있는지 검사를 해 줌
 const authenticateToken = (req, res, next) => {
@@ -253,37 +254,39 @@ app.post("/api/reset-password", async (req, res) => {
   }
 });
 
-// 👤 유저 프로필 정보 수정해 주는 창고 직원 (API)
 // ==========================================
-// 👤 유저 프로필 정보 수정해 주는 창고 직원 (API) - 강력 버전!
+// 👤 유저 프로필 정보 수정 API
 // ==========================================
 app.put('/api/users/:id', async (req, res) => {
   try {
     const userId = req.params.id;
     const { userName, statusMessage, profileImg } = req.body;
 
-    // 🌟 [핵심 수술] 아이디가 MongoDB 기본 _id인지, 커스텀 id인지 둘 다 커버하기!
     let query = {};
-    if (mongoose.Types.ObjectId.isValid(userId)) {
-      query = { _id: userId }; // 24자리 기본 아이디일 경우
-    } else {
-      query = { id: userId };  // 네 스샷처럼 커스텀 아이디(Firebase 등)일 경우
-    }
 
-    // findByIdAndUpdate 대신 findOneAndUpdate를 써서 유도리 있게 검색!
+    // 아이디가 일반 DB 아이디인지, 구글 간편 로그인 아이디인지 구별!
+    if (mongoose.Types.ObjectId.isValid(userId)) {
+      query = { _id: userId }; 
+    } else {
+      query = { id: userId }; 
+    }
+   
     const updatedUser = await User.findOneAndUpdate(
       query,
       { 
-        name: userName, // 프론트의 userName을 DB의 name 필드에 덮어쓰기
-        statusMessage: statusMessage,
-        profileImg: profileImg
+      
+        $set: {
+          name: userName, 
+          statusMessage: statusMessage,
+          profileImg: profileImg
+        }
       },
-      { new: true } 
+      { 
+        returnDocument: 'after', 
+        upsert: true,            
+        setDefaultsOnInsert: true 
+      } 
     );
-
-    if (!updatedUser) {
-      return res.status(404).json({ success: false, message: '장부에 없는 유저야 ㅠㅠ' });
-    }
 
     res.json({ success: true, message: '프로필 업데이트 찢었다! 완료!', user: updatedUser });
 
@@ -292,54 +295,72 @@ app.put('/api/users/:id', async (req, res) => {
     res.status(500).json({ success: false, message: '서버가 아파요 ㅠㅠ' });
   }
 });
+
+// ==========================================
+// 👤 유저 정보 가져오기 (메인 화면 닉네임 찰떡 유지용!)
+// ==========================================
+app.get('/api/users/:id', async (req, res) => {
+  try {
+    const userId = req.params.id;
+    
+    // 일반 아이디인지 구글 간편 로그인 아이디인지 구별해서 찾기!
+    let query = {};
+    if (mongoose.Types.ObjectId.isValid(userId)) {
+      query = { _id: userId }; 
+    } else {
+      query = { id: userId }; 
+    }
+
+    const user = await User.findOne(query);
+
+    if (user) {
+      res.json({ success: true, user: user });
+    } else {
+      res.json({ success: false, message: '장부에 없는 유저야 ㅠㅠ' });
+    }
+  } catch (error) {
+    console.log('유저 정보 조회 에러 ㅠㅠ:', error);
+    res.status(500).json({ success: false, message: '서버가 아파요 ㅠㅠ' });
+  }
+});
+
+
+app.post('/api/contact', async (req, res) => {
+  try {
+    const { userName, title, content } = req.body; // 프론트가 보낸 팩스 읽기
+
+    // 1. 우체부 세팅 (네 이메일 정보 입력!)
+    const transporter = nodemailer.createTransport({
+      service: 'gmail', // 구글 메일 사용
+      auth: {
+        user: 'gimingng2311@gmail.com', // 내 이메일 주소 입력!
+        pass: 'txfpkwcfvkfrxrhl' // 🌟 구글에서 발급받은 앱 비밀번호 (띄어쓰기 없이)
+      }
+    });
+
+    // 2. 보낼 편지 내용 작성
+const mailOptions = {
+      from: 'gimingng2311@gmail.com',
+      to: 'gimingng2311@gmail.com', 
+      subject: `[돈폴겟 고객센터] ${userName}님의 문의: ${title}`, 
+      text: `보낸 사람: ${userName}\n제목: ${title}\n\n[문의 내용]\n${content}` 
+    };
+
+    // 3. 우체부야 메일 보내라!
+    await transporter.sendMail(mailOptions);
+    
+    // 4. 프론트엔드에게 성공했다고 답장!
+    res.json({ success: true, message: '문의가 정상적으로 접수되었습니다!' });
+    
+  } catch (error) {
+    console.error('이메일 전송 에러 ㅠㅠ:', error);
+    res.json({ success: false, message: '서버 문제로 이메일 전송에 실패했어요.' });
+  }
+});
+
+// 서버 가동 코드
 app.listen(PORT, () => {
   console.log(
     `백엔드(Node) 서버가 http://localhost:${PORT} 에서 켜졌습니다! 🚀`,
   );
-});
-
-// 🔍 1. 아이디 찾기 API
-app.post("/api/find-id", async (req, res) => {
-  try {
-    const { name } = req.body;
-    const user = await User.findOne({ name: name });
-
-    if (!user) {
-      return res.json({
-        success: false,
-        message: "입력하신 이름으로 등록된 아이디가 없어!",
-      });
-    }
-
-    res.json({ success: true, id: user.id });
-  } catch (error) {
-    console.log("아이디 찾기 에러 ㅠㅠ", error);
-    res.status(500).json({ success: false, message: "서버 에러 발생!" });
-  }
-});
-
-// 🔑 2. 비밀번호 재설정 API
-app.post("/api/reset-password", async (req, res) => {
-  try {
-    const { id, name, newPassword } = req.body;
-    const user = await User.findOne({ id: id, name: name });
-
-    if (!user) {
-      return res.json({
-        success: false,
-        message: "일치하는 아이디나 이름 정보를 찾을 수 없어!",
-      });
-    }
-
-    user.password = newPassword;
-    await user.save();
-
-    res.json({
-      success: true,
-      message: "비밀번호가 성공적으로 변경되었어! 새 비밀번호로 로그인해 봐.",
-    });
-  } catch (error) {
-    console.log("비밀번호 재설정 에러 ㅠㅠ", error);
-    res.status(500).json({ success: false, message: "서버 에러 발생!" });
-  }
 });

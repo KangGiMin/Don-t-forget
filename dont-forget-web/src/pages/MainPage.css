@@ -462,19 +462,20 @@ html.dark {
   padding: 20px;
 }
 
-/* 1. 사이드바 기본 모습 (화면 오른쪽 밖으로 숨바꼭질 중!) */
+/* 1. 사이드바 기본 뼈대 (화면 오른쪽 밖으로 숨바꼭질 중!) */
 .sidebar {
   position: fixed;
-  top: 0;
+  top: 40px;
   right: -300px;
   width: 300px;
   border-radius: 30px;
-  height: 90px;
+  height: calc(100vh - 80px);
   background-color: var(--main-bg);
   box-shadow: -2px 0 5px rgba(0,0,0,0.5);
   transition: right 0.3s ease;
   z-index: 1000;
   padding: 20px;
+  
 }
 
 /* 2. 사이드바가 열렸을 때의 모습 (오른쪽에서 안으로 들어옴!) */
@@ -483,40 +484,12 @@ html.dark {
 }
 
 /* 3. 버튼들 예쁘게 다듬기 */
-.hamburger-button, .close-button {
+.hamburger-button {
   font-size: 24px;
   background: none;
   border: none;
   cursor: pointer;
   color: inherit; /* 테마 색상 따라가게! */
-}
-
-/* ========================================= */
-/* 🍔 사이드바 전체 뼈대 (테마 색상 마법 적용!) */
-/* ========================================= */
-/* ========================================= */
-/* 🌞 기본 (라이트 모드) 사이드바 뼈대 */
-/* ========================================= */
-.sidebar {
-  position: fixed;
-  top: 0;
-  right: -320px;
-  width: 320px;
-  height: 96vh;
-  /* 🌟 라이트 모드일 때: 하얀색 배경에 까만색 글씨! */
-  background-color: #ffffff; 
-  color: #1f2937; 
-  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
-  /* transition에 색상 변하는 시간도 추가해서 스르륵~ 변하게! */
-  transition: right 0.4s ease-in-out, background-color 0.3s, color 0.3s;
-  z-index: 1000;
-  padding: 30px 20px;
-  display: flex;
-  flex-direction: column;
-}
-
-.sidebar.open {
-  right: 0;
 }
 
 /* ========================================= */
@@ -531,19 +504,6 @@ html.dark .sidebar {
 }
 
 /* ========================================= */
-/* ✖ 닫기 버튼 */
-/* ========================================= */
-.close-button {
-  align-self: flex-end;
-  font-size: 28px;
-  background: none;
-  border: none;
-  color: inherit; /* 부모(sidebar)의 글자색을 그대로 따라가라! */
-  cursor: pointer;
-  margin-bottom: 30px;
-}
-
-/* ========================================= */
 /* 📋 메뉴판 안의 아이템들 */
 /* ========================================= */
 .sidebar-menu {
@@ -551,6 +511,7 @@ html.dark .sidebar {
   flex-direction: column;
   gap: 15px;
   flex: 1;
+  margin-top: 30px;
 }
 
 .menu-item {
@@ -700,4 +661,16 @@ html.dark .subtitle-text {
 html.dark .hamburger-button {
   /* 🌙 다크 모드일 때: 하얀색 햄버거 줄! */
   color: #ffffff; 
+}
+
+/* 🌟 사이드바 바깥 영역(투명 이불) 스타일 */
+.sidebar-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;     
+  height: 100vh;      
+  background-color: rgba(0, 0, 0, 0.2); /* 사이드바 오픈 시 메인화면 배경을 살짝 어둡게 해주는 효과! */
+  z-index: 999;      
+  cursor: pointer; 
 }

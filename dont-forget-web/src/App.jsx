@@ -1,4 +1,6 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import ContactAdminPage from "./pages/ContactAdminPage";
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { LanguageProvider } from './LanguageContext';
 import ProfilePage from "./pages/ProfilePage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
@@ -59,17 +61,22 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/Signup" element={<SignupPage />} />
-        <Route path="/find-id" element={<FindIdPage />} /> 
-        <Route path="/find-pw" element={<FindPwPage />} /> 
-        <Route path="/todo" element={<MainPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="*" element={<Navigate to="/login" replace />} />
-      </Routes>
-    </BrowserRouter>
+    <LanguageProvider>
+      {/* 🌟 BrowserRouter 대신 아까 지어준 별명(Router)으로 불렀어! */}
+      <Router>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/Signup" element={<SignupPage />} />
+          <Route path="/find-id" element={<FindIdPage />} /> 
+          <Route path="/find-pw" element={<FindPwPage />} /> 
+          <Route path="/todo" element={<MainPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          {/* 🌟 엉뚱한 주소로 가면 무조건 로그인 창으로 쫓아내는 녀석! */}
+          <Route path="*" element={<Navigate to="/login" replace />} />
+          <Route path="/contact" element={<ContactAdminPage />} />
+        </Routes>
+      </Router>
+    </LanguageProvider>
   );
 }
 
