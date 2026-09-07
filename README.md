@@ -26,7 +26,7 @@
 
 #### 개발환경
 ![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-007ACC?style=for-the-badge&logo=visual-studio-code&logoColor=white)
-![Android Studio](https://img.shields.io/badge/Android%20Studio-3DDC84?style=for-the-badge&logo=android-studio&logoColor=white)
+[![Android Studio](https://img.shields.io/badge/Android%20Studio-000000?style=for-the-badge&logo=android-studio&logoColor=3DDC84)](https://developer.android.com/studio)
 
 
 <br>
@@ -36,7 +36,7 @@
 ![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
 ![macOS](https://img.shields.io/badge/macOS-000000?style=for-the-badge&logo=apple&logoColor=white)
 ![iOS](https://img.shields.io/badge/iOS-000000?style=for-the-badge&logo=ios&logoColor=white)
-![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
+[![Android Studio](https://img.shields.io/badge/Android%20-000000?style=for-the-badge&logo=android-studio&logoColor=3DDC84)](https://developer.android.com/studio)
 
 <br>
 
@@ -45,6 +45,10 @@
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+<<<<<<< HEAD
+=======
+[![TypeScript](https://img.shields.io/badge/TypeScript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+>>>>>>> 570f4a5b3623b7d27ce860e6fb8da4f62df0b795
 ![React](https://img.shields.io/badge/react.js-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 
 <br>
@@ -104,77 +108,3 @@
 
 ### 4. 관리자에게 문의하기(Admin Email Contact)
 * **Nodemailer 연동:** 사용자가 프론트엔드에서 문의 내용을 작성하면, 백엔드 API를 거쳐 관리자의 Gmail로 다이렉트 전송.
-
-```
-
-## 프로젝트 구조
-
-<br>
-
-Don-t-forget
-├─ dont-forget-server
-│  ├─ .env
-│  ├─ app
-│  │  ├─ App.css
-│  │  └─ App.jsx
-│  ├─ controllers
-│  │  ├─ todoController.js
-│  │  └─ userController.js
-│  ├─ firebase
-│  │  └─ firebase.js
-│  ├─ models
-│  │  ├─ Todo.js
-│  │  └─ User.js
-│  ├─ routes
-│  │  ├─ todos.js
-│  │  └─ users.js
-│  └─ server.js
-├─ dont-forget-web
-│  ├─ eslint.config.js
-│  ├─ index.html
-│  ├─ main.jsx
-│  ├─ package-lock.json
-│  ├─ package.json
-│  ├─ public
-│  │  ├─ favicon.png
-│  │  ├─ favicon.svg
-│  │  └─ icons.svg
-│  ├─ README.md
-│  ├─ src
-│  │  ├─ api
-│  │  │  └─ todoApi.js
-│  │  ├─ assets
-│  │  │  ├─ hero.png
-│  │  │  ├─ react.svg
-│  │  │  └─ vite.svg
-│  │  ├─ index.css
-│  │  ├─ locales
-│  │  │  ├─ LanguageContext.jsx
-│  │  │  └─ translations.js
-│  │  └─ pages
-│  │     ├─ admin
-│  │     │  ├─ ContactAdminPage.css
-│  │     │  └─ ContactAdminPage.jsx
-│  │     ├─ auth
-│  │     │  ├─ FindIdPage.css
-│  │     │  ├─ FindIdPage.jsx
-│  │     │  ├─ FindPwPage.css
-│  │     │  ├─ FindPwPage.jsx
-│  │     │  ├─ LoginPage.css
-│  │     │  ├─ LoginPage.jsx
-│  │     │  ├─ SignupPage.css
-│  │     │  └─ SignupPage.jsx
-│  │     ├─ main
-│  │     │  ├─ MainPage.css
-│  │     │  └─ MainPage.jsx
-│  │     ├─ profile
-│  │     │  ├─ ProfilePage.css
-│  │     │  └─ ProfilePage.jsx
-│  │     └─ theme
-│  │        ├─ ThemeSelector.css
-│  │        └─ ThemeSelector.jsx
-│  └─ vite.config.js
-├─ README.md
-└─ TROUBLESHOOTING.md
-
-```
