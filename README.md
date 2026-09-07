@@ -105,3 +105,72 @@
 
 ### 4. 관리자에게 문의하기(Admin Email Contact)
 * **Nodemailer 연동:** 사용자가 프론트엔드에서 문의 내용을 작성하면, 백엔드 API를 거쳐 관리자의 Gmail로 다이렉트 전송.
+
+```
+Don-t-forget
+├─ dont-forget-server
+│  ├─ .env
+│  ├─ app
+│  │  ├─ App.css
+│  │  └─ App.jsx
+│  ├─ controllers
+│  │  ├─ todoController.js
+│  │  └─ userController.js
+│  ├─ firebase
+│  │  └─ firebase.js
+│  ├─ models
+│  │  ├─ Todo.js
+│  │  └─ User.js
+│  ├─ routes
+│  │  ├─ todos.js
+│  │  └─ users.js
+│  └─ server.js
+├─ dont-forget-web
+│  ├─ eslint.config.js
+│  ├─ index.html
+│  ├─ main.jsx
+│  ├─ package-lock.json
+│  ├─ package.json
+│  ├─ public
+│  │  ├─ favicon.png
+│  │  ├─ favicon.svg
+│  │  └─ icons.svg
+│  ├─ README.md
+│  ├─ src
+│  │  ├─ api
+│  │  │  └─ todoApi.js
+│  │  ├─ assets
+│  │  │  ├─ hero.png
+│  │  │  ├─ react.svg
+│  │  │  └─ vite.svg
+│  │  ├─ index.css
+│  │  ├─ locales
+│  │  │  ├─ LanguageContext.jsx
+│  │  │  └─ translations.js
+│  │  └─ pages
+│  │     ├─ admin
+│  │     │  ├─ ContactAdminPage.css
+│  │     │  └─ ContactAdminPage.jsx
+│  │     ├─ auth
+│  │     │  ├─ FindIdPage.css
+│  │     │  ├─ FindIdPage.jsx
+│  │     │  ├─ FindPwPage.css
+│  │     │  ├─ FindPwPage.jsx
+│  │     │  ├─ LoginPage.css
+│  │     │  ├─ LoginPage.jsx
+│  │     │  ├─ SignupPage.css
+│  │     │  └─ SignupPage.jsx
+│  │     ├─ main
+│  │     │  ├─ MainPage.css
+│  │     │  └─ MainPage.jsx
+│  │     ├─ profile
+│  │     │  ├─ ProfilePage.css
+│  │     │  └─ ProfilePage.jsx
+│  │     └─ theme
+│  │        ├─ ThemeSelector.css
+│  │        └─ ThemeSelector.jsx
+│  └─ vite.config.js
+├─ README.md
+└─ TROUBLESHOOTING.md
+
+```

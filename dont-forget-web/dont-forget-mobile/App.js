@@ -1,0 +1,21 @@
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import LoginScreen from './screens/LoginScreen'; // 방금 만든 화면 불러오기!
+import MainScreen from './screens/MainScreen';
+
+const Stack = createNativeStackNavigator();
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        {/* 첫 번째 화면으로 Login 등록 */}
+        <Stack.Screen name="Login" component={LoginScreen} />
+
+         {/* 두 번째로 메인 페이지 화면 등록 */}
+        <Stack.Screen name="Main" component={MainScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
