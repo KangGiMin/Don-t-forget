@@ -45,7 +45,6 @@
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![JSX](https://img.shields.io/badge/JSX-f7df1e?style=for-the-badge&logo=javascript&logoColor=black)
 ![React](https://img.shields.io/badge/react.js-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 
 <br>
@@ -107,6 +106,11 @@
 * **Nodemailer 연동:** 사용자가 프론트엔드에서 문의 내용을 작성하면, 백엔드 API를 거쳐 관리자의 Gmail로 다이렉트 전송.
 
 ```
+
+## 프로젝트 구조
+
+<br>
+
 Don-t-forget
 ├─ dont-forget-server
 │  ├─ .env
