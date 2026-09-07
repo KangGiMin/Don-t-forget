@@ -105,3 +105,15 @@
 
 ### 4. 관리자에게 문의하기(Admin Email Contact)
 * **Nodemailer 연동:** 사용자가 프론트엔드에서 문의 내용을 작성하면, 백엔드 API를 거쳐 관리자의 Gmail로 다이렉트 전송.
+
+<br>
+
+### 5. 모바일 앱 환경 구현 (Cross Platform) 
+* **크로스 플랫폼 앱 환경 구축:** Expo Go(최신 SDK) 및 React Native 환경을 도입하여 웹의 핵심 로직과 시크한 흑화 다크모드 UI 감성을 모바일 화면으로 완벽 이식.
+
+* **React Navigation 스택 라우팅:** @react-navigation/native-stack을 활용해 앱 실행 시 로그인 화면(LoginScreen)에서 메인 할 일 목록 화면(MainScreen)으로 부드럽게 전환되는 화면 이동 길목 구축.
+
+* **Zustand 구축 및 백엔드 통신 연동:** todoStore.js를 통해 서버 API(/api/todos)와 연동하여 모바일 환경에서도 할 일 데이터를 유기적으로 주고받을 수 있는 통신 고속도로 개통.
+
+<br>
+
