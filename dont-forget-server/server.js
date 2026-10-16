@@ -3,37 +3,55 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const dns = require("node:dns");
+const { applicationDefault, initializeApp } = require("firebase-admin/app");
 require("dotenv").config();
 
-dns.setServers(["8.8.8.8", "8.8.4.4"]);
+if (!process.env.FIREBASE_PROJECT_ID) {
+  throw new Error("FIREBASE_PROJECT_ID 환경변수가 필요합니다.");
+}
 
-// MongoDB 연결
-mongoose
-  .connect(process.env.MONGO_URI, { family: 4 })
-  .then(() => console.log("MongoDB 연결 성공!"))
-  .catch((err) => console.log("MongoDB 연결 실패..", err));
+initializeApp({
+  credential: applicationDefault(),
+  projectId: process.env.FIREBASE_PROJECT_ID,
+});
 
 const app = express();
-const PORT = 3000;
+const PORT = Number(process.env.PORT || 3000);
+const allowedOrigins = process.env.CORS_ORIGIN
+  ?.split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
-app.use(cors());
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
+if (process.env.NODE_ENV === "production" && !allowedOrigins?.length) {
+  throw new Error("운영 환경에서는 CORS_ORIGIN을 설정해야 합니다.");
+}
 
-// 쪼개진 라우터 불러오기
-const todoRoutes = require('./routes/todos');
-const userRoutes = require('./routes/users');
+app.use(cors({ origin: allowedOrigins?.length ? allowedOrigins : true }));
+app.use(express.json({ limit: "3mb" }));
+app.use(express.urlencoded({ limit: "3mb", extended: true }));
 
-// api의 구역 할당하기
-app.use('/api/todos', todoRoutes); 
-app.use('/api', userRoutes); // 로그인, 회원가입 등 유저 관련은 모두 여기서 처리!
+const todoRoutes = require("./routes/todos");
+const userRoutes = require("./routes/users");
+
+app.use("/api/todos", todoRoutes);
+app.use("/api", userRoutes);
 
 app.get("/", (req, res) => {
   res.send("Node(백엔드) 서버가 오픈되었습니다!");
 });
 
-// 서버 가동
-app.listen(PORT, () => {
-  console.log(`백엔드(Node) 서버가 http://localhost:${PORT} 에서 켜졌습니다!`);
+async function startServer() {
+  if (!process.env.MONGO_URI) {
+    throw new Error("MONGO_URI 환경변수가 필요합니다.");
+  }
+
+  await mongoose.connect(process.env.MONGO_URI);
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`백엔드 서버가 포트 ${PORT}에서 실행 중입니다.`);
+  });
+}
+
+startServer().catch((error) => {
+  console.error("서버 시작 실패:", error);
+  process.exitCode = 1;
 });

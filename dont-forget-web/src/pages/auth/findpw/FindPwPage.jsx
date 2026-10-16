@@ -1,48 +1,56 @@
-// src/pages/FindPwPage.jsx
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth } from "../../../firebase/firebase";
 import { useLanguage } from "../../../locales/LanguageContext";
 import "./FindPwPage.css";
 
 function FindPwPage() {
   const { t } = useLanguage();
-  const [id, setId] = useState("");
-  const [name, setName] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
-  const handleResetPassword = async (e) => {
-    e.preventDefault();
+  const handleResetPassword = async (event) => {
+    event.preventDefault();
+    setMessage("");
+    setError("");
+
     try {
-      const response = await fetch("http://localhost:3000/api/reset-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: id, name: name, newPassword: newPassword }),
-      });
-      const result = await response.json();
-      if (result.success) {
-        window.location.href = "/login";
-      } else { alert(result.message); }
-    } catch (error) { console.log(error); }
+      await sendPasswordResetEmail(auth, email.trim());
+      setMessage("계정이 존재하는 경우 비밀번호 재설정 안내 이메일을 보냈습니다.");
+    } catch (resetError) {
+      console.error("비밀번호 재설정 이메일 전송 실패:", resetError);
+      setError("재설정 이메일을 보내지 못했습니다. 이메일 주소를 확인해 주세요.");
+    }
   };
 
   return (
     <div className="login-container">
       <div className="login-box">
         <h1 className="login-title">{t.findPwTitle}</h1>
-
         <form className="login-form" onSubmit={handleResetPassword}>
-          <input type="text" className="login-input" placeholder={t.phFindPwId} value={id} onChange={(e) => setId(e.target.value)} required />
-          <input type="text" className="login-input" placeholder={t.phFindPwName} value={name} onChange={(e) => setName(e.target.value)} required />
-          <input type="password" className="login-input" placeholder={t.phFindPwNew} value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required />
+          <input
+            type="email"
+            className="login-input"
+            placeholder={t.phIdEmail}
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            autoCapitalize="none"
+            required
+          />
+          {message && <p role="status">{message}</p>}
+          {error && <p role="alert">{error}</p>}
           <button type="submit" className="login-submit-btn">{t.btnChangePw}</button>
         </form>
-
         <div className="login-footer">
-          <a href="/login" className="footer-link">{t.linkBackLogin}</a>
+          <Link to="/login" className="footer-link">{t.linkBackLogin}</Link>
           <div className="divider"></div>
-          <a href="/find-id" className="footer-link">{t.linkFindId}</a>
+          <Link to="/find-id" className="footer-link">{t.linkFindId}</Link>
         </div>
       </div>
     </div>
   );
 }
+
 export default FindPwPage;

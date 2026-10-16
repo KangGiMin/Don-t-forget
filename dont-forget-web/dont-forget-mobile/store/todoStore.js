@@ -1,60 +1,79 @@
-import { create } from 'zustand';
-import axios from 'axios';
+import { create } from "zustand";
+import api from "../api/client";
+import { auth } from "../firebase/firebase";
 
-// 네 컴퓨터의 로컬 IP 주소와 서버 포트
-const API_URL = 'http://192.168.0.10:3000/api/todos'; 
+const getLocalDate = () => {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
+const assertSuccess = (data, fallbackMessage) => {
+  if (!data?.success) {
+    throw new Error(data?.message || fallbackMessage);
+  }
+};
 
 const useTodoStore = create((set, get) => ({
   todos: [],
+  clearTodos: () => set({ todos: [] }),
 
-  // 1. 서버에서 데이터 불러오기 (Read)
   fetchTodos: async () => {
-    try {
-      const response = await axios.get(API_URL);
-      set({ todos: response.data });
-    } catch (error) {
-      console.error('불러오기 에러:', error);
-    }
+    const uid = auth.currentUser?.uid;
+    const { data } = await api.get("/todos");
+    assertSuccess(data, "할 일 목록을 불러오지 못했습니다.");
+    if (auth.currentUser?.uid === uid) set({ todos: data.todos });
   },
 
-  // 2. 서버에 할 일 추가 (Create)
   addTodo: async (text) => {
-    try {
-      const response = await axios.post(API_URL, { text, done: false,
-        userId: 'testUser',
-        dueDate: '2026-12-31'
-       });
-      set((state) => ({ todos: [...state.todos, response.data] }));
-    } catch (error) {
-      console.error('추가 에러:', error);
+    const uid = auth.currentUser?.uid;
+    if (typeof text !== "string" || !text.trim()) {
+      throw new Error("할 일 내용을 입력해 주세요.");
     }
+
+    const { data } = await api.post("/todos", {
+      text: text.trim(),
+      category: "개인",
+      dueDate: getLocalDate(),
+      priority: "보통",
+    });
+    assertSuccess(data, "할 일을 추가하지 못했습니다.");
+
+    if (auth.currentUser?.uid === uid) {
+      set((state) => ({ todos: [...state.todos, data.todo] }));
+    }
+    return data.todo;
   },
 
-  // 3. 서버에 완료 상태 수정 (Update)
-  toggleTodo: async (id, currentDone) => {
-    try {
-      await axios.put(`${API_URL}/${id}`, { done: !currentDone });
+  updateTodo: async (id, updateData) => {
+    const uid = auth.currentUser?.uid;
+    const { data } = await api.put(`/todos/${id}`, updateData);
+    assertSuccess(data, "할 일을 수정하지 못했습니다.");
+
+    if (auth.currentUser?.uid === uid) {
       set((state) => ({
-        todos: state.todos.map((todo) =>
-          todo.id === id ? { ...todo, done: !todo.done } : todo
-        )
+        todos: state.todos.map((todo) => (todo._id === id ? data.todo : todo)),
       }));
-    } catch (error) {
-      console.error('수정 에러:', error);
     }
+    return data.todo;
   },
 
-  // 4. 서버에서 삭제 (Delete)
+  toggleTodo: async (id, currentCompleted) =>
+    get().updateTodo(id, { completed: !currentCompleted }),
+
   deleteTodo: async (id) => {
-    try {
-      await axios.delete(`${API_URL}/${id}`);
+    const uid = auth.currentUser?.uid;
+    const { data } = await api.delete(`/todos/${id}`);
+    assertSuccess(data, "할 일을 삭제하지 못했습니다.");
+
+    if (auth.currentUser?.uid === uid) {
       set((state) => ({
-        todos: state.todos.filter((todo) => todo.id !== id)
+        todos: state.todos.filter((todo) => todo._id !== id),
       }));
-    } catch (error) {
-      console.error('삭제 에러:', error);
     }
-  }
+  },
 }));
 
 export default useTodoStore;

@@ -3,16 +3,11 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
+const requireFirebaseAuth = require('../middleware/requireFirebaseAuth');
 
-// 프론트의 요청 경로와 주방장의 요리 기술(함수)을 연결!
-router.post('/login', userController.login);
-router.post('/signup', userController.signup);
-router.post('/find-id', userController.findId);
-router.post('/reset-password', userController.resetPassword);
-
-router.put('/users/:id', userController.updateProfile);
-router.get('/users/:id', userController.getUserInfo);
-
+router.use(requireFirebaseAuth);
+router.get('/users/me', userController.getMyProfile);
+router.patch('/users/me', userController.updateMyProfile);
 router.post('/contact', userController.contactAdmin);
 
 module.exports = router;

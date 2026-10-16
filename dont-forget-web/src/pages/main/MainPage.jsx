@@ -1,6 +1,7 @@
 import { useLanguage } from "../../locales/LanguageContext";
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { signOut } from 'firebase/auth';
+import { auth } from '../../firebase/firebase';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import confetti from 'canvas-confetti'; 
@@ -10,12 +11,12 @@ import Sidebar from '../../components/common/Sidebar';
 import TodoList from '../../components/todo/TodoList'; 
 import useTodoStore from '../../store/todoStore';
 import { requestNotificationPermission, sendNotification } from '../../utils/notification';
+import api from '../../api/client';
 
 function MainPage() {
   const { t, lang } = useLanguage();
-  const navigate = useNavigate();
 
-  const { todos, fetchTodos, addTodo, updateTodo, deleteTodo } = useTodoStore();
+  const { todos, fetchTodos, addTodo, updateTodo, deleteTodo, clearTodos } = useTodoStore();
 
   const [newText, setNewText] = useState('');
   const [category, setCategory] = useState('업무'); 
@@ -39,58 +40,61 @@ function MainPage() {
   const [editingId, setEditingId] = useState(null);
   const [editText, setEditText] = useState('');
   
-  const userId = localStorage.getItem('userId');
-  const token = localStorage.getItem('token');
   const [userName, setUserName] = useState(localStorage.getItem('userName') || '친구');
 
-  // 로그인 상태 체크
+  // Load the authenticated user's profile from the server.
   useEffect(() => {
-    if (!userId || userId === 'undefined' || !token) {
-      window.location.href = '/login';
-    }
-  }, [userId, token]);
-
-  // 이름 가져오기
-  useEffect(() => {
-    const fetchRealName = async () => {
+    let active = true;
+    const fetchProfile = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/users/${userId}`);
-        const result = await response.json();
-        if (result.success && result.user && result.user.name) {
-          setUserName(result.user.name); 
-          localStorage.setItem('userName', result.user.name); 
+        const { data } = await api.get('/users/me');
+        if (active && data.user?.name) {
+          setUserName(data.user.name);
+          localStorage.setItem('userName', data.user.name);
         }
-      } catch (error) { console.log(error); }
+      } catch (error) {
+        console.error('프로필 조회 실패:', error);
+      }
     };
-    if (userId && userId !== 'undefined') fetchRealName();
-  }, [userId]); 
+    fetchProfile();
+    return () => { active = false; };
+  }, []);
 
   // 화면 켜지자마자 알림 권한 허락받기
 useEffect(() => {
   requestNotificationPermission();
 }, []);
 
-  // 3. 할 일 불러오기
+  // Load only the authenticated user's todos.
   useEffect(() => {
-    if (userId && userId !== 'undefined' && token) {
-      fetchTodos(userId, token);
-    }
-  }, [userId, token, fetchTodos]);
+    clearTodos();
+    fetchTodos().catch((error) => {
+      console.error('할 일 목록 조회 실패:', error);
+      alert(error.message || '할 일 목록을 불러오지 못했습니다.');
+    });
+  }, [clearTodos, fetchTodos]);
 
   // 4. 할 일 추가하기
   const handleAddTodo = async (e) => {
     e.preventDefault();
     if (!newText.trim()) return;
     
-    const todoData = { userId, text: newText, category, dueDate };
-    await addTodo(todoData, token); 
-    setNewText(''); 
-    sendNotification("새로운 할 일 등록 완료!", `[${category}] ${newText}`);
+    try {
+      await addTodo({ text: newText, category, dueDate });
+      setNewText('');
+      sendNotification("새로운 할 일 등록 완료!", `[${category}] ${newText}`);
+    } catch (error) {
+      alert(error.message || '할 일을 추가하지 못했습니다.');
+    }
   };
 
   // 5. 할 일 완료 토글
   const handleToggleComplete = async (todo) => {
-    await updateTodo(todo._id, { completed: !todo.completed }, userId, token);
+    try {
+      await updateTodo(todo._id, { completed: !todo.completed });
+    } catch (error) {
+      alert(error.message || '할 일을 수정하지 못했습니다.');
+    }
   };
 
   // 6. 할 일 수정 시작
@@ -102,21 +106,35 @@ useEffect(() => {
   // 7. 할 일 텍스트 수정 저장
   const handleSaveEdit = async (id) => {
     if (!editText.trim()) return;
-    await updateTodo(id, { text: editText }, userId, token);
-    setEditingId(null);
-    setEditText('');
+    try {
+      await updateTodo(id, { text: editText });
+      setEditingId(null);
+      setEditText('');
+    } catch (error) {
+      alert(error.message || '할 일을 수정하지 못했습니다.');
+    }
   };
 
   // 8. 할 일 삭제하기
   const handleDeleteTodo = async (id) => {
-    await deleteTodo(id, userId, token);
+    try {
+      await deleteTodo(id);
+    } catch (error) {
+      alert(error.message || '할 일을 삭제하지 못했습니다.');
+    }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('userName');
-    window.location.href = '/login';
+  const handleLogout = async () => {
+    try {
+      clearTodos();
+      await signOut(auth);
+      localStorage.removeItem('userName');
+      localStorage.removeItem('statusMessage');
+      localStorage.removeItem('profileImg');
+    } catch (error) {
+      console.error('로그아웃 실패:', error);
+      alert('로그아웃하지 못했습니다. 다시 시도해 주세요.');
+    }
   };
 
   const handleDateChange = (date) => {

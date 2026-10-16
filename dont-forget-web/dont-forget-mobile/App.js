@@ -1,20 +1,43 @@
 import React from 'react';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import LoginScreen from './screens/LoginScreen'; // 방금 만든 화면 불러오기!
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from './firebase/firebase';
+import LoginScreen from './screens/LoginScreen';
 import MainScreen from './screens/MainScreen';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const [user, setUser] = useState(auth.currentUser);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(
+    () => onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setLoading(false);
+    }),
+    [],
+  );
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', backgroundColor: '#121212' }}>
+        <ActivityIndicator color="#3b82f6" />
+      </View>
+    );
+  }
+
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {/* 첫 번째 화면으로 Login 등록 */}
-        <Stack.Screen name="Login" component={LoginScreen} />
-
-         {/* 두 번째로 메인 페이지 화면 등록 */}
-        <Stack.Screen name="Main" component={MainScreen} />
+        {user ? (
+          <Stack.Screen name="Main" component={MainScreen} />
+        ) : (
+          <Stack.Screen name="Login" component={LoginScreen} />
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );

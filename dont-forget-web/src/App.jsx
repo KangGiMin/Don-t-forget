@@ -1,4 +1,7 @@
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from './firebase/firebase';
 import { LanguageProvider } from './locales/LanguageContext';
 import LoginPage from "./pages/auth/login/LoginPage";
 import SignupPage from "./pages/auth/signup/SignupPage";
@@ -7,6 +10,19 @@ import FindPwPage from "./pages/auth/findpw/FindPwPage";
 import MainPage from './pages/main/MainPage';
 import ProfilePage from './pages/profile/ProfilePage';
 import ContactAdminPage from './pages/admin/ContactAdminPage';
+
+function RequireAuth({ children }) {
+  const [user, setUser] = useState(auth.currentUser);
+  const [loading, setLoading] = useState(!auth.currentUser);
+
+  useEffect(() => onAuthStateChanged(auth, (currentUser) => {
+    setUser(currentUser);
+    setLoading(false);
+  }), []);
+
+  if (loading) return <div role="status">로그인 상태를 확인하고 있습니다...</div>;
+  return user ? children : <Navigate to="/login" replace />;
+}
 
 function App() {
   return (
@@ -23,10 +39,10 @@ function App() {
           <Route path="/find-pw" element={<FindPwPage />} />
           
           {/* 네가 지금 들어가려던 대망의 메인 화면! */}
-          <Route path="/todo" element={<MainPage />} />
+          <Route path="/todo" element={<RequireAuth><MainPage /></RequireAuth>} />
           
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/contact" element={<ContactAdminPage />} />
+          <Route path="/profile" element={<RequireAuth><ProfilePage /></RequireAuth>} />
+          <Route path="/contact" element={<RequireAuth><ContactAdminPage /></RequireAuth>} />
         </Routes>
       </BrowserRouter>
     </LanguageProvider>

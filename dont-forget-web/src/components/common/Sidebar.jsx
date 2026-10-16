@@ -2,7 +2,7 @@
 
 import { useLanguage } from '../../locales/LanguageContext';
 import { useNavigate } from 'react-router-dom';
-import ThemeSelector from '../../pages/theme/ThemeSelector'; // 🌟 테마 선택기 경로 연결
+import ThemeSelector from '../../pages/theme/ThemeSelector'; 
 
 function Sidebar({ isSidebarOpen, setIsSidebarOpen, handleLogout }) {
   const { t, lang, changeLanguage } = useLanguage();
