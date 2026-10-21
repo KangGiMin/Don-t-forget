@@ -1,0 +1,759 @@
+:root {
+  /* 🌞 라이트 모드 적용 시 */
+  --main-bg: #f8fafc;          /* 전체 배경: 아주 연한 회색/흰색 */
+  --main-text: #0f172a;        /* 기본 글자: 진한 남색/검정 */
+  --sub-text: #64748b;         /* 서브 글자: 회색 */
+  --box-bg: #ffffff;           /* 박스 배경: 완전 흰색 */
+  --box-border: #e2e8f0;       /* 박스 테두리: 연한 회색 */
+  --input-bg: #f1f5f9;         /* 입력창 배경: 연한 회색 */
+}
+
+html.dark {
+  /* 🌙 다크 모드 적용 시 */
+  --main-bg: black;
+  --main-text: #f8fafc;
+  --sub-text: #94a3b8;
+  --box-bg: #1e293b;
+  --box-border: #334155;
+  --input-bg: #0f172a;
+}
+
+.main-container {
+  min-height: 100vh;
+  background-color: var(--main-bg);
+  color: var(--main-text);         
+  padding: 40px 20px;
+  font-family: system-ui, -apple-system, sans-serif;
+  transition: all 0.3s ease;     
+}
+
+.content-wrapper {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.header-area {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  border-bottom: 1px solid var(--box-border); 
+  padding-bottom: 20px;
+}
+
+.title-text {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.2;
+  padding-bottom: 5px;
+  margin: 0 0 5px 0;
+  background: linear-gradient(90deg, #38bdf8, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle-text {
+  color: var(--sub-text);
+  margin: 0;
+  text-align: left;
+  font-size: 14px;
+}
+
+.logout-btn {
+  padding: 8px 16px;
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.calendar-section {
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.today-btn-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.today-btn {
+  padding: 6px 14px;
+  background-color: var(--box-bg); 
+  color: #38bdf8;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-wrapper {
+  width: 100%;
+}
+
+.todo-form {
+  background-color: var(--box-bg);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 1px solid var(--box-border);
+  transition: all 0.3s ease;
+}
+
+.form-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.selected-date-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: #38bdf8;
+}
+
+.select-box {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--box-border);
+  background-color: var(--input-bg);
+  color: var(--main-text);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.form-input-row {
+  display: flex;
+  gap: 10px;
+}
+
+.text-input {
+  flex: 1;
+  padding: 12px 16px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid var(--box-border);
+  background-color: var(--input-bg); 
+  color: var(--main-text); 
+  outline: none;
+}
+
+.submit-btn {
+  padding: 0 24px;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.todo-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.section-title {
+  font-size: 18px;
+  margin: 0 0 10px 0;
+  color: var(--sub-text);
+}
+
+.empty-view {
+  text-align: center;
+  padding: 40px 0;
+  color: var(--sub-text); 
+  background-color: var(--box-bg); 
+  border-radius: 12px;
+  border: 1px solid var(--box-border); 
+}
+
+.todo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background-color: var(--box-bg); 
+  border-radius: 12px;
+  border: 1px solid var(--box-border); 
+  transition: all 0.3s ease;
+}
+
+.todo-content-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+  min-width: 0;
+}
+
+.todo-checkbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #38bdf8;
+  flex-shrink: 0;
+}
+
+.todo-text-area {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+}
+
+.todo-text {
+  font-size: 16px;
+  font-weight: 500;
+  word-break: break-all;
+  text-align: left;
+}
+
+.todo-text.completed {
+  text-decoration: line-through;
+  color: var(--sub-text); 
+}
+
+.todo-text.active {
+  color: var(--main-text); 
+}
+
+.todo-category-badge {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background-color: var(--input-bg);
+  color: #38bdf8;
+  font-weight: 600;
+  width: fit-content;
+}
+
+
+/* React Calendar 다크모드 커스텀 스타일 */
+.react-calendar {
+  background-color: var(--box-bg) !important; 
+  color: var(--main-text) !important; 
+  border: 1px solid var(--box-border) !important;
+  border-radius: 16px;
+  padding: 16px;
+  width: 100% !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+.react-calendar__navigation {
+  margin-bottom: 1em;
+}
+.react-calendar__navigation button {
+  color: var(--main-text) !important;
+  background: none !important;
+  font-weight: 700;
+  font-size: 16px;
+  min-width: 44px;
+}
+.react-calendar__navigation button:hover {
+  background-color: var(--input-bg) !important; 
+  border-radius: 8px;
+}
+.react-calendar__navigation button:disabled {
+  background-color: transparent !important;
+  opacity: 0.4;
+}
+.react-calendar__month-view__weekdays {
+  color: #38bdf8 !important;
+  font-weight: 700;
+  text-align: center;
+  font-size: 14px;
+}
+.react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none;
+}
+.react-calendar__tile {
+  color: var(--main-text) !important;
+  background: transparent !important;
+  border-radius: 8px;
+  padding: 25px 6px;
+  font-weight: 500;
+  margin: 2px 0;
+}
+.react-calendar__tile:hover {
+  background-color: var(--input-bg) !important; 
+  color: #38bdf8 !important;
+}
+.react-calendar__tile--now {
+  background: var(--input-bg) !important;
+  color: #38bdf8 !important;
+  font-weight: bold;
+  border: 1px solid #38bdf8;
+}
+.react-calendar__tile--active {
+  background: #38bdf8 !important;
+  color: #0f172a !important;
+  font-weight: 800;
+}
+.react-calendar__month-view__days__day--neighboringMonth {
+  color: var(--sub-text) !important;
+}
+
+/* --- 검색창 및 통계 게이지바 스타일 --- */
+.search-input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 15px;
+  border-radius: 8px;
+  border: 1px solid var(--box-border); 
+  background-color: var(--input-bg);
+  color: var(--main-text); 
+  outline: none;
+  margin-bottom: 15px;
+}
+
+.search-input:focus {
+  border-color: #38bdf8;
+}
+
+.stats-container {
+  background-color: var(--box-bg); 
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1px solid var(--box-border);
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 0.3s ease;
+}
+
+.stats-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--sub-text); 
+}
+
+.stats-percent {
+  color: #38bdf8;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.progress-bar-bg {
+  width: 100%;
+  height: 10px;
+  background-color: var(--input-bg); 
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #38bdf8, #818cf8);
+  border-radius: 5px;
+  transition: width 0.3s ease;
+}
+
+/* --- 할 일 수정 관련 스타일 --- */
+.edit-input {
+  flex: 1;
+  padding: 6px 10px;
+  font-size: 15px;
+  border-radius: 6px;
+  border: 1px solid #38bdf8;
+  background-color: var(--input-bg);
+  color: var(--main-text);
+  outline: none;
+}
+
+.edit-btn {
+  padding: 8px 12px;
+  background-color: transparent;
+  color: #38bdf8;
+  border: 1px solid #38bdf8;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.edit-btn:hover {
+  background-color: #38bdf8;
+  color: white;
+}
+
+/* 할 일 삭제 버튼 스타일 */
+.delete-btn {
+  padding: 8px 12px;
+  background-color: transparent;
+  color: #f43f5e;
+  border: 1px solid #f43f5e;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.delete-btn:hover {
+  background-color: #f43f5e;
+  color: white;
+}
+
+.button-group {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* --- 100% 달성 시 축하 네온 효과 스타일 --- */
+.stats-container.completed-100 {
+  border: 2px solid #38bdf8 !important;
+  box-shadow: 0 0 25px rgba(56, 189, 248, 0.6) !important;
+}
+
+.progress-bar-fill.completed-100 {
+  background: linear-gradient(90deg, #38bdf8, #4ade80, #38bdf8) !important;
+  background-size: 200% 100% !important;
+  animation: rainbowGlow 2s linear infinite !important;
+}
+
+@keyframes rainbowGlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.congrats-text {
+  color: #4ade80 !important;
+  font-weight: 800 !important;
+  font-size: 15px !important;
+  animation: bounceText 0.6s ease infinite alternate !important;
+}
+
+@keyframes bounceText {
+  from { transform: translateY(0); }
+  to { transform: translateY(-3px); }
+}
+
+/* 간단 상단바 */
+.header {
+  display: flex;
+  justify-content: space-between; /* 양쪽 끝으로 밀어내기 */
+  align-items: center;
+  padding: 20px;
+}
+
+/* 1. 사이드바 기본 뼈대 (화면 오른쪽 밖으로 숨바꼭질 중!) */
+.sidebar {
+  position: fixed;
+  top: 40px;
+  right: -300px;
+  width: 300px;
+  border-radius: 30px;
+  height: calc(100vh - 80px);
+  background-color: var(--main-bg);
+  box-shadow: -2px 0 5px rgba(0,0,0,0.5);
+  transition: right 0.3s ease;
+  z-index: 1000;
+  padding: 20px;
+  
+}
+
+/* 2. 사이드바가 열렸을 때의 모습 (오른쪽에서 안으로 들어옴!) */
+.sidebar.open {
+  right: 0;
+}
+
+/* 3. 버튼들 예쁘게 다듬기 */
+.hamburger-button {
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit; /* 테마 색상 따라가게! */
+}
+
+/* ========================================= */
+/* 🌙 다크 모드 사이드바 (카멜레온 변신!) */
+/* ========================================= */
+/* html 태그에 'dark'라는 이름표가 붙으면 이 코드가 발동해! */
+html.dark .sidebar {
+  /* 🌟 다크 모드일 때: 어두운 배경에 하얀색 글씨! */
+  background-color: #1e293b; 
+  color: #f8fafc; 
+  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.7);
+}
+
+/* ========================================= */
+/* 📋 메뉴판 안의 아이템들 */
+/* ========================================= */
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  flex: 1;
+  margin-top: 30px;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 12px;
+  cursor: pointer;
+  color: inherit; /* 🌟 핵심! 배경에 맞춰 변한 부모의 글자색을 찰떡같이 따라감! */
+  transition: background-color 0.2s;
+}
+
+/* 🌞 라이트 모드에서 마우스 올렸을 때 */
+.menu-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* 🌙 다크 모드에서 마우스 올렸을 때 */
+html.dark .menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* 하얀색을 투명하게 깔아줌 */
+}
+
+/* 테마 설정 콤보박스 자리 벌리기 */
+.theme-menu-item {
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* ========================================= */
+/* 🚪 로그아웃 버튼 */
+/* ========================================= */
+.menu-item.logout-btn-sidebar {
+  color: #ef4444;
+  background-color: rgba(239, 68, 68, 0.1); 
+  justify-content: center;
+  margin-top: auto; 
+}
+
+.menu-item.logout-btn-sidebar:hover {
+  background-color: rgba(239, 68, 68, 0.2);
+}
+
+/* 맨 아래 앱 버전 */
+.app-version {
+  text-align: center;
+  font-size: 13px;
+  color: #888;
+  margin-top: 20px;
+}
+
+/* ========================================= */
+/* 🎨 테마 설정 버튼 전용 구역 (대공사 완벽 수정본!) */
+/* ========================================= */
+.menu-item.theme-menu-item {
+  display: flex;
+  flex-direction: row; /* 가로 방향으로 나란히 줄 세우기 */
+  justify-content: space-between; /* 양 끝으로 쫙 밀어내기 */
+  align-items: center; /* 위아래 중앙 맞추기 */
+  gap: 15px; /* 글씨랑 뚱뚱한 버튼 사이에 숨통 틔워주기 (간격) */
+}
+
+/* 🌟 대망의 핵심 1: 글씨 절대 안 깨지게 막는 마법! */
+.theme-menu-item span {
+  white-space: nowrap; /* "설"이랑 "정"이 절대 두 줄로 안 쪼개지게 강력 본드로 붙임! */
+  flex-shrink: 0; /* 옆에 버튼이 아무리 뚱뚱해도 내 글씨 구역은 안 찌그러지게 방어! */
+  font-weight: bold; /* 글씨를 살짝 굵게 해서 잘 보이게! */
+}
+
+/* 🌟 대망의 핵심 2: 무식하게 큰 ThemeSelector 버튼 다이어트 시키기! */
+.theme-menu-item > div,
+.theme-menu-item > button {
+  transform: scale(0.85); /* 뚱뚱한 버튼 전체 크기를 85%로 확! 줄여버림! */
+  transform-origin: right center; /* 축소할 때 오른쪽 벽에 딱 붙은 채로 줄어들게 만듦! */
+  margin: 0; /* 쓸데없는 바깥 여백 싹 제거! */
+}
+
+/* ========================================= */
+/* 🌍 전체 도화지(웹 페이지) 배경 테마 연동 */
+/* ========================================= */
+body, .main-page {
+  /* 🌞 라이트 모드일 때: 아주 뽀얀 밝은 회색(거의 흰색) 배경! */
+  background-color: #f8fafc; 
+  /* 🌞 라이트 모드일 때: 기본 글씨들을 진한 숯검정색으로! */
+  color: #0f172a; 
+  min-height: 100vh; /* 화면 높이를 끝까지 꽉 채우기! */
+  transition: background-color 0.3s ease, color 0.3s ease; /* 부드럽게 스르륵~ 변하게! */
+  margin: 0; /* 테두리 쓸데없는 여백 싹 없애기 */
+}
+
+/* 🌙 다크 모드일 때 전체 도화지 색상 뒤집기! */
+html.dark body,
+html.dark .main-page {
+  /* 🌙 다크 모드일 때: 스샷처럼 완전 까만 배경! */
+  background-color: #000000; 
+  /* 🌙 다크 모드일 때: 기본 글씨들을 하얀색으로! */
+  color: #f8fafc; 
+}
+
+/* ========================================= */
+/* 👑 상단 헤더 구역 (유저네임 & 명언) 테마 연동 */
+/* ========================================= */
+.header-area {
+  /* 배경을 투명하게 해서 뒤에 깔린 전체 도화지 색깔이 그대로 비치게 함! */
+  background-color: transparent; 
+  /* 🌞 라이트 모드일 때: 헤더 아래쪽에 연한 회색으로 예쁜 구분선 긋기 */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1); 
+}
+
+html.dark .header-area {
+  /* 🌙 다크 모드일 때: 헤더 아래쪽에 연한 하얀색으로 구분선 긋기 */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+}
+
+/* 👤 유저네임 글씨 색상 */
+.title-text {
+  /* 🌞 라이트 모드일 때: 하얀 배경에 잘 어울리는 맑은 파란색! */
+  color: #0284c7; 
+  transition: color 0.3s ease;
+}
+
+html.dark .title-text {
+  /* 🌙 다크 모드일 때: 까만 배경에 확 튀는 네온 하늘색! (스샷 원래 색상) */
+  color: #38bdf8; 
+}
+
+/* 💬 명언 글씨 색상 */
+.subtitle-text {
+  /* 🌞 라이트 모드일 때: 너무 튀지 않게 차분한 진회색! */
+  color: #64748b; 
+  transition: color 0.3s ease;
+}
+
+html.dark .subtitle-text {
+  /* 🌙 다크 모드일 때: 부드러운 밝은 회색! */
+  color: #94a3b8; 
+}
+
+/* 🍔 햄버거 버튼 색상도 카멜레온처럼! */
+.hamburger-button {
+  /* 🌞 라이트 모드일 때: 까만색 햄버거 줄! */
+  color: #0f172a; 
+  transition: color 0.3s ease;
+}
+
+html.dark .hamburger-button {
+  /* 🌙 다크 모드일 때: 하얀색 햄버거 줄! */
+  color: #ffffff; 
+}
+
+/* 🌟 사이드바 바깥 영역(투명 이불) 스타일 */
+.sidebar-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;     
+  height: 100vh;      
+  background-color: rgba(0, 0, 0, 0.2); /* 사이드바 오픈 시 메인화면 배경을 살짝 어둡게 해주는 효과! */
+  z-index: 999;      
+  cursor: pointer; 
+}
+
+.menu-item[type="button"] {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  font: inherit;
+}
+
+
+.todo-error {
+  margin: -18px 0 24px;
+  color: #dc2626;
+  font-size: 14px;
+}
+
+html.dark .todo-error {
+  color: #fca5a5;
+}
+
+/* Layout and control styling moved out of JSX; values match the former inline styles. */
+.header-area {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+.hamburger-button {
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.language-menu-item {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.language-menu-title {
+  margin-bottom: 10px;
+}
+
+.language-select {
+  width: 100%;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.todo-filter-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+  padding-bottom: 5px;
+}
+
+.todo-filter-button {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  background-color: #1e293b;
+  color: #94a3b8;
+  transition: all 0.2s;
+}
+
+.todo-filter-button.active {
+  background-color: #38bdf8;
+  color: #0f172a;
+}
+
+.todo-empty-primary {
+  font-size: 16px;
+  margin: 0 0 6px;
+}
+
+.todo-empty-secondary {
+  font-size: 13px;
+  margin: 0;
+}
