@@ -1,56 +1,32 @@
-# Welcome to your Expo app 👋
+# Don't Forget Mobile
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Expo SDK 57 and React Native client for the Don't Forget personal todo app.
 
-## Get started
+## Features
 
-1. Install dependencies
+- Firebase email/password login and signup with persistent native auth.
+- Email-based password reset; ID lookup follows the server's privacy-safe disabled response.
+- Todo create, edit, complete, delete, text search, category filters, and due dates.
+- Profile name/status editing, profile photo selection, and completed-task count.
+- Authenticated administrator contact form.
 
-   ```bash
-   npm install
-   ```
+## Source layout
 
-2. Start the app
+- `index.js`: Expo entry registered with `registerRootComponent`.
+- `src/navigation`: React Navigation stack, switched by Firebase auth state.
+- `src/features/auth`: sign-in, signup, ID notice, password-reset screens, and account API.
+- `src/features/todos`: todo screens, composer/list components, API, and Zustand store.
+- `src/features/profile`: profile screen and API.
+- `src/features/admin`: contact screen and API.
+- `src/services`: Firebase initialization and authenticated API client.
+- `src/shared`: shared form controls and date helpers.
 
-   ```bash
-   npx expo start
-   ```
+## Configuration and launch
 
-In the output, you'll find options to open the app in a
+Copy `.env.example` to `.env` and configure the Firebase values plus `EXPO_PUBLIC_API_URL`.
+Start the API server before launching the app. On an Android emulator, the default API address
+uses `10.0.2.2`. On a physical phone, set `EXPO_PUBLIC_API_URL` to the computer's reachable LAN
+address, for example `http://192.168.0.10:3000/api`; `localhost` on the phone refers to the phone.
+For Expo Go, keep the phone and development computer on the same network.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-### Other setup steps
-
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Run `npm install`, then `npm start`. Use `npm run android` for Android or `npm run ios` for iOS.

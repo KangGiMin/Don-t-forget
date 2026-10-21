@@ -1,79 +1,32 @@
-## MongoDB, Node.js 서버 서로 연결 불가
+# Troubleshooting
+
+## API server does not start
+
+- Use Node.js 20.19 or newer, enter dont-forget-server, run npm ci, and start with npm start.
+- Ensure .env contains MONGO_URI, a JWT_SECRET of at least 32 random bytes, and FIREBASE_PROJECT_ID.
+- If MongoDB Atlas rejects a connection, check the database user's permissions, URI encoding for special characters, and Atlas Network Access rules. Prefer allowing only the development or deployed server address instead of opening access to every IP.
+- If Firebase requests return 401, confirm the client and FIREBASE_PROJECT_ID use the same Firebase project and that the request sends the current Firebase ID token.
+
+## Web app cannot reach the API
+
+- Start the API on port 3000 before using the web client.
+- The web client currently targets http://localhost:3000/api; that address only works when the web browser and API run on the same computer.
+- Confirm the web .env has the Firebase web app values with the VITE_FIREBASE_ prefix, then restart Vite after changing them.
+
+## Mobile app cannot sign in or load todos
+
+- Configure the EXPO_PUBLIC_FIREBASE_* values in the mobile app's local .env.
+- Set EXPO_PUBLIC_API_URL to an address reachable from the device. On a physical phone, use the computer's LAN IP and ensure both devices can reach the development network.
+- Use Firebase email/password credentials. The mobile app sends Firebase ID tokens and uses the same /api/todos endpoints and _id/completed fields as the server.
+
+## Password recovery and account lookup
+
+- Firebase sends email/password reset messages. The app deliberately uses the same confirmation message whether or not an account exists.
+- Account ID lookup is disabled because revealing an account from a name alone exposes private account information. Use the email address associated with Firebase Authentication.
 
 
-### 발생 원인
+## API address configuration
 
-IP 액세스 리스트(Network Access) 차단: MongoDB Atlas 클라우드 벤더 측에서 보안을 위해 기본적으로 서버의 외부 IP 접근을 제한하고 있었음. 이로 인해 Node.js 서버가 실행 중인 환경(로컬 PC 또는 외부 호스팅 서버)에서 DB 클러스터로 향하는 네트워크 요청이 방화벽에 막혀 튕겨 나감.
-
-보안 자격 증명 관련 해프닝 (참고): 초기에 DB 접속 계정 정보(ID/PW)나 연결 문자열(URI) 설정 과정에서 깃허브(GitHub) 등 원격 저장소에 민감한 정보가 노출되거나 권한 설정에 혼선이 있었음.
-
-### 해결 과정
-
-MongoDB Atlas 네트워크 설정 변경:
-
-MongoDB Atlas 대시보드(Dashboard) 접속 ➡️ 좌측 메뉴의 Network Access 탭으로 이동.
-
-현재 서버가 위치한 환경의 IP를 추가하거나, 개발 및 테스트 편의를 위해 'Allow Access From Anywhere'(어디서나 접근 허용, 0.0.0.0/0) 설정 적용.
-
-접속 URI 및 환경변수(.env) 점검:
-
-mongoose.connect() 함수에 전달되는 연결 문자열(URI) 내에 올바른 사용자 계정(username)과 비밀번호(password), 그리고 클러스터 주소가 정확히 입력되었는지 재확인.
-
-특수문자가 비밀번호에 포함되어 있을 경우 URL 인코딩(encodeURIComponent)이 누락되지 않았는지 체크.
-
-연결 테스트:
-
-서버 재시작 후 터미널에 MongoDB Connected: ... 또는 정상 연결 성공 메시지가 출력되는지 최종 확인.
-
-
-==============================================================================
-
-
-## 구글 소셜 로그인 유저의 프로필 업데이트 시 404 Not Found 에러
-
-
-### 발생 원인
-
-일반 회원가입 유저는 MongoDB의 24자리 고유 _id를 사용하지만, 구글 간편 로그인 유저는 Firebase에서 발급된 긴 문자열의 UID를 사용함. 백엔드 업데이트 로직이 일반 _id만 찾도록 설계되어 있어 구글 유저를 식별하지 못해 발생한 문제.
-
-### 해결 과정
-
-server.js의 프로필 업데이트 API(app.put('/api/users/:id'))에서 mongoose.Types.ObjectId.isValid(userId)를 활용해 전달받은 ID의 포맷을 검증. MongoDB _id인지 커스텀 Firebase id인지 분기 처리하여 쿼리 조건을 동적으로 적용.
-
-추가 개선: DB에 등록되지 않은 소셜 로그인 유저가 최초 프로필 수정 시, DB에 자동으로 새 도큐먼트를 생성하도록 Mongoose의 upsert: true 옵션과 setDefaultsOnInsert: true 옵션을 추가 적용.
-
-==============================================================================
-
-## 로그아웃 후 재로그인 시 변경한 닉네임이 초기화되어 있는 현상
-
-### 발생 원인
-
-프론트엔드 로그인 로직에서 인증 성공 시 localStorage의 userName 값을 구글 계정의 기본 표시 이름(user.displayName)으로 무조건 덮어씌우도록 설계되어 있었음.
-
-### 해결 과정
-
-메인 페이지(MainPage.jsx) 컴포넌트 마운트 시 발동하는 useEffect 로직을 추가. 서버에 fetchRealName API 요청을 보내어 DB에 갱신된 사용자의 최신 프로필 닉네임이 존재하는 경우, 로컬 스토리지의 구글 기본 이름을 실제 DB 데이터로 동기화하도록 조치.
-
-==============================================================================
-
-## Context API 도입 후 다국어 스위칭 에러
-
-### 발생 원인
-
-각 페이지 컴포넌트 내에 개별적으로 선언되어 있던 로컬 언어 상태 관리(useState)와 번역 객체(dict) 코드를 제거하지 않은 상태에서, 최상위 LanguageProvider의 전역 상태를 구독하기 위해 useLanguage() 훅을 중복으로 호출함. 이로 인해 lang 및 t 변수가 한 스코프 내에서 중복 선언되는 문법 오류 발생.
-
-### 해결 과정
-
-컴포넌트 내부의 불필요한 useState 및 로컬 언어 토글 함수(toggleLanguage)를 모두 제거하고, 글로벌 방송국 역할을 하는 Context API의 전역 상태 객체만을 구조 분해 할당하여 단일 출처(Single Source of Truth)로 코드를 리팩토링함.
-
-==============================================================================
-
-## 관리자에게 메일 문의하기 기능이 제대로 동작하지 않는 현상
-
-### 발생 원인
-
-백엔드 서버에서 관리자 메일로 SMTP 접근을 시도할 때, 구글 보안 정책상 계정의 원래 비밀번호를 사용하거나, '앱 비밀번호' 내의 띄어쓰기(공백)를 포함하여 인증을 시도하여 발생한 인증 실패(BadCredentials) 오류.
-
-### 해결 과정
-
-Google 계정 설정에서 Node.js 서버 전용 16자리 '앱 비밀번호'를 새로 발급받고, 코드 내에 포함된 띄어쓰기 찌꺼기 공백을 완벽하게 제거하여 auth.pass 파라미터에 할당함.
+- Web: set `VITE_API_URL` in `dont-forget-web/.env`; it defaults to `http://localhost:3000/api`.
+- Mobile: set `EXPO_PUBLIC_API_URL` in `dont-forget-web/dont-forget-mobile/.env`; use a LAN address on a physical device.
+- Restart the API after changing its `.env`. Restart Vite or Expo after changing client environment values.

@@ -1,0 +1,23 @@
+{
+  "name": "dont-forget-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Express API for the Don't Forget todo app",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check server.js && node --check src/app.js && node --check src/config/database.js && node --check src/features/todos/todoController.js && node --check src/features/todos/todoRoutes.js && node --check src/features/users/userController.js && node --check src/features/users/userRoutes.js && node --check src/middleware/auth.js && node --check src/middleware/contactRateLimit.js && node --check src/features/todos/Todo.js && node --check src/features/users/User.js && node --check scripts/migrateLegacyPasswords.js",
+    "migrate:legacy-passwords": "node scripts/migrateLegacyPasswords.js"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.8.1",
+    "nodemailer": "^9.0.5"
+  }
+}
