@@ -42,8 +42,8 @@
 
 
 #### 프론트엔드
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![JSX](https://img.shields.io/badge/JSX-f7df1e?style=for-the-badge&logo=javascript&logoColor=black)
-![React](https://img.shields.io/badge/react.js-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 
 <br>
 
