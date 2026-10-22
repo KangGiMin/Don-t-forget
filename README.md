@@ -1,6 +1,10 @@
 # 📝 Don't Forget  
 
-**Don't Forget**은 할 일을 날짜와 카테고리별로 정리하고 진행 상황을 확인할 수 있는 개인용 투두리스트 프로젝트입니다. React 기반 웹 클라이언트와 Expo/React Native 모바일 앱이 하나의 Express API와 MongoDB를 사용합니다. Firebase Authentication으로 웹과 모바일의 이메일 계정을 관리하며, 인증된 사용자의 데이터만 API에서 읽고 수정하도록 구성했습니다.
+**Don't Forget**은 할 일을 날짜와 카테고리별로 정리하고 진행 상황을 확인할 수 있는 개인용 투두리스트 프로젝트입니다.
+<br>
+React 기반 웹 클라이언트와 Expo/React Native 모바일 앱이 하나의 Express API와 MongoDB를 사용합니다.
+<br>
+Firebase Authentication으로 웹과 모바일의 이메일 계정을 관리하며, 인증된 사용자의 데이터만 API에서 읽고 수정하도록 구성했습니다.
 <br>
 <br>
 
@@ -92,7 +96,7 @@ flowchart LR
 할 일과 프로필 API는 Firebase ID 토큰 인증을 요구합니다. 서버에는 기존 계정과의 호환을 위한 로컬 `/login`, `/signup` 경로도 남아 있으며, 현재 웹·모바일 클라이언트의 기본 인증 흐름은 Firebase 이메일 인증을 사용합니다.
 <br>
 <br>
-## 저장소 구조
+## 🌳 저장소 구조  
 
 ```text
 .
