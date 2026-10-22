@@ -72,8 +72,9 @@ flowchart LR
 | 메일·환경 설정 | Nodemailer, dotenv |
 | 품질 확인 | ESLint, Node.js 구문 검사, Vite 프로덕션 빌드 |
 
-## API 개요
 <br>
+
+## API 개요
 <br>
 기본 주소는 `http://localhost:3000/api`입니다. 실제 배포 또는 모바일 기기에서 접근할 때는 환경에 맞는 API 주소를 설정해야 합니다.
 
