@@ -120,6 +120,7 @@ flowchart LR
 
 ## 💡 시작하기
 <br>
+
 ### 사전 준비
 
 - Node.js 20.19 이상 및 npm
