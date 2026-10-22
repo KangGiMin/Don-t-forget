@@ -1,8 +1,8 @@
-# Don't Forget
+# 📝 Don't Forget  
 
 **Don't Forget**은 할 일을 날짜와 카테고리별로 정리하고 진행 상황을 확인할 수 있는 개인용 투두리스트 프로젝트입니다. React 기반 웹 클라이언트와 Expo/React Native 모바일 앱이 하나의 Express API와 MongoDB를 사용합니다. Firebase Authentication으로 웹과 모바일의 이메일 계정을 관리하며, 인증된 사용자의 데이터만 API에서 읽고 수정하도록 구성했습니다.
 
-## 주요 기능
+## ✨ 주요 기능  
 
 ### 웹 클라이언트
 
@@ -37,7 +37,7 @@
 - 문의 이메일 SMTP 발송 및 계정별 요청 제한(15분당 최대 5회)
 - 사용자 식별자에 대한 고유 부분 인덱스 확인 및 준비
 
-## 시스템 구성
+## ⚙️ 시스템 구성
 
 ```mermaid
 flowchart LR
@@ -52,7 +52,7 @@ flowchart LR
 
 웹과 모바일은 Firebase Authentication에서 발급한 ID 토큰을 `Authorization: Bearer <token>` 헤더로 API에 전달합니다. 서버는 토큰의 서명과 프로젝트 정보, 만료 여부를 검증한 뒤 Firebase UID를 사용자 데이터의 소유자 키로 사용합니다.
 
-## 기술 스택
+## 🔥 기술 스택
 
 | 영역 | 기술 |
 | --- | --- |
@@ -111,7 +111,7 @@ flowchart LR
             └── shared/             # 공용 폼 컴포넌트와 유틸리티
 ```
 
-## 시작하기
+## 💡 시작하기
 
 ### 사전 준비
 
