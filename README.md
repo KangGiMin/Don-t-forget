@@ -1,7 +1,7 @@
 # 📝 Don't Forget  
 
 **Don't Forget**은 할 일을 날짜와 카테고리별로 정리하고 진행 상황을 확인할 수 있는 개인용 투두리스트 프로젝트입니다. React 기반 웹 클라이언트와 Expo/React Native 모바일 앱이 하나의 Express API와 MongoDB를 사용합니다. Firebase Authentication으로 웹과 모바일의 이메일 계정을 관리하며, 인증된 사용자의 데이터만 API에서 읽고 수정하도록 구성했습니다.
-
+<br>
 ## ✨ 주요 기능  
 
 ### 웹 클라이언트
@@ -51,7 +51,7 @@ flowchart LR
 ```
 
 웹과 모바일은 Firebase Authentication에서 발급한 ID 토큰을 `Authorization: Bearer <token>` 헤더로 API에 전달합니다. 서버는 토큰의 서명과 프로젝트 정보, 만료 여부를 검증한 뒤 Firebase UID를 사용자 데이터의 소유자 키로 사용합니다.
-
+<br>
 ## 🔥 기술 스택
 
 | 영역 | 기술 |
@@ -70,7 +70,7 @@ flowchart LR
 | 품질 확인 | ESLint, Node.js 구문 검사, Vite 프로덕션 빌드 |
 
 ## API 개요
-
+<br>
 기본 주소는 `http://localhost:3000/api`입니다. 실제 배포 또는 모바일 기기에서 접근할 때는 환경에 맞는 API 주소를 설정해야 합니다.
 
 | 메서드 | 경로 | 설명 |
@@ -85,7 +85,7 @@ flowchart LR
 | `POST` | `/contact` | 관리자 문의 전송 |
 
 할 일과 프로필 API는 Firebase ID 토큰 인증을 요구합니다. 서버에는 기존 계정과의 호환을 위한 로컬 `/login`, `/signup` 경로도 남아 있으며, 현재 웹·모바일 클라이언트의 기본 인증 흐름은 Firebase 이메일 인증을 사용합니다.
-
+<br>
 ## 저장소 구조
 
 ```text
@@ -112,6 +112,7 @@ flowchart LR
 ```
 
 ## 💡 시작하기
+<br>
 
 ### 사전 준비
 
@@ -212,7 +213,7 @@ npm start
 ```
 
 실제 휴대전화에서 실행할 때 `localhost`는 개발 컴퓨터가 아니라 휴대전화를 가리킵니다. 컴퓨터와 휴대전화를 같은 네트워크에 연결하고, `EXPO_PUBLIC_API_URL`에 컴퓨터의 LAN IP 주소를 입력하세요. Android 에뮬레이터의 기본 API 주소는 `http://10.0.2.2:3000/api`입니다.
-
+<br>
 ## 확인 명령
 
 각 폴더에서 실행합니다.
