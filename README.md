@@ -1,6 +1,6 @@
 # 📝 Don't Forget  
 
-**Don't Forget**은 할 일을 날짜와 카테고리별로 정리하고 진행 상황을 확인할 수 있는 개인용 투두리스트 프로젝트입니다.
+**Don't Forget**은 할 일을 날짜와 카테고리별로 정리하고 진행 상황을 확인할 수 있는 개인용 To-do List 프로젝트입니다.
 <br>
 React 기반 웹 클라이언트와 Expo/React Native 모바일 앱이 하나의 Express API와 MongoDB를 사용합니다.
 <br>
