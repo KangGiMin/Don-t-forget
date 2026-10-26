@@ -22,27 +22,32 @@ function FindPwPage() {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-box">
-        <h1 className="login-title">{t.findPwTitle}</h1>
+    <div className="find-pw-container">
+      <div className="find-pw-box">
+        <div className="page-brand" aria-label="Don't Forget">
+          <span className="page-brand-mark" aria-hidden="true">✓</span>
+          <span>don't forget</span>
+        </div>
+        <h1 className="find-pw-title">{t.findPwTitle}</h1>
+        <p className="auth-intro">{t.appSubtitle}</p>
         {submitted ? (
-          <p role="status">등록된 계정이면 비밀번호 재설정 안내를 받을 수 있습니다.</p>
+          <p className="reset-status" role="status">등록된 계정이면 비밀번호 재설정 안내를 받을 수 있습니다.</p>
         ) : (
-          <form className="login-form" onSubmit={handleResetPassword}>
+          <form className="find-pw-form" onSubmit={handleResetPassword}>
             <input
               type="email"
-              className="login-input"
+              className="find-pw-input"
               placeholder={t.phIdEmail}
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               autoComplete="email"
               required
             />
-            <button type="submit" className="login-submit-btn">{t.btnChangePw}</button>
+            <button type="submit" className="find-pw-submit-btn">{t.btnChangePw}</button>
           </form>
         )}
-        <div className="login-footer">
-          <a href={ROUTES.login} className="footer-link">{t.linkBackLogin}</a>
+        <div className="find-pw-footer">
+          <a href={ROUTES.login} className="find-pw-link">{t.linkBackLogin}</a>
         </div>
       </div>
     </div>

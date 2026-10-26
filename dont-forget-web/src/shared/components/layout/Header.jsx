@@ -1,17 +1,55 @@
 import { useLanguage } from "@/shared/i18n/LanguageContext";
 
-export default function Header({ userName, toggleSidebar }) {
+export default function Header({
+  userName,
+  toggleSidebar,
+  onShowToday,
+  onShowAllTodos,
+  onScrollToCalendar,
+  showAllTodos,
+}) {
   const { t } = useLanguage();
 
   return (
-    <div className="header-area">
-      <div>
-        <h1 className="title-text">{userName}{t.appTitle}</h1>
-        <p className="subtitle-text">{t.appSubtitle}</p>
-      </div>
-      <button type="button" className="hamburger-button" onClick={toggleSidebar}>
-        ☰
+    <header className="header-area">
+      <button type="button" className="brand-home" onClick={onShowToday} aria-label={t.btnToday}>
+        <span className="brand-mark" aria-hidden="true">✓</span>
+        <span>don't forget</span>
       </button>
-    </div>
+
+      <nav className="header-nav" aria-label={t.appTitle}>
+        <button
+          type="button"
+          className={`header-nav-item ${showAllTodos ? "" : "active"}`}
+          onClick={onShowToday}
+        >
+          <span aria-hidden="true">◷</span>{t.btnToday}
+        </button>
+        <button
+          type="button"
+          className={`header-nav-item ${showAllTodos ? "active" : ""}`}
+          onClick={onShowAllTodos}
+        >
+          <span aria-hidden="true">▤</span>{t.navTodos}
+        </button>
+        <button type="button" className="header-nav-item" onClick={onScrollToCalendar}>
+          <span aria-hidden="true">▦</span>{t.navCalendar}
+        </button>
+      </nav>
+
+      <div className="header-user">
+        <span className="header-avatar" aria-hidden="true">{userName?.charAt(0) || "?"}</span>
+        <span className="header-user-name">{userName}</span>
+        <button
+          type="button"
+          className="hamburger-button"
+          onClick={toggleSidebar}
+          aria-label={t.menuProfile}
+          title={t.menuProfile}
+        >
+          ☰
+        </button>
+      </div>
+    </header>
   );
 }

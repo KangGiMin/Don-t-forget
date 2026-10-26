@@ -32,7 +32,12 @@ function FindIdPage() {
   return (
     <div className="find-id-container">
       <div className="find-id-box">
+        <div className="page-brand" aria-label="Don't Forget">
+          <span className="page-brand-mark" aria-hidden="true">✓</span>
+          <span>don't forget</span>
+        </div>
         <h1 className="find-id-title">{t.findIdTitle}</h1>
+        <p className="auth-intro">{t.appSubtitle}</p>
 
         {!foundId ? (
           <form className="find-id-form" onSubmit={handleFindId}>
@@ -49,18 +54,9 @@ function FindIdPage() {
             </button>
           </form>
         ) : (
-          <div style={{ margin: "20px 0", color: "#f8fafc", fontSize: "18px" }}>
+          <div className="find-id-result" role="status">
             <p>{t.txtYourIdIs}</p>
-            <p
-              style={{
-                color: "#38bdf8",
-                fontWeight: "bold",
-                fontSize: "24px",
-                margin: "15px 0",
-              }}
-            >
-              {foundId}
-            </p>
+            <p className="found-id">{foundId}</p>
             <button
               onClick={() => (window.location.href = ROUTES.login)}
               className="login-submit-btn"

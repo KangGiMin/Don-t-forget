@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { APP_VERSION, ROUTES, SUPPORTED_LANGUAGES } from "@/shared/constants/app";
 import ThemeSelector from "@/features/preferences/components/ThemeSelector";
 
-export default function Sidebar({ isSidebarOpen, setIsSidebarOpen, handleLogout, onShowAllTodos }) {
+export default function Sidebar({ isSidebarOpen, setIsSidebarOpen, handleLogout }) {
   const { t, lang, changeLanguage } = useLanguage();
   const navigate = useNavigate();
 
@@ -24,9 +24,6 @@ export default function Sidebar({ isSidebarOpen, setIsSidebarOpen, handleLogout,
             </select>
           </div>
           <div className="menu-item" onClick={() => navigate(ROUTES.contact)}>{t.menuContact}</div>
-          <button type="button" className="menu-item" onClick={() => { onShowAllTodos?.(); setIsSidebarOpen(false); }}>
-            {t.menuAllTodos}
-          </button>
           <div className="menu-item theme-menu-item">
             <span>{t.menuTheme}</span>
             <ThemeSelector />

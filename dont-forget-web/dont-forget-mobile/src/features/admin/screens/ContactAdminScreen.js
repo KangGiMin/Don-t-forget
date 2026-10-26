@@ -3,8 +3,11 @@ import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } fr
 import { auth } from "../../../services/firebase/firebase";
 import { ActionButton, FormField, LinkButton } from "../../../shared/components/FormControls";
 import { sendAdminMessage } from "../api/contactApi";
+import { useTheme } from "../../../shared/theme/ThemeContext";
 
 export default function ContactAdminScreen({ navigation }) {
+  const { colors } = useTheme();
+  const styles = makeStyles(colors);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
@@ -49,14 +52,7 @@ export default function ContactAdminScreen({ navigation }) {
     </KeyboardAvoidingView>
   );
 }
-const styles = StyleSheet.create({
-  flex: { flex: 1, backgroundColor: "#121212" },
-  container: { flexGrow: 1, padding: 20, paddingTop: 48 },
-  form: { width: "100%", maxWidth: 520, alignSelf: "center" },
-  back: { color: "#93c5fd", fontSize: 16, marginBottom: 18 },
-  title: { color: "#fff", fontSize: 27, fontWeight: "bold", marginBottom: 8 },
-  subtitle: { color: "#aaa", lineHeight: 20, marginBottom: 24 },
-  messageInput: { minHeight: 190 },
-  error: { color: "#fca5a5", textAlign: "center", marginBottom: 8 },
-  success: { color: "#86efac", textAlign: "center", marginBottom: 8 },
+const makeStyles = (c) => StyleSheet.create({
+  flex: { flex: 1, backgroundColor: c.background }, container: { flexGrow: 1, padding: 20, paddingTop: 48 }, form: { width: "100%", maxWidth: 520, alignSelf: "center", padding: 20, borderRadius: 18, backgroundColor: c.surface, borderWidth: 1, borderColor: c.border },
+  back: { color: c.primaryStrong, fontSize: 15, marginBottom: 18 }, title: { color: c.text, fontSize: 24, fontWeight: "bold", marginBottom: 8, textAlign: "center" }, subtitle: { color: c.muted, lineHeight: 20, marginBottom: 24, textAlign: "center" }, messageInput: { minHeight: 190 }, error: { color: c.danger, textAlign: "center", marginBottom: 8 }, success: { color: c.success, textAlign: "center", marginBottom: 8 },
 });

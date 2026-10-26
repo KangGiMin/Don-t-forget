@@ -14,8 +14,8 @@ export default function TodoComposer({
       <div className="form-top-row">
         <span className="selected-date-text">{translations.targetDate} {dueDate}</span>
         <select value={category} onChange={(event) => onCategoryChange(event.target.value)} className="select-box">
-          {TODO_CATEGORIES.map(({ value, optionLabel }) => (
-            <option key={value} value={value}>{translations[optionLabel]}</option>
+          {TODO_CATEGORIES.map(({ value, emoji, optionLabel }) => (
+            <option key={value} value={value}>{emoji} {translations[optionLabel]}</option>
           ))}
         </select>
       </div>

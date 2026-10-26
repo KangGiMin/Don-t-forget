@@ -1,4 +1,5 @@
 import { useLanguage } from "@/shared/i18n/LanguageContext";
+import { TODO_CATEGORIES } from "@/shared/constants/todos";
 
 export default function TodoListItem({
   todo,
@@ -13,12 +14,14 @@ export default function TodoListItem({
 }) {
   const { t } = useLanguage();
 
-  const categoryLabel = {
-    업무: t.catWorkTxt,
-    공부: t.catStudyTxt,
-    개인: t.catPersonalTxt,
-    기타: t.catOtherTxt,
-  }[todo.category] || todo.category;
+  const legacyCategories = {
+    업무: { label: t.catWorkTxt, emoji: "💼" },
+    개인: { label: t.catOtherTxt, emoji: "✨" },
+  };
+  const category = TODO_CATEGORIES.find(({ value }) => value === todo.category);
+  const legacyCategory = legacyCategories[todo.category];
+  const categoryLabel = category ? t[category.filterLabel] : legacyCategory?.label || todo.category;
+  const categoryEmoji = category?.emoji || legacyCategory?.emoji;
 
   return (
     <div className="todo-item">
@@ -42,7 +45,7 @@ export default function TodoListItem({
             <span className={`todo-text ${todo.completed ? "completed" : "active"}`}>
               {todo.text}
             </span>
-            <span className="todo-category-badge">{categoryLabel}</span>
+            <span className="todo-category-badge">{categoryEmoji ? `${categoryEmoji} ` : ""}{categoryLabel}</span>
           </div>
         )}
       </div>

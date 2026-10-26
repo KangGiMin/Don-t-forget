@@ -1,3 +1,4 @@
+import { useLayoutEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { LanguageProvider } from "@/shared/i18n/LanguageContext";
 import { ROUTES } from "@/shared/constants/app";
@@ -10,6 +11,28 @@ import ProfilePage from "@/features/profile/pages/ProfilePage";
 import ContactAdminPage from "@/features/admin/pages/ContactAdminPage";
 
 export default function App() {
+  useLayoutEffect(() => {
+    const root = document.documentElement;
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const applyTheme = () => {
+      const theme = localStorage.getItem("theme") || "system";
+      const shouldUseDark = theme === "dark" || (theme === "system" && mediaQuery.matches);
+      root.classList.toggle("dark", shouldUseDark);
+    };
+
+    applyTheme();
+    mediaQuery.addEventListener("change", applyTheme);
+    const handleStorageChange = (event) => {
+      if (event.key === "theme") applyTheme();
+    };
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      mediaQuery.removeEventListener("change", applyTheme);
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
   return (
     <LanguageProvider>
       <BrowserRouter>

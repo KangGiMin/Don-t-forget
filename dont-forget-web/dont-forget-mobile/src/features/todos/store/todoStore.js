@@ -3,7 +3,8 @@ import { createTodoAPI, deleteTodoAPI, getTodosAPI, updateTodoAPI } from "../api
 import { formatLocalDate } from "../../../shared/utils/date";
 import { getApiErrorMessage } from "../../../services/api/client";
 
-export const TODO_CATEGORIES = ["업무", "개인", "공부", "기타"];
+export const TODO_CATEGORIES = ["근무", "운동", "예약", "공부", "약속", "기타"];
+export const TODO_CATEGORY_EMOJIS = { 근무: "💼", 운동: "🏃", 예약: "📅", 공부: "📚", 약속: "🤝", 기타: "✨" };
 
 const useTodoStore = create((set, get) => ({
   todos: [],
@@ -32,7 +33,7 @@ const useTodoStore = create((set, get) => ({
       const response = await createTodoAPI({
         text: text.trim(),
         dueDate: dueDate || formatLocalDate(new Date()),
-        category: category || "개인",
+        category: category || "근무",
       });
       if (response.data.success && response.data.todo) {
         set((state) => ({ todos: [response.data.todo, ...state.todos], error: "" }));
