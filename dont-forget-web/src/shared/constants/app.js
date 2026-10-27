@@ -8,6 +8,9 @@ export const ROUTES = {
   todos: "/todo",
   profile: "/profile",
   contact: "/contact",
+  routines: "/routines",
+  journal: "/journal",
+  leaderboard: "/leaderboard",
 };
 
 export const PROFILE_DEFAULTS = {

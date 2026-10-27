@@ -217,3 +217,16 @@ html.dark .sidebar { background: var(--box-bg); color: var(--main-text); box-sha
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
 }
+
+/* Deadline and multiple reminder controls */
+.deadline-options { display: grid; grid-template-columns: minmax(120px, .65fr) minmax(220px, 1.35fr); gap: 14px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--box-border); }
+.deadline-field, .reminder-editor { display: flex; flex-direction: column; gap: 7px; color: var(--sub-text); font-size: 11px; font-weight: 700; }
+.deadline-field input, .reminder-controls input, .reminder-controls select { min-height: 35px; padding: 6px 9px; border: 1px solid var(--box-border); border-radius: 8px; background: var(--input-bg); color: var(--main-text); font: inherit; }
+.reminder-controls { display: flex; gap: 6px; }
+.reminder-controls input { width: 75px; }
+.reminder-controls select { min-width: 72px; }
+.reminder-controls button, .reminder-chips button { padding: 6px 9px; border: 1px solid var(--box-border); border-radius: 8px; background: var(--accent-soft); color: var(--accent-strong); font: inherit; font-size: 10px; font-weight: 700; cursor: pointer; }
+.reminder-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.reminder-chips button { border-radius: 15px; }
+.reminder-chips span { margin-left: 3px; }
+@media (max-width: 560px) { .deadline-options { grid-template-columns: 1fr; } }

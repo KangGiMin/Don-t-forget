@@ -1,0 +1,12 @@
+const express = require("express");
+const router = express.Router();
+const controller = require("./notificationController");
+const { authenticateFirebaseToken } = require("../../middleware/auth");
+router.get("/vapid-public-key", controller.getVapidKey);
+router.use(authenticateFirebaseToken);
+router.put("/time-zone", controller.setTimeZone);
+router.post("/expo-token", controller.registerExpoToken);
+router.delete("/expo-token", controller.unregisterExpoToken);
+router.post("/web-subscription", controller.registerWebSubscription);
+router.delete("/web-subscription", controller.unregisterWebSubscription);
+module.exports = router;

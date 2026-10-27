@@ -19,3 +19,6 @@ export async function apiPut(path, body) {
 export function getApiErrorMessage(error, fallback) {
   return error?.response?.data?.message || error?.message || fallback;
 }
+export async function apiDelete(path, body = {}) {
+  return axios.delete(API_URL + path, { ...(await authenticatedConfig({ "Content-Type": "application/json" })), data: body });
+}

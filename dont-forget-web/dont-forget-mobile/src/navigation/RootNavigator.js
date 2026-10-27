@@ -11,6 +11,9 @@ import FindPasswordScreen from "../features/auth/screens/FindPasswordScreen";
 import MainScreen from "../features/todos/screens/MainScreen";
 import ProfileScreen from "../features/profile/screens/ProfileScreen";
 import ContactAdminScreen from "../features/admin/screens/ContactAdminScreen";
+import RoutineScreen from "../features/extras/screens/RoutineScreen";
+import JournalScreen from "../features/extras/screens/JournalScreen";
+import LeaderboardScreen from "../features/extras/screens/LeaderboardScreen";
 import { auth } from "../services/firebase/firebase";
 import { ThemeProvider, useTheme } from "../shared/theme/ThemeContext";
 
@@ -33,6 +36,9 @@ function NavigatorContent() {
             <Stack.Screen name="Main" component={MainScreen} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
             <Stack.Screen name="ContactAdmin" component={ContactAdminScreen} />
+            <Stack.Screen name="Routines" component={RoutineScreen} />
+            <Stack.Screen name="Journal" component={JournalScreen} />
+            <Stack.Screen name="Leaderboard" component={LeaderboardScreen} />
           </>
         ) : (
           <>

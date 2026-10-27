@@ -1,0 +1,10 @@
+const express = require("express");
+const router = express.Router();
+const controller = require("./routineController");
+const { authenticateFirebaseToken } = require("../../middleware/auth");
+router.use(authenticateFirebaseToken);
+router.get("/", controller.getRoutines);
+router.post("/", controller.createRoutine);
+router.put("/:id", controller.updateRoutine);
+router.delete("/:id", controller.deleteRoutine);
+module.exports = router;

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { ActivityIndicator, FlatList, Modal, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, FlatList, Modal, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { signOut } from "firebase/auth";
 import { auth } from "../../../services/firebase/firebase";
 import { ActionButton, FormField } from "../../../shared/components/FormControls";
@@ -8,6 +8,7 @@ import { formatLocalDate, isValidLocalDate } from "../../../shared/utils/date";
 import useTodoStore, { TODO_CATEGORIES, TODO_CATEGORY_EMOJIS } from "../store/todoStore";
 import TodoComposer from "../components/TodoComposer";
 import TodoListItem from "../components/TodoListItem";
+import { registerExpoPushNotifications } from "../../../services/notifications/pushNotifications";
 
 const VIEW_FILTERS = ["오늘", "모든 할 일", "예정", "완료"];
 const WEEKDAYS = ["월", "화", "수", "목", "금", "토", "일"];
@@ -21,6 +22,8 @@ export default function MainScreen({ navigation }) {
   const [inputText, setInputText] = useState("");
   const [category, setCategory] = useState("근무");
   const [dueDate, setDueDate] = useState(formatLocalDate(new Date()));
+  const [dueTime, setDueTime] = useState("23:59");
+  const [reminders, setReminders] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [formError, setFormError] = useState("");
   const [filterCategory, setFilterCategory] = useState("전체");
@@ -54,7 +57,9 @@ export default function MainScreen({ navigation }) {
     if (!inputText.trim()) return setFormError("할 일을 입력해 주세요.");
     if (!isValidLocalDate(dueDate)) return setFormError("마감일을 올바른 YYYY-MM-DD 형식으로 입력해 주세요.");
     setFormError("");
-    const added = await addTodo({ text: inputText, category, dueDate });
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || "Asia/Seoul";
+    const dueAt = new Date(`${dueDate}T${dueTime}:00`).toISOString();
+    const added = await addTodo({ text: inputText, category, dueDate, dueTime, dueAt, timeZone, reminders });
     if (added) { setInputText(""); setSearchTerm(""); setFilterCategory("전체"); setViewFilter(dueDate === selectedDate ? "오늘" : "모든 할 일"); }
   };
   const openEditor = (todo) => { setEditingTodo(todo); setEditText(todo.text || ""); setEditCategory(todo.category === "업무" ? "근무" : todo.category === "개인" ? "기타" : todo.category || "근무"); setEditDueDate(todo.dueDate || formatLocalDate(new Date())); };
@@ -69,6 +74,7 @@ export default function MainScreen({ navigation }) {
   const openCalendar = () => { setCalendarMonth(toDate(selectedDate)); setCalendarVisible(true); };
   const selectDate = (value) => { setSelectedDate(value); setDueDate(value); setViewFilter("오늘"); setCalendarVisible(false); };
   const handleLogout = async () => { setSettingsVisible(false); await signOut(auth); };
+  const handleEnablePush = async () => { const result = await registerExpoPushNotifications(); Alert.alert(result.success ? "알림 설정" : "알림 등록 안내", result.message); };
   const week = useMemo(() => { const start = weekStart(selectedDate); return Array.from({ length: 7 }, (_, i) => { const d = new Date(start); d.setDate(start.getDate() + i); return d; }); }, [selectedDate]);
   const monthCells = useMemo(() => {
     const year = calendarMonth.getFullYear(); const month = calendarMonth.getMonth(); const first = new Date(year, month, 1); const start = new Date(year, month, 1 - ((first.getDay() + 6) % 7));
@@ -88,7 +94,7 @@ export default function MainScreen({ navigation }) {
     </TouchableOpacity>
     <View style={styles.weekStrip}>{week.map((date) => { const value = toIso(date); const active = value === selectedDate; return <TouchableOpacity key={value} onPress={() => selectDate(value)} style={[styles.dayCell, active && styles.dayCellActive]}><Text style={[styles.dayName, active && styles.dayTextActive]}>{WEEKDAYS[(date.getDay() + 6) % 7]}</Text><Text style={[styles.dayNumber, active && styles.dayTextActive]}>{date.getDate()}</Text><View style={[styles.dayDot, active && styles.dayDotActive]} /></TouchableOpacity>; })}</View>
     <View style={styles.viewTabs}>{VIEW_FILTERS.map((item) => <TouchableOpacity key={item} onPress={() => setViewFilter(item)} style={[styles.viewTab, viewFilter === item && styles.viewTabActive]}><Text style={[styles.viewTabText, viewFilter === item && styles.viewTabTextActive]}>{item === "예정" ? "예정" : item}</Text>{item === "완료" && todos.some((todo) => todo.completed) ? <View style={styles.tabDot} /> : null}</TouchableOpacity>)}</View>
-    <TodoComposer value={inputText} onChangeText={setInputText} onSubmit={handleAdd} category={category} onCategoryChange={setCategory} dueDate={dueDate} onDueDateChange={setDueDate} />
+    <TodoComposer value={inputText} onChangeText={setInputText} onSubmit={handleAdd} category={category} onCategoryChange={setCategory} dueDate={dueDate} dueTime={dueTime} onDueTimeChange={setDueTime} reminders={reminders} onRemindersChange={setReminders} onPickDate={openCalendar} />
     <Text style={styles.sectionLabel}>빠른 분류</Text>
     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filters}>
       {["전체", ...TODO_CATEGORIES].map((item) => <TouchableOpacity key={item} onPress={() => setFilterCategory(item)} style={[styles.filter, filterCategory === item && styles.filterSelected]}><Text style={[styles.filterText, filterCategory === item && styles.filterTextSelected]}>{TODO_CATEGORY_EMOJIS[item] ? `${TODO_CATEGORY_EMOJIS[item]} ` : ""}{item}</Text></TouchableOpacity>)}
@@ -121,8 +127,10 @@ export default function MainScreen({ navigation }) {
     <Modal visible={settingsVisible} transparent animationType="fade" onRequestClose={() => setSettingsVisible(false)}>
       <View style={styles.modalShade}><View style={styles.settingsModal}><View style={styles.settingsHeader}><Text style={styles.modalTitle}>메뉴 및 설정</Text><TouchableOpacity onPress={() => setSettingsVisible(false)}><Text style={styles.closeText}>✕</Text></TouchableOpacity></View>
         <TouchableOpacity style={styles.settingsLink} onPress={() => { setSettingsVisible(false); navigation.navigate("Profile"); }}><Text style={styles.settingsLinkText}>👤  내 프로필</Text><Text style={styles.chevron}>›</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.settingsLink} onPress={() => { setSettingsVisible(false); navigation.navigate("ContactAdmin"); }}><Text style={styles.settingsLinkText}>🎧  관리자에게 문의하기</Text><Text style={styles.chevron}>›</Text></TouchableOpacity>
-        <Text style={styles.label}>화면 테마</Text><View style={styles.themeOptions}>{[{ value: "light", label: "☀️ 라이트" }, { value: "dark", label: "🌙 다크" }, { value: "system", label: "📱 시스템" }].map((option) => <TouchableOpacity key={option.value} onPress={() => setThemeMode(option.value)} style={[styles.themeOption, themeMode === option.value && styles.themeOptionActive]}><Text style={[styles.themeOptionText, themeMode === option.value && styles.themeOptionTextActive]}>{option.label}</Text></TouchableOpacity>)}</View>
+        <TouchableOpacity style={styles.settingsLink} onPress={() => { setSettingsVisible(false); navigation.navigate("ContactAdmin"); }}><Text style={styles.settingsLinkText}>🎧  관리자에게 문의하기</Text><Text style={styles.chevron}>›</Text></TouchableOpacity>        <TouchableOpacity style={styles.settingsLink} onPress={() => { setSettingsVisible(false); navigation.navigate("Routines"); }}><Text style={styles.settingsLinkText}>🔁  반복 루틴</Text><Text style={styles.chevron}>›</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.settingsLink} onPress={() => { setSettingsVisible(false); navigation.navigate("Journal"); }}><Text style={styles.settingsLinkText}>📔  오늘의 일기</Text><Text style={styles.chevron}>›</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.settingsLink} onPress={() => { setSettingsVisible(false); navigation.navigate("Leaderboard"); }}><Text style={styles.settingsLinkText}>🏆  명예의 전당</Text><Text style={styles.chevron}>›</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.settingsLink} onPress={handleEnablePush}><Text style={styles.settingsLinkText}>🔔  모바일 푸시 알림 켜기</Text><Text style={styles.chevron}>›</Text></TouchableOpacity><Text style={styles.label}>화면 테마</Text><View style={styles.themeOptions}>{[{ value: "light", label: "☀️ 라이트" }, { value: "dark", label: "🌙 다크" }, { value: "system", label: "📱 시스템" }].map((option) => <TouchableOpacity key={option.value} onPress={() => setThemeMode(option.value)} style={[styles.themeOption, themeMode === option.value && styles.themeOptionActive]}><Text style={[styles.themeOptionText, themeMode === option.value && styles.themeOptionTextActive]}>{option.label}</Text></TouchableOpacity>)}</View>
         <TouchableOpacity style={styles.logout} onPress={handleLogout}><Text style={styles.logoutText}>로그아웃</Text></TouchableOpacity>
       </View></View>
     </Modal>

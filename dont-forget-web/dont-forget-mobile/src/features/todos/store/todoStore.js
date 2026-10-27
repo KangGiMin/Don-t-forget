@@ -28,11 +28,15 @@ const useTodoStore = create((set, get) => ({
     }
   },
 
-  addTodo: async ({ text, category, dueDate }) => {
+  addTodo: async ({ text, category, dueDate, dueTime, dueAt, timeZone, reminders }) => {
     try {
       const response = await createTodoAPI({
         text: text.trim(),
         dueDate: dueDate || formatLocalDate(new Date()),
+        dueTime: dueTime || "23:59",
+        dueAt,
+        timeZone: timeZone || Intl.DateTimeFormat().resolvedOptions().timeZone || "Asia/Seoul",
+        reminders: reminders || [],
         category: category || "근무",
       });
       if (response.data.success && response.data.todo) {

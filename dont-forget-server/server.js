@@ -7,10 +7,14 @@ if (!JWT_SECRET || Buffer.byteLength(JWT_SECRET, "utf8") < 32) {
 
 const app = require("./src/app");
 const { connectDatabase } = require("./src/config/database");
+const { startSchedulers } = require("./src/services/scheduler");
+const { backfillCompletionStats } = require("./src/services/completionBackfill");
 const PORT = Number(process.env.PORT) || 3000;
 
 connectDatabase()
-  .then(() => {
+  .then(async () => {
+    await backfillCompletionStats();
+    startSchedulers();
     app.listen(PORT, () => {
       console.log(`백엔드(Node) 서버가 http://localhost:${PORT} 에서 켜졌습니다!`);
     });

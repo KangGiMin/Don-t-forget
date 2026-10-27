@@ -1,0 +1,28 @@
+.feature-page { min-height: 100vh; padding: 32px 18px 60px; background: var(--main-bg, #fffdf9); color: var(--main-text, #342c26); font-family: "DM Sans", "Noto Sans KR", system-ui, sans-serif; }
+.feature-page-header { display: flex; align-items: center; gap: 14px; max-width: 760px; margin: 0 auto 22px; }
+.feature-page-header > a { display: grid; place-items: center; width: 38px; height: 38px; border: 1px solid var(--box-border, #efe8df); border-radius: 10px; color: var(--accent-strong, #24543e); text-decoration: none; font-size: 22px; }
+.feature-page-header p { margin: 0 0 4px; color: var(--accent-strong, #24543e); font-size: 10px; font-weight: 800; letter-spacing: 1px; }
+.feature-page-header h1 { margin: 0; color: var(--main-text, #342c26); font-size: 25px; }
+.feature-card { max-width: 760px; margin: 0 auto 12px; padding: 18px; border: 1px solid var(--box-border, #efe8df); border-radius: 14px; background: var(--box-bg, #fff); box-shadow: 0 8px 24px rgba(35,50,40,.05); }
+.feature-form { display: flex; flex-direction: column; gap: 14px; }
+.feature-form label { display: flex; flex-direction: column; gap: 6px; color: var(--sub-text, #78847c); font-size: 12px; font-weight: 700; }
+.feature-form input, .feature-form select, .feature-form textarea { min-height: 40px; padding: 9px 11px; border: 1px solid var(--box-border, #dfe7df); border-radius: 9px; background: var(--input-bg, #f7f9f6); color: var(--main-text, #26352d); font: inherit; }
+.feature-form textarea { resize: vertical; line-height: 1.65; }
+.feature-inline { display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap; }
+.feature-toggle, .weekday-picker, .feature-actions { display: flex; gap: 7px; flex-wrap: wrap; }
+.feature-toggle button, .weekday-picker button, .feature-actions > button:not(.feature-primary) { padding: 9px 12px; border: 1px solid var(--box-border, #dfe7df); border-radius: 9px; background: var(--input-bg, #f7f9f6); color: var(--main-text, #26352d); cursor: pointer; }
+.feature-toggle button.selected, .weekday-picker button.selected { background: var(--accent, #2f6b4f); border-color: var(--accent, #2f6b4f); color: #fff; }
+.weekday-picker { border: 0; padding: 0; margin: 0; }
+.weekday-picker legend { margin-bottom: 6px; color: var(--sub-text, #78847c); font-size: 12px; font-weight: 700; }
+.feature-primary { min-height: 42px; padding: 0 15px; border: 0; border-radius: 9px; background: var(--accent, #2f6b4f); color: #fff; font: inherit; font-weight: 800; cursor: pointer; }
+.feature-list, .leaderboard-list { max-width: 760px; margin: 18px auto; }
+.feature-row, .leaderboard-row { display: flex; align-items: center; gap: 12px; justify-content: space-between; }
+.feature-row p { margin: 5px 0 0; color: var(--sub-text, #78847c); font-size: 12px; }
+.feature-actions { align-items: center; }
+.feature-message { color: var(--accent-strong, #24543e); font-size: 13px; }
+.feature-empty { padding: 30px; color: var(--sub-text, #78847c); text-align: center; }
+.tier-summary { max-width: 760px; margin: 0 auto 18px; padding: 18px; display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; border-radius: 16px; background: var(--accent, #2f6b4f); color: #fff; }
+.tier-summary div { display: flex; flex-direction: column; gap: 6px; } .tier-summary span { color: #d8eadf; font-size: 11px; } .tier-summary strong { font-size: 19px; } .tier-summary p { grid-column: 1/-1; margin: 0; color: #e7f3eb; font-size: 12px; }
+.rank-medal { min-width: 35px; color: var(--accent-strong, #24543e); font-size: 20px; font-weight: 900; text-align: center; } .leaderboard-row img, .rank-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; background: var(--accent-soft, #e8f1eb); color: var(--accent-strong, #24543e); display: grid; place-items: center; font-weight: 800; } .leaderboard-row strong { flex: 1; } .leader-count { color: var(--accent-strong, #24543e); font-size: 12px; font-weight: 700; } .rank-1 { border-color: #d6b34c; } .rank-2 { border-color: #aeb7bd; } .rank-3 { border-color: #c98e67; }
+html.dark .feature-page { --main-bg: #211d1a; --main-text: #f4eee7; --sub-text: #b6a99d; --box-bg: #2c2722; --box-border: #423a32; --input-bg: #25211d; --accent: #2f6b4f; --accent-strong: #9ecfab; --accent-soft: #293a30; }
+@media(max-width:560px){.feature-page{padding:20px 12px 40px}.feature-page-header h1{font-size:21px}.feature-row{align-items:flex-start;flex-wrap:wrap}.feature-actions{width:100%;justify-content:flex-end}.tier-summary strong{font-size:15px}}

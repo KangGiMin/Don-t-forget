@@ -3,9 +3,10 @@ import "react-calendar/dist/Calendar.css";
 import confetti from "canvas-confetti";
 import { signOut } from "firebase/auth";
 import { useLanguage } from "@/shared/i18n/LanguageContext";
+import { getFeatureText } from "@/shared/i18n/featureTranslations";
 import { auth } from "@/shared/services/firebase/firebase";
 import { getFirebaseAuthHeaders } from "@/shared/services/firebase/idToken";
-import { requestNotificationPermission, sendNotification } from "@/shared/services/notifications/notification";
+import { registerBrowserPush, sendNotification } from "@/shared/services/notifications/notification";
 import { apiUrl } from "@/shared/config/api";
 import { formatLocalDate, getTodayString } from "@/shared/utils/date";
 import Header from "@/shared/components/layout/Header";
@@ -21,12 +22,15 @@ import { ROUTES } from "@/shared/constants/app";
 
 function MainPage() {
   const { t, lang } = useLanguage();
+  const featureText = getFeatureText(lang);
   const { todos, error, fetchTodos, addTodo, updateTodo, deleteTodo } = useTodoStore();
 
   const [newText, setNewText] = useState("");
   const [category, setCategory] = useState("근무");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [dueDate, setDueDate] = useState(getTodayString);
+  const [dueTime, setDueTime] = useState("23:59");
+  const [reminders, setReminders] = useState([]);
   const [selectedDate, setSelectedDate] = useState(() => new Date());
   const [activeStartDate, setActiveStartDate] = useState(() => new Date());
   const [searchTerm, setSearchTerm] = useState("");
@@ -63,10 +67,6 @@ function MainPage() {
   }, [userId]);
 
   useEffect(() => {
-    requestNotificationPermission();
-  }, []);
-
-  useEffect(() => {
     if (userId && userId !== "undefined") fetchTodos(userId);
   }, [userId, fetchTodos]);
 
@@ -74,7 +74,9 @@ function MainPage() {
     event.preventDefault();
     if (!newText.trim()) return;
 
-    const todoData = { userId, text: newText.trim(), category, dueDate };
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || "Asia/Seoul";
+    const dueAt = new Date(`${dueDate}T${dueTime}:00`).toISOString();
+    const todoData = { userId, text: newText.trim(), category, dueDate, dueTime, dueAt, timeZone, reminders };
     const result = await addTodo(todoData);
     if (!result?.success) return;
 
@@ -83,6 +85,11 @@ function MainPage() {
     setFilterCategory("전체");
     setShowAllTodos(false);
     sendNotification("할 일이 추가되었습니다.", `[${category}] ${todoData.text}`);
+  };
+
+  const handleEnableNotifications = async () => {
+    try { const result = await registerBrowserPush(); window.alert(result.message); }
+    catch (error) { window.alert(error?.message || "브라우저 푸시를 등록하지 못했습니다."); }
   };
 
   const handleToggleComplete = async (todo) => {
@@ -175,7 +182,7 @@ function MainPage() {
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
         handleLogout={handleLogout}
-        onShowAllTodos={() => setShowAllTodos(true)}
+        onEnableNotifications={handleEnableNotifications}
       />
 
       <main className="main-container">
@@ -209,7 +216,7 @@ function MainPage() {
             text={newText}
             onTextChange={setNewText}
             onSubmit={handleAddTodo}
-            translations={t}
+            translations={{ ...t, ...featureText }}
           />
           {error ? <p role="alert" className="todo-error">{error}</p> : null}
 
@@ -251,7 +258,7 @@ function MainPage() {
                 onSearchChange={setSearchTerm}
                 filterCategory={filterCategory}
                 onFilterChange={setFilterCategory}
-                translations={t}
+                translations={{ ...t, ...featureText }}
               />
               <TodoList
                 filteredTodos={filteredTodos}

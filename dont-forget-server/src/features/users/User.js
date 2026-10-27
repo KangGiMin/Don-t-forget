@@ -8,18 +8,15 @@ const userSchema = new mongoose.Schema({
   password: { type: String, select: false },
   statusMessage: { type: String, default: "", maxlength: 160 },
   profileImg: { type: String, default: "", maxlength: 2800000 },
+  timeZone: { type: String, default: "Asia/Seoul" },
+  lifetimeCompletedCount: { type: Number, default: 0, min: 0 },
+  tierPoints: { type: Number, default: 0, min: 0 },
+  expoPushTokens: [{ token: { type: String, trim: true }, deviceId: { type: String, trim: true }, updatedAt: { type: Date, default: Date.now } }],
+  webPushSubscriptions: [{ endpoint: { type: String }, expirationTime: { type: Number, default: null }, keys: { p256dh: { type: String }, auth: { type: String } }, updatedAt: { type: Date, default: Date.now } }],
 }, { timestamps: true, autoIndex: false });
 
-// Firebase 계정과 레거시 아이디 계정의 식별자는 각각 존재하는 문자열일 때만 고유해야 합니다.
-userSchema.index({ firebaseUid: 1 }, {
-  unique: true,
-  partialFilterExpression: { firebaseUid: { $type: "string" } },
-  name: "firebaseUid_1",
-});
-userSchema.index({ id: 1 }, {
-  unique: true,
-  partialFilterExpression: { id: { $type: "string" } },
-  name: "id_1",
-});
+userSchema.index({ firebaseUid: 1 }, { unique: true, partialFilterExpression: { firebaseUid: { $type: "string" } }, name: "firebaseUid_1" });
+userSchema.index({ id: 1 }, { unique: true, partialFilterExpression: { id: { $type: "string" } }, name: "id_1" });
+userSchema.index({ lifetimeCompletedCount: -1, createdAt: 1 }, { name: "leaderboard_completed_count" });
 
 module.exports = mongoose.model("User", userSchema);

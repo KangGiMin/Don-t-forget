@@ -9,6 +9,9 @@ import FindPwPage from "@/features/auth/pages/findpw/FindPwPage";
 import MainPage from "@/features/todos/pages/MainPage";
 import ProfilePage from "@/features/profile/pages/ProfilePage";
 import ContactAdminPage from "@/features/admin/pages/ContactAdminPage";
+import RoutinePage from "@/features/extras/pages/RoutinePage";
+import JournalPage from "@/features/extras/pages/JournalPage";
+import LeaderboardPage from "@/features/extras/pages/LeaderboardPage";
 
 export default function App() {
   useLayoutEffect(() => {
@@ -45,6 +48,9 @@ export default function App() {
           <Route path={ROUTES.todos} element={<MainPage />} />
           <Route path={ROUTES.profile} element={<ProfilePage />} />
           <Route path={ROUTES.contact} element={<ContactAdminPage />} />
+          <Route path={ROUTES.routines} element={<RoutinePage />} />
+          <Route path={ROUTES.journal} element={<JournalPage />} />
+          <Route path={ROUTES.leaderboard} element={<LeaderboardPage />} />
         </Routes>
       </BrowserRouter>
     </LanguageProvider>
