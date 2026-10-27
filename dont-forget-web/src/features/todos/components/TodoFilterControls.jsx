@@ -17,13 +17,13 @@ export default function TodoFilterControls({
         className="search-input"
       />
       <div className="todo-filter-tabs">
-        {TODO_FILTERS.map(({ value, label }) => (
+        {TODO_FILTERS.map(({ value, label, emoji }) => (
           <button
             key={value}
             onClick={() => onFilterChange(value)}
             className={`todo-filter-button ${filterCategory === value ? "active" : ""}`}
           >
-            {translations[label]}
+            {emoji ? <span aria-hidden="true">{emoji} </span> : null}{translations[label]}
           </button>
         ))}
       </div>

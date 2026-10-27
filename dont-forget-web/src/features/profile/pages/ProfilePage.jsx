@@ -68,6 +68,10 @@ export default function ProfilePage() {
   return (
     <div className="profile-container">
       <div className="profile-box">
+        <div className="page-brand" aria-label="Don't Forget">
+          <span className="page-brand-mark" aria-hidden="true">✓</span>
+          <span>don't forget</span>
+        </div>
         <ProfileHeader
           isEditing={isEditing}
           onBack={() => navigate(-1)}

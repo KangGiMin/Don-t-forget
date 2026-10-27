@@ -1,3 +1,4 @@
+import { useLayoutEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { LanguageProvider } from "@/shared/i18n/LanguageContext";
 import { ROUTES } from "@/shared/constants/app";
@@ -8,8 +9,33 @@ import FindPwPage from "@/features/auth/pages/findpw/FindPwPage";
 import MainPage from "@/features/todos/pages/MainPage";
 import ProfilePage from "@/features/profile/pages/ProfilePage";
 import ContactAdminPage from "@/features/admin/pages/ContactAdminPage";
+import RoutinePage from "@/features/extras/pages/RoutinePage";
+import JournalPage from "@/features/extras/pages/JournalPage";
+import LeaderboardPage from "@/features/extras/pages/LeaderboardPage";
 
 export default function App() {
+  useLayoutEffect(() => {
+    const root = document.documentElement;
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const applyTheme = () => {
+      const theme = localStorage.getItem("theme") || "system";
+      const shouldUseDark = theme === "dark" || (theme === "system" && mediaQuery.matches);
+      root.classList.toggle("dark", shouldUseDark);
+    };
+
+    applyTheme();
+    mediaQuery.addEventListener("change", applyTheme);
+    const handleStorageChange = (event) => {
+      if (event.key === "theme") applyTheme();
+    };
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      mediaQuery.removeEventListener("change", applyTheme);
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
   return (
     <LanguageProvider>
       <BrowserRouter>
@@ -22,6 +48,9 @@ export default function App() {
           <Route path={ROUTES.todos} element={<MainPage />} />
           <Route path={ROUTES.profile} element={<ProfilePage />} />
           <Route path={ROUTES.contact} element={<ContactAdminPage />} />
+          <Route path={ROUTES.routines} element={<RoutinePage />} />
+          <Route path={ROUTES.journal} element={<JournalPage />} />
+          <Route path={ROUTES.leaderboard} element={<LeaderboardPage />} />
         </Routes>
       </BrowserRouter>
     </LanguageProvider>

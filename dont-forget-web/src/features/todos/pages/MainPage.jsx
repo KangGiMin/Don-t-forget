@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "react-calendar/dist/Calendar.css";
 import confetti from "canvas-confetti";
 import { signOut } from "firebase/auth";
 import { useLanguage } from "@/shared/i18n/LanguageContext";
+import { getFeatureText } from "@/shared/i18n/featureTranslations";
 import { auth } from "@/shared/services/firebase/firebase";
 import { getFirebaseAuthHeaders } from "@/shared/services/firebase/idToken";
-import { requestNotificationPermission, sendNotification } from "@/shared/services/notifications/notification";
+import { registerBrowserPush, sendNotification } from "@/shared/services/notifications/notification";
 import { apiUrl } from "@/shared/config/api";
 import { formatLocalDate, getTodayString } from "@/shared/utils/date";
 import Header from "@/shared/components/layout/Header";
@@ -21,12 +22,15 @@ import { ROUTES } from "@/shared/constants/app";
 
 function MainPage() {
   const { t, lang } = useLanguage();
+  const featureText = getFeatureText(lang);
   const { todos, error, fetchTodos, addTodo, updateTodo, deleteTodo } = useTodoStore();
 
   const [newText, setNewText] = useState("");
-  const [category, setCategory] = useState("업무");
+  const [category, setCategory] = useState("근무");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [dueDate, setDueDate] = useState(getTodayString);
+  const [dueTime, setDueTime] = useState("23:59");
+  const [reminders, setReminders] = useState([]);
   const [selectedDate, setSelectedDate] = useState(() => new Date());
   const [activeStartDate, setActiveStartDate] = useState(() => new Date());
   const [searchTerm, setSearchTerm] = useState("");
@@ -34,6 +38,7 @@ function MainPage() {
   const [showAllTodos, setShowAllTodos] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [editText, setEditText] = useState("");
+  const calendarRef = useRef(null);
 
   const userId = localStorage.getItem("userId");
   const [userName, setUserName] = useState(localStorage.getItem("userName") || "친구");
@@ -62,10 +67,6 @@ function MainPage() {
   }, [userId]);
 
   useEffect(() => {
-    requestNotificationPermission();
-  }, []);
-
-  useEffect(() => {
     if (userId && userId !== "undefined") fetchTodos(userId);
   }, [userId, fetchTodos]);
 
@@ -73,7 +74,9 @@ function MainPage() {
     event.preventDefault();
     if (!newText.trim()) return;
 
-    const todoData = { userId, text: newText.trim(), category, dueDate };
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || "Asia/Seoul";
+    const dueAt = new Date(`${dueDate}T${dueTime}:00`).toISOString();
+    const todoData = { userId, text: newText.trim(), category, dueDate, dueTime, dueAt, timeZone, reminders };
     const result = await addTodo(todoData);
     if (!result?.success) return;
 
@@ -81,7 +84,12 @@ function MainPage() {
     setSearchTerm("");
     setFilterCategory("전체");
     setShowAllTodos(false);
-    sendNotification("새로운 할 일 등록 완료!", `[${category}] ${todoData.text}`);
+    sendNotification("할 일이 추가되었습니다.", `[${category}] ${todoData.text}`);
+  };
+
+  const handleEnableNotifications = async () => {
+    try { const result = await registerBrowserPush(); window.alert(result.message); }
+    catch (error) { window.alert(error?.message || "브라우저 푸시를 등록하지 못했습니다."); }
   };
 
   const handleToggleComplete = async (todo) => {
@@ -129,6 +137,8 @@ function MainPage() {
     setDueDate(getTodayString());
   };
 
+  const handleShowToday = () => handleResetToToday();
+
   const formattedSelectedDate = formatLocalDate(selectedDate);
   const selectedDayTodos = showAllTodos
     ? todos
@@ -144,31 +154,50 @@ function MainPage() {
     }
   }, [isCompleted100]);
   const filteredTodos = selectedDayTodos.filter((todo) => {
-    const matchesCategory = filterCategory === "전체" || todo.category === filterCategory;
+    const legacyCategoryAliases = { 근무: ["업무"], 기타: ["개인"] };
+    const matchesCategory = filterCategory === "전체" || todo.category === filterCategory || legacyCategoryAliases[filterCategory]?.includes(todo.category);
     const matchesSearch = todo.text.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
+  const weekDays = Array.from({ length: 7 }, (_, index) => {
+    const date = new Date(selectedDate);
+    date.setDate(date.getDate() - date.getDay() + index);
+    return date;
+  });
+  const dateHeading = new Intl.DateTimeFormat(lang, { dateStyle: "full" }).format(selectedDate);
+
+
   return (
     <div className="main-page">
-      <Header userName={userName} toggleSidebar={() => setIsSidebarOpen((isOpen) => !isOpen)} />
+      <Header
+        userName={userName}
+        toggleSidebar={() => setIsSidebarOpen((isOpen) => !isOpen)}
+        onShowToday={handleShowToday}
+        onShowAllTodos={() => setShowAllTodos(true)}
+        onScrollToCalendar={() => calendarRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })}
+        showAllTodos={showAllTodos}
+      />
       <Sidebar
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
         handleLogout={handleLogout}
-        onShowAllTodos={() => setShowAllTodos(true)}
+        onEnableNotifications={handleEnableNotifications}
       />
-      <div className="main-container">
+
+      <main className="main-container">
         <div className="content-wrapper">
-          <TodoCalendarPanel
-            selectedDate={selectedDate}
-            activeStartDate={activeStartDate}
-            onDateChange={handleDateChange}
-            onActiveStartDateChange={setActiveStartDate}
-            onResetToday={handleResetToToday}
-            todayLabel={t.btnToday}
-            locale={lang}
-          />
+          <section className="welcome-section">
+            <div>
+              <p className="welcome-date">{dateHeading}</p>
+              <h1 className="welcome-title">{t.welcomeGreeting.replace("{name}", userName)}</h1>
+              <p className="welcome-subtitle">{t.appSubtitle}</p>
+            </div>
+            <button type="button" onClick={handleShowToday} className="today-btn">
+              <span aria-hidden="true">↗</span>{t.btnToday}
+            </button>
+          </section>
+
           <TodoProgressPanel
             isCompleted100={isCompleted100}
             congratsLabel={t.statsCongrats}
@@ -179,6 +208,7 @@ function MainPage() {
             doneLabel={t.statsDone}
             progressPercent={progressPercent}
           />
+
           <TodoComposer
             dueDate={dueDate}
             category={category}
@@ -186,29 +216,90 @@ function MainPage() {
             text={newText}
             onTextChange={setNewText}
             onSubmit={handleAddTodo}
-            translations={t}
+            translations={{ ...t, ...featureText }}
           />
           {error ? <p role="alert" className="todo-error">{error}</p> : null}
-          <TodoFilterControls
-            searchTerm={searchTerm}
-            onSearchChange={setSearchTerm}
-            filterCategory={filterCategory}
-            onFilterChange={setFilterCategory}
-            translations={t}
-          />
-          <TodoList
-            filteredTodos={filteredTodos}
-            editingId={editingId}
-            setEditingId={setEditingId}
-            editText={editText}
-            setEditText={setEditText}
-            handleToggleComplete={handleToggleComplete}
-            handleStartEdit={handleStartEdit}
-            handleSaveEdit={handleSaveEdit}
-            handleDeleteTodo={handleDeleteTodo}
-          />
+
+          <div className="dashboard-board">
+            <section className="task-panel" aria-label={t.navTodos}>
+              <div className="task-panel-heading">
+                <div>
+                  <p className="panel-eyebrow">{showAllTodos ? t.navTodos : dateHeading}</p>
+                  <h2>{showAllTodos ? t.navTodos : t.searchResultTitle}</h2>
+                </div>
+                <span className="task-count">{filteredTodos.length}{t.statsCountSuffix}</span>
+              </div>
+
+              <div className="week-strip" role="group" aria-label={t.navCalendar}>
+                {weekDays.map((date) => {
+                  const isSelected = !showAllTodos && formatLocalDate(date) === formattedSelectedDate;
+                  return (
+                    <button
+                      key={formatLocalDate(date)}
+                      type="button"
+                      className={`week-day ${isSelected ? "selected" : ""}`}
+                      onClick={() => {
+                        setShowAllTodos(false);
+                        setSelectedDate(date);
+                        setActiveStartDate(date);
+                        setDueDate(formatLocalDate(date));
+                      }}
+                      aria-pressed={isSelected}
+                    >
+                      <span>{new Intl.DateTimeFormat(lang, { weekday: "short" }).format(date)}</span>
+                      <strong>{date.getDate()}</strong>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <TodoFilterControls
+                searchTerm={searchTerm}
+                onSearchChange={setSearchTerm}
+                filterCategory={filterCategory}
+                onFilterChange={setFilterCategory}
+                translations={{ ...t, ...featureText }}
+              />
+              <TodoList
+                filteredTodos={filteredTodos}
+                editingId={editingId}
+                setEditingId={setEditingId}
+                editText={editText}
+                setEditText={setEditText}
+                handleToggleComplete={handleToggleComplete}
+                handleStartEdit={handleStartEdit}
+                handleSaveEdit={handleSaveEdit}
+                handleDeleteTodo={handleDeleteTodo}
+              />
+            </section>
+
+            <aside className="calendar-column" ref={calendarRef}>
+              <section className="calendar-card">
+                <div className="calendar-card-heading">
+                  <p className="panel-eyebrow">{t.targetDate}</p>
+                  <h2>{t.navCalendar}</h2>
+                </div>
+                <TodoCalendarPanel
+                  selectedDate={selectedDate}
+                  activeStartDate={activeStartDate}
+                  onDateChange={handleDateChange}
+                  onActiveStartDateChange={setActiveStartDate}
+                  onResetToday={handleShowToday}
+                  todayLabel={t.btnToday}
+                  locale={lang}
+                />
+              </section>
+              <div className="calendar-summary">
+                <span className="summary-icon" aria-hidden="true">✳</span>
+                <div>
+                  <strong>{formattedSelectedDate}</strong>
+                  <p>{completedCount} / {totalCount} {t.statsDone}</p>
+                </div>
+              </div>
+            </aside>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

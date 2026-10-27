@@ -57,7 +57,12 @@ function SignupPage() {
   return (
     <div className="register-container">
       <div className="register-box">
+        <div className="page-brand" aria-label="Don't Forget">
+          <span className="page-brand-mark" aria-hidden="true">✓</span>
+          <span>don't forget</span>
+        </div>
         <h1 className="register-title">{t.signupTitle}</h1>
+        <p className="auth-intro">{t.appSubtitle}</p>
         <form className="register-form" onSubmit={handleRegister}>
           <input type="email" className="register-input" placeholder={t.phSignupId} value={email} onChange={(event) => setEmail(event.target.value)} autoComplete="email" required />
           <input type="password" className="register-input" placeholder={t.phSignupPw} value={password} onChange={(event) => setPassword(event.target.value)} autoComplete="new-password" minLength={10} required />

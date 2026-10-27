@@ -58,7 +58,12 @@ function LoginPage() {
   return (
     <div className="login-container">
       <div className="login-box">
+        <div className="page-brand" aria-label="Don't Forget">
+          <span className="page-brand-mark" aria-hidden="true">✓</span>
+          <span>don't forget</span>
+        </div>
         <h1 className="login-title">{t.loginTitle}</h1>
+        <p className="auth-intro">{t.appSubtitle}</p>
         
        <form className="login-form" onSubmit={handleEmailLogin}>
           <input type="email" placeholder={t.phIdEmail} value={email} onChange={(e) => setEmail(e.target.value)} className="login-input" />
@@ -76,11 +81,11 @@ function LoginPage() {
         </div>
 
         <div className="login-links">
-          <span className="link-text" onClick={() => navigate(ROUTES.signup)}>{t.linkSignup}</span>
+          <button type="button" className="link-text" onClick={() => navigate(ROUTES.signup)}>{t.linkSignup}</button>
           <span className="separator">|</span>
-          <span className="link-text" onClick={() => navigate(ROUTES.findId)}>{t.linkFindId}</span>
+          <button type="button" className="link-text" onClick={() => navigate(ROUTES.findId)}>{t.linkFindId}</button>
           <span className="separator">|</span>
-          <span className="link-text" onClick={() => navigate(ROUTES.findPassword)}>{t.linkFindPw}</span>
+          <button type="button" className="link-text" onClick={() => navigate(ROUTES.findPassword)}>{t.linkFindPw}</button>
         </div>
       </div>
     </div>

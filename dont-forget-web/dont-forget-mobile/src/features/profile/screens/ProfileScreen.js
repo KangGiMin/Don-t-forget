@@ -6,8 +6,11 @@ import { auth } from "../../../services/firebase/firebase";
 import { ActionButton, FormField, LinkButton } from "../../../shared/components/FormControls";
 import { apiGet } from "../../../services/api/client";
 import { getProfile, saveProfile } from "../api/profileApi";
+import { useTheme } from "../../../shared/theme/ThemeContext";
 
 export default function ProfileScreen({ navigation }) {
+  const { colors } = useTheme();
+  const styles = makeStyles(colors);
   const user = auth.currentUser;
   const [name, setName] = useState(user?.displayName || "");
   const [statusMessage, setStatusMessage] = useState("");
@@ -116,22 +119,13 @@ export default function ProfileScreen({ navigation }) {
     </KeyboardAvoidingView>
   );
 }
-const styles = StyleSheet.create({
-  flex: { flex: 1, backgroundColor: "#121212" },
-  container: { flexGrow: 1, padding: 20, paddingTop: 48 },
-  form: { width: "100%", maxWidth: 520, alignSelf: "center" },
-  title: { color: "#fff", fontSize: 27, fontWeight: "bold", textAlign: "center", marginBottom: 22 },
-  avatar: { width: 104, height: 104, borderRadius: 52, alignSelf: "center", marginBottom: 10, backgroundColor: "#242424" },
-  avatarFallback: { width: 104, height: 104, borderRadius: 52, alignSelf: "center", marginBottom: 10, backgroundColor: "#263449", alignItems: "center", justifyContent: "center" },
-  avatarLetter: { color: "#bfdbfe", fontSize: 42, fontWeight: "700" },
-  photoButton: { alignSelf: "center", paddingVertical: 9, paddingHorizontal: 14, marginBottom: 8, borderRadius: 18, backgroundColor: "#202a39" },
-  photoButtonText: { color: "#bfdbfe", fontSize: 13, fontWeight: "600" },
-  email: { color: "#aaa", textAlign: "center", marginBottom: 24 },
-  label: { color: "#d4d4d4", marginBottom: 8, fontWeight: "600" },
-  stats: { flexDirection: "row", justifyContent: "space-between", backgroundColor: "#1e1e1e", padding: 16, borderRadius: 8, marginVertical: 12 },
-  statLabel: { color: "#bbb" },
-  statValue: { color: "#93c5fd", fontWeight: "700" },
-  muted: { color: "#aaa", textAlign: "center", marginVertical: 24 },
-  error: { color: "#fca5a5", textAlign: "center", marginBottom: 8 },
-  notice: { color: "#86efac", textAlign: "center", marginBottom: 8 },
+const makeStyles = (c) => StyleSheet.create({
+  flex: { flex: 1, backgroundColor: c.background },
+  container: { flexGrow: 1, padding: 20, paddingTop: 48 }, form: { width: "100%", maxWidth: 520, alignSelf: "center" },
+  title: { color: c.text, fontSize: 27, fontWeight: "bold", textAlign: "center", marginBottom: 22 },
+  avatar: { width: 104, height: 104, borderRadius: 52, alignSelf: "center", marginBottom: 10, backgroundColor: c.surfaceAlt }, avatarFallback: { width: 104, height: 104, borderRadius: 52, alignSelf: "center", marginBottom: 10, backgroundColor: c.primarySoft, alignItems: "center", justifyContent: "center" }, avatarLetter: { color: c.primaryStrong, fontSize: 42, fontWeight: "700" },
+  photoButton: { alignSelf: "center", paddingVertical: 9, paddingHorizontal: 14, marginBottom: 8, borderRadius: 18, backgroundColor: c.primarySoft }, photoButtonText: { color: c.primaryStrong, fontSize: 13, fontWeight: "600" },
+  email: { color: c.muted, textAlign: "center", marginBottom: 24 }, label: { color: c.text, marginBottom: 8, fontWeight: "600" },
+  stats: { flexDirection: "row", justifyContent: "space-between", backgroundColor: c.surface, borderColor: c.border, borderWidth: 1, padding: 16, borderRadius: 12, marginVertical: 12 }, statLabel: { color: c.muted }, statValue: { color: c.primaryStrong, fontWeight: "700" }, muted: { color: c.muted, textAlign: "center", marginVertical: 24 },
+  error: { color: c.danger, textAlign: "center", marginBottom: 8 }, notice: { color: c.success, textAlign: "center", marginBottom: 8 },
 });

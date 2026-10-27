@@ -42,7 +42,7 @@ body {
 }
 
 .theme-main-btn:hover {
-  background-color: #3b82f6; /* 마우스 올리면 파란색! */
+  background-color: #2f6b4f; /* 마우스 올리면 파란색! */
   color: white;
 }
 
@@ -78,6 +78,6 @@ body {
 }
 
 .check-mark {
-  color: #3b82f6; /* 체크 표시는 파란색으로 포인트! */
+  color: #2f6b4f; /* 체크 표시는 파란색으로 포인트! */
   font-weight: bold;
 }

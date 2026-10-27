@@ -1,26 +1,43 @@
-// 1. 브라우저한테 알림 권한을 요청하는 함수
+import { apiUrl } from "@/shared/config/api";
+import { getFirebaseAuthHeaders } from "@/shared/services/firebase/idToken";
+
+function decodeVapidKey(value) {
+  const padding = "=".repeat((4 - value.length % 4) % 4);
+  const base64 = (value + padding).replace(/-/g, "+").replace(/_/g, "/");
+  const raw = window.atob(base64);
+  return Uint8Array.from(raw, (char) => char.charCodeAt(0));
+}
+
+export async function registerBrowserPush() {
+  if (!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)) {
+    return { success: false, message: "이 브라우저는 푸시 알림을 지원하지 않습니다." };
+  }
+  if (!window.isSecureContext) return { success: false, message: "브라우저 푸시는 HTTPS 연결에서 사용할 수 있습니다." };
+  const permission = await Notification.requestPermission();
+  if (permission !== "granted") return { success: false, message: "브라우저 알림 권한이 허용되지 않았습니다." };
+  const keyResponse = await fetch(apiUrl("/notifications/vapid-public-key"));
+  const keyResult = await keyResponse.json();
+  if (!keyResult.publicKey) return { success: false, message: "서버 Web Push 키 설정이 필요합니다." };
+  const registration = await navigator.serviceWorker.register("/service-worker.js");
+  const subscription = await registration.pushManager.getSubscription() || await registration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: decodeVapidKey(keyResult.publicKey) });
+  const response = await fetch(apiUrl("/notifications/web-subscription"), {
+    method: "POST",
+    headers: await getFirebaseAuthHeaders({ "Content-Type": "application/json" }),
+    body: JSON.stringify({ subscription: subscription.toJSON(), timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone || "Asia/Seoul" }),
+  });
+  const result = await response.json();
+  if (!result.success) return { success: false, message: result.message || "브라우저 알림을 등록하지 못했습니다." };
+  return { success: true, message: result.configured ? "브라우저 푸시 알림을 켰습니다." : "구독은 저장했지만 서버 VAPID 키 설정이 필요합니다." };
+}
+
+// Keep the immediate in-page task feedback separate from scheduled push reminders.
 export const requestNotificationPermission = () => {
-
-  // 브라우저가 알림 기능을 지원하는지 확인
-  if ('Notification' in window) {
-    Notification.requestPermission().then((permission) => {
-      if (permission === 'granted') {
-        console.log('알림 권한 획득 완료! 😎');
-      }
-    });
-  }
+  if ("Notification" in window && Notification.permission === "default") return Notification.requestPermission();
+  return Promise.resolve("Notification" in window ? Notification.permission : "unsupported");
 };
 
-// 2. 띠링~ 하고 실제 알림을 쏴주는 함수
 export const sendNotification = (title, body) => {
-
-  // 권한이 '허용(granted)' 상태일 때만 알림을 보냄
-  if ('Notification' in window && Notification.permission === 'granted') {
-    new Notification(title, {
-      body: body,
-      icon: '/favicon.png', // 알림 옆에 뜰 앱 아이콘
-    });
+  if ("Notification" in window && Notification.permission === "granted") {
+    navigator.serviceWorker?.ready.then((registration) => registration.showNotification(title, { body, icon: "/favicon.png" })).catch(() => new Notification(title, { body, icon: "/favicon.png" }));
   }
 };
-
-

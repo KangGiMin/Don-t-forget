@@ -2,9 +2,11 @@ import { useLanguage } from "@/shared/i18n/LanguageContext";
 import { useNavigate } from "react-router-dom";
 import { APP_VERSION, ROUTES, SUPPORTED_LANGUAGES } from "@/shared/constants/app";
 import ThemeSelector from "@/features/preferences/components/ThemeSelector";
+import { getFeatureText } from "@/shared/i18n/featureTranslations";
 
-export default function Sidebar({ isSidebarOpen, setIsSidebarOpen, handleLogout, onShowAllTodos }) {
+export default function Sidebar({ isSidebarOpen, setIsSidebarOpen, handleLogout, onEnableNotifications }) {
   const { t, lang, changeLanguage } = useLanguage();
+  const extra = getFeatureText(lang);
   const navigate = useNavigate();
 
   return (
@@ -24,9 +26,10 @@ export default function Sidebar({ isSidebarOpen, setIsSidebarOpen, handleLogout,
             </select>
           </div>
           <div className="menu-item" onClick={() => navigate(ROUTES.contact)}>{t.menuContact}</div>
-          <button type="button" className="menu-item" onClick={() => { onShowAllTodos?.(); setIsSidebarOpen(false); }}>
-            {t.menuAllTodos}
-          </button>
+          <button type="button" className="menu-item" onClick={onEnableNotifications}>{extra.menuEnableNotifications}</button>
+          <div className="menu-item" onClick={() => navigate(ROUTES.routines)}>{extra.navRoutines}</div>
+          <div className="menu-item" onClick={() => navigate(ROUTES.journal)}>{extra.navJournal}</div>
+          <div className="menu-item" onClick={() => navigate(ROUTES.leaderboard)}>{extra.navLeaderboard}</div>
           <div className="menu-item theme-menu-item">
             <span>{t.menuTheme}</span>
             <ThemeSelector />

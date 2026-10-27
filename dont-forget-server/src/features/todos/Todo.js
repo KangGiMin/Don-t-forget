@@ -1,19 +1,27 @@
-// 할 일 로직
-
 const mongoose = require("mongoose");
 
-// 할 일(Todo) 데이터의 뼈대(Schema) 빚기
-const todoSchema = new mongoose.Schema({
-    userId: {
-    type: String, // 👈 "이제 파이어베이스가 주는 문자열(String) 신분증도 다 받겠다!"
-    required: true
-  }, // 어떤 유저의 할 일인지!
-  text: { type: String, required: true }, // 할 일 내용 (예: 운동하기)
-  category: { type: String, default: "기본" }, // 카테고리 (예: 운동, 공부, 쇼핑)
-  dueDate: { type: String, required: true }, // 마감 기한 (날짜)
-  priority: { type: String, default: "보통" }, // 우선순위 (높음 / 보통 / 낮음)
-  completed: { type: Boolean, default: false }, // 완료 여부 (체크했으면 true, 아니면 false)
-  createdAt: { type: Date, default: Date.now }, // 만든 날짜
-});
+const reminderSchema = new mongoose.Schema({
+  offsetMinutes: { type: Number, required: true, min: 1, max: 43200 },
+  sentAt: { type: Date, default: null },
+  claimedAt: { type: Date, default: null },
+}, { _id: false });
 
+const todoSchema = new mongoose.Schema({
+  userId: { type: String, required: true, index: true },
+  text: { type: String, required: true, trim: true, maxlength: 200 },
+  category: { type: String, default: "기타" },
+  dueDate: { type: String, required: true },
+  dueTime: { type: String, default: "23:59", match: /^([01]\d|2[0-3]):[0-5]\d$/ },
+  dueAt: { type: Date, default: null, index: true },
+  timeZone: { type: String, default: "Asia/Seoul" },
+  reminders: { type: [reminderSchema], default: [] },
+  priority: { type: String, default: "보통" },
+  completed: { type: Boolean, default: false },
+  completedAt: { type: Date, default: null },
+  routineId: { type: mongoose.Schema.Types.ObjectId, ref: "Routine", default: null },
+  occurrenceDate: { type: String, default: null },
+  createdAt: { type: Date, default: Date.now },
+}, { timestamps: true });
+
+todoSchema.index({ routineId: 1, occurrenceDate: 1 }, { unique: true, partialFilterExpression: { routineId: { $type: "objectId" }, occurrenceDate: { $type: "string" } } });
 module.exports = mongoose.model("Todo", todoSchema);
