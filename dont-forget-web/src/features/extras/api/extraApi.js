@@ -9,7 +9,7 @@ export const getRoutines = () => request("/routines");
 export const createRoutine = (data) => request("/routines", { method: "POST", body: JSON.stringify(data) });
 export const updateRoutine = (id, data) => request(`/routines/${encodeURIComponent(id)}`, { method: "PUT", body: JSON.stringify(data) });
 export const deleteRoutine = (id) => request(`/routines/${encodeURIComponent(id)}`, { method: "DELETE" });
-export const getJournals = (date) => request(`/journals?from=${encodeURIComponent(date)}&to=${encodeURIComponent(date)}`);
+export const getJournals = (from, to = from) => request(`/journals?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`);
 export const saveJournal = (data) => request("/journals", { method: "PUT", body: JSON.stringify(data) });
 export const deleteJournal = (date) => request(`/journals/${encodeURIComponent(date)}`, { method: "DELETE" });
 export const getLeaderboard = () => request("/leaderboard");

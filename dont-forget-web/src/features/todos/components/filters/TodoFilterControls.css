@@ -1,0 +1,44 @@
+.search-input {
+  width: 100%;
+  min-height: 36px;
+  margin: 0 0 10px;
+  padding: 0 10px;
+  border: 1px solid var(--box-border);
+  border-radius: 7px;
+  outline: none;
+  background: var(--input-bg);
+  color: var(--main-text);
+  font: inherit;
+  font-size: 11px;
+}
+.todo-filter-tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  margin: 0 0 8px;
+  padding: 0 0 3px;
+  scrollbar-width: thin;
+}
+.todo-filter-button {
+  flex: 0 0 auto;
+  padding: 6px 10px;
+  border: 1px solid var(--box-border);
+  border-radius: 18px;
+  background: var(--box-bg);
+  color: var(--sub-text);
+  font: inherit;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+.todo-filter-button:hover {
+  border-color: var(--accent);
+  color: var(--accent-strong);
+}
+.todo-filter-button.active {
+  border-color: var(--accent-soft);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  font-weight: 800;
+}

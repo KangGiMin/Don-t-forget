@@ -1,3 +1,4 @@
+import { useMobileLayout, useReadableStyles } from "../../../shared/layout/useMobileLayout";
 import React, { useState } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from "react-native";
 import { auth } from "../../../services/firebase/firebase";
@@ -7,7 +8,8 @@ import { useTheme } from "../../../shared/theme/ThemeContext";
 
 export default function ContactAdminScreen({ navigation }) {
   const { colors } = useTheme();
-  const styles = makeStyles(colors);
+  const layout = useMobileLayout();
+  const styles = useReadableStyles(makeStyles, colors);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
@@ -36,7 +38,7 @@ export default function ContactAdminScreen({ navigation }) {
 
   return (
     <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === "ios" ? "padding" : undefined}>
-      <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
+      <ScrollView contentContainerStyle={[styles.container, layout.pageContent]} keyboardShouldPersistTaps="handled">
         <View style={styles.form}>
           <Text style={styles.back} onPress={() => navigation.goBack()}>‹ 뒤로</Text>
           <Text style={styles.title}>관리자에게 문의하기</Text>

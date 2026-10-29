@@ -17,6 +17,8 @@ import LeaderboardScreen from "../features/extras/screens/LeaderboardScreen";
 import { auth } from "../services/firebase/firebase";
 import { ThemeProvider, useTheme } from "../shared/theme/ThemeContext";
 
+import { SafeAreaProvider } from "react-native-safe-area-context";
+
 const Stack = createNativeStackNavigator();
 
 function NavigatorContent() {
@@ -54,6 +56,6 @@ function NavigatorContent() {
   );
 }
 
-export default function RootNavigator() { return <ThemeProvider><NavigatorContent /></ThemeProvider>; }
+export default function RootNavigator() { return <SafeAreaProvider><ThemeProvider><NavigatorContent /></ThemeProvider></SafeAreaProvider>; }
 
 const styles = StyleSheet.create({ loading: { flex: 1, justifyContent: "center", alignItems: "center" } });

@@ -26,22 +26,33 @@ async function sendExpoToken(token, payload) {
 
 async function sendToUser(userId, payload) {
   const user = await User.findOne({ firebaseUid: userId }).select("expoPushTokens webPushSubscriptions");
-  if (!user) return { sent: 0, total: 0 };
+  if (!user) return { sent: 0, total: 0, expoTargets: 0, webTargets: 0, expoSent: 0, webSent: 0 };
   const jobs = [];
-  for (const device of user.expoPushTokens || []) jobs.push(() => sendExpoToken(device.token, payload));
+  for (const device of user.expoPushTokens || []) jobs.push({ channel: "expo", send: () => sendExpoToken(device.token, payload) });
   if (configureWebPush()) {
-    for (const sub of user.webPushSubscriptions || []) jobs.push(async () => {
-      try { await webPush.sendNotification(sub.toObject ? sub.toObject() : sub, JSON.stringify(payload)); return true; }
-      catch (error) {
-        if (error.statusCode === 404 || error.statusCode === 410) await User.updateOne({ firebaseUid: userId }, { $pull: { webPushSubscriptions: { endpoint: sub.endpoint } } });
-        throw error;
-      }
-    });
+    for (const sub of user.webPushSubscriptions || []) jobs.push({ channel: "web", send: async () => {
+        try { await webPush.sendNotification(sub.toObject ? sub.toObject() : sub, JSON.stringify(payload)); return true; }
+        catch (error) {
+          if (error.statusCode === 404 || error.statusCode === 410) await User.updateOne({ firebaseUid: userId }, { $pull: { webPushSubscriptions: { endpoint: sub.endpoint } } });
+          throw error;
+        }
+      } });
   }
-  const results = await Promise.allSettled(jobs.map((job) => job()));
-  const sent = results.filter((result) => result.status === "fulfilled" && result.value).length;
-  results.forEach((result) => { if (result.status === "rejected") console.error("Push delivery failed:", { name: result.reason?.name, statusCode: result.reason?.statusCode }); });
-  return { sent, total: jobs.length };
+  const results = await Promise.allSettled(jobs.map((job) => job.send()));
+  const delivered = results.map((result) => result.status === "fulfilled" && result.value);
+  const sent = delivered.filter(Boolean).length;
+  results.forEach((result, index) => {
+    if (result.status === "rejected") console.error("Push delivery failed:", { channel: jobs[index].channel, name: result.reason?.name, statusCode: result.reason?.statusCode });
+  });
+  const channelCount = (channel, isDelivered) => jobs.reduce((count, job, index) => count + Number(job.channel === channel && (!isDelivered || delivered[index])), 0);
+  return {
+    sent,
+    total: jobs.length,
+    expoTargets: channelCount("expo", false),
+    webTargets: channelCount("web", false),
+    expoSent: channelCount("expo", true),
+    webSent: channelCount("web", true),
+  };
 }
 
 module.exports = { sendToUser, configureWebPush };

@@ -1,0 +1,108 @@
+.header-area {
+  position: relative;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  min-height: 68px;
+  padding: 0 clamp(18px, 4vw, 48px);
+  border-bottom: 1px solid var(--box-border);
+  background: color-mix(in srgb, var(--main-bg) 92%, transparent);
+}
+.brand-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  width: fit-content;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--main-text);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  cursor: pointer;
+}
+.brand-mark {
+  display: grid;
+  width: 27px;
+  height: 27px;
+  place-items: center;
+  border-radius: 9px;
+  background: var(--accent);
+  color: #ffffff;
+  font-size: 14px;
+}
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.header-nav-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--sub-text);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease;
+}
+.header-nav-item:hover,
+.header-nav-item.active {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+.header-user {
+  display: flex;
+  align-items: center;
+  justify-self: end;
+  gap: 9px;
+}
+.header-avatar {
+  display: grid;
+  width: 31px;
+  height: 31px;
+  place-items: center;
+  border-radius: 50%;
+  background: #E6F0FA;
+  color: #245B95;
+  font-size: 12px;
+  font-weight: 800;
+}
+.header-user-name {
+  max-width: 110px;
+  overflow: hidden;
+  color: var(--main-text);
+  font-size: 11px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.hamburger-button {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid var(--box-border);
+  border-radius: 9px;
+  background: var(--box-bg);
+  color: var(--main-text);
+  font-size: 17px;
+  cursor: pointer;
+}
+
+
+html.dark .header-avatar {
+  background: #1E3550;
+  color: #2B6CB0;
+}

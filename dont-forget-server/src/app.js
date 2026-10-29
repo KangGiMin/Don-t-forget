@@ -6,6 +6,7 @@ const journalRoutes = require("./features/journals/journalRoutes");
 const routineRoutes = require("./features/routines/routineRoutes");
 const leaderboardRoutes = require("./features/leaderboard/leaderboardRoutes");
 const notificationRoutes = require("./features/notifications/notificationRoutes");
+const socialAuthRoutes = require("./features/auth/socialAuthRoutes");
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use("/api/journals", journalRoutes);
 app.use("/api/routines", routineRoutes);
 app.use("/api/leaderboard", leaderboardRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/auth/social", socialAuthRoutes);
 
 app.get("/", (_req, res) => {
   res.send("Node(백엔드) 서버가 오픈되었습니다!");

@@ -58,8 +58,7 @@ function SignupPage() {
     <div className="register-container">
       <div className="register-box">
         <div className="page-brand" aria-label="Don't Forget">
-          <span className="page-brand-mark" aria-hidden="true">✓</span>
-          <span>don't forget</span>
+          <span>Don't forget</span>
         </div>
         <h1 className="register-title">{t.signupTitle}</h1>
         <p className="auth-intro">{t.appSubtitle}</p>

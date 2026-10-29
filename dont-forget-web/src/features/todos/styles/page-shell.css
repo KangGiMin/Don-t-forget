@@ -1,0 +1,46 @@
+.main-page {
+  --main-bg: #f5f5f5;
+  --main-text: #202124;
+  --sub-text: #70757a;
+  --box-bg: #ffffff;
+  --box-border: #dadce0;
+  --input-bg: #f8f9fa;
+  --accent: #2B6CB0;
+  --accent-strong: #245B95;
+  --accent-hover: #245B95;
+  --accent-soft: #E6F0FA;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--main-bg);
+  color: var(--main-text);
+  font-family:
+    "DM Sans",
+    "Noto Sans KR",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  font-size: 14px;
+  text-align: left;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
+}
+
+html.dark body {
+  background: #111111;
+}
+html.dark .main-page {
+  --main-bg: #111111;
+  --main-text: #f5f5f5;
+  --sub-text: #a7a7a7;
+  --box-bg: #202020;
+  --box-border: #303030;
+  --input-bg: #181818;
+  --accent: #2B6CB0;
+  --accent-strong: #2B6CB0;
+  --accent-hover: #245B95;
+  --accent-soft: #1E3550;
+}

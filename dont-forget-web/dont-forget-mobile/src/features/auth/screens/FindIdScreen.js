@@ -1,3 +1,4 @@
+import { useReadableStyles } from "../../../shared/layout/useMobileLayout";
 import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { ActionButton, FormField, LinkButton } from "../../../shared/components/FormControls";
@@ -6,6 +7,7 @@ import AuthLayout from "../components/AuthLayout";
 import { requestIdLookup } from "../api/accountApi";
 
 export default function FindIdScreen({ navigation }) {
+  const styles = useReadableStyles(baseStyles);
   const [name, setName] = useState(""); const [message, setMessage] = useState(""); const [error, setError] = useState(""); const [loading, setLoading] = useState(false);
   const { colors } = useTheme();
   const handleLookup = async () => {
@@ -26,4 +28,4 @@ export default function FindIdScreen({ navigation }) {
     </View>
   </AuthLayout>;
 }
-const styles = StyleSheet.create({ form: { width: "100%" }, error: { marginBottom: 8, textAlign: "center" }, message: { lineHeight: 22, marginBottom: 12, textAlign: "center" } });
+const baseStyles = StyleSheet.create({ form: { width: "100%" }, error: { marginBottom: 8, textAlign: "center" }, message: { lineHeight: 22, marginBottom: 12, textAlign: "center" } });

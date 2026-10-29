@@ -1,41 +1,15 @@
 const mongoose = require("mongoose");
+const { parseReminderOffsets, buildReminderStates, resolveDeadline } = require("./services/reminderSchedule");
+const { awardCompletion } = require("./services/awardCompletion");
 const Todo = require("./Todo");
 const User = require("../users/User");
-const CompletionEvent = require("../users/CompletionEvent");
-const TierDailyCounter = require("../users/TierDailyCounter");
-const { validTimeZone, zonedDateTimeToUtc, formatDateInZone } = require("../../shared/dateTime");
-
-function parseReminderOffsets(value) {
-  if (value === undefined) return [];
-  if (!Array.isArray(value) || value.length > 10) throw new Error("알림은 최대 10개까지 설정할 수 있습니다.");
-  const offsets = [...new Set(value.map(Number))].sort((a, b) => b - a);
-  if (offsets.some((minutes) => !Number.isInteger(minutes) || minutes < 1 || minutes > 43200)) {
-    throw new Error("알림 시간은 1분에서 30일 사이로 설정해 주세요.");
-  }
-  return offsets;
-}
-
-function buildReminderStates(offsets, existing = [], reset = false) {
-  return offsets.map((offsetMinutes) => {
-    const old = reset ? null : existing.find((item) => item.offsetMinutes === offsetMinutes);
-    return { offsetMinutes, sentAt: old?.sentAt || null, claimedAt: null };
-  });
-}
-
-function resolveDeadline(dueDate, dueTime, timeZone, suppliedDueAt) {
-  if (suppliedDueAt !== undefined) {
-    const parsed = new Date(suppliedDueAt);
-    if (!Number.isFinite(parsed.getTime())) return null;
-    return parsed;
-  }
-  return zonedDateTimeToUtc(dueDate, dueTime, timeZone);
-}
+const { validTimeZone, isValidDateKey } = require("../../shared/dateTime");
 
 exports.createTodo = async (req, res) => {
   try {
     const { text, category, dueDate, dueTime = "23:59", dueAt, timeZone = "Asia/Seoul", reminders = [], priority } = req.body;
     if (typeof text !== "string" || !text.trim() || text.trim().length > 200) return res.status(400).json({ success: false, message: "할 일을 1~200자로 입력해 주세요." });
-    if (!require("../../shared/dateTime").isValidDateKey(dueDate)) return res.status(400).json({ success: false, message: "마감 날짜를 YYYY-MM-DD 형식으로 입력해 주세요." });
+    if (!isValidDateKey(dueDate)) return res.status(400).json({ success: false, message: "마감 날짜를 YYYY-MM-DD 형식으로 입력해 주세요." });
     if (typeof dueTime !== "string" || !/^([01]\d|2[0-3]):[0-5]\d$/.test(dueTime)) return res.status(400).json({ success: false, message: "마감 시각을 HH:mm 형식으로 입력해 주세요." });
     const zone = validTimeZone(timeZone);
     const deadline = resolveDeadline(dueDate, dueTime, zone, dueAt);
@@ -43,6 +17,7 @@ exports.createTodo = async (req, res) => {
     const offsets = parseReminderOffsets(reminders);
     await User.updateOne({ firebaseUid: req.auth.uid }, { $set: { timeZone: zone }, $setOnInsert: { firebaseUid: req.auth.uid } }, { upsert: true });
     const newTodo = await Todo.create({ userId: req.auth.uid, text: text.trim(), category, dueDate, dueTime, dueAt: deadline, timeZone: zone, reminders: buildReminderStates(offsets), priority });
+    if (offsets.length) console.info("Reminder scheduled:", { todoId: String(newTodo._id), dueAt: deadline.toISOString(), offsetsMinutes: offsets, timeZone: zone });
     return res.status(201).json({ success: true, todo: newTodo });
   } catch (error) {
     return res.status(400).json({ success: false, message: error.message || "할 일을 저장하지 못했습니다." });
@@ -63,24 +38,6 @@ exports.getTodos = async (req, res) => {
   } catch (_) { return res.status(500).json({ success: false, message: "할 일을 불러오지 못했습니다." }); }
 };
 
-async function awardCompletion(todo, userId, session) {
-  let event = await CompletionEvent.findOne({ todoId: todo._id }).session(session);
-  if (event) return;
-  const user = await User.findOne({ firebaseUid: userId }).session(session);
-  const timeZone = validTimeZone(user?.timeZone || todo.timeZone || "Asia/Seoul");
-  const dayKey = formatDateInZone(new Date(), timeZone);
-  let daily = await TierDailyCounter.findOne({ userId, dayKey }).session(session);
-  if (!daily) { daily = new TierDailyCounter({ userId, dayKey, count: 0 }); await daily.save({ session }); }
-  const tierPointsAwarded = daily.count < 3;
-  if (tierPointsAwarded) { daily.count += 1; await daily.save({ session }); }
-  await CompletionEvent.create([{ userId, todoId: todo._id, completedAt: todo.completedAt || new Date(), dayKey, tierPointsAwarded }], { session });
-  await User.findOneAndUpdate(
-    { firebaseUid: userId },
-    { $setOnInsert: { firebaseUid: userId }, $inc: { lifetimeCompletedCount: 1, tierPoints: tierPointsAwarded ? 1 : 0 } },
-    { upsert: true, new: true, session, setDefaultsOnInsert: true }
-  );
-}
-
 exports.updateTodo = async (req, res) => {
   const { id } = req.params;
   const { text, completed, category, dueDate, dueTime, dueAt, timeZone, reminders, priority } = req.body;
@@ -92,7 +49,7 @@ exports.updateTodo = async (req, res) => {
   if (category !== undefined) updateData.category = category;
   if (priority !== undefined) updateData.priority = priority;
   if (dueDate !== undefined) {
-    if (!require("../../shared/dateTime").isValidDateKey(dueDate)) return res.status(400).json({ success: false, message: "마감 날짜 형식이 올바르지 않습니다." });
+    if (!isValidDateKey(dueDate)) return res.status(400).json({ success: false, message: "마감 날짜 형식이 올바르지 않습니다." });
     updateData.dueDate = dueDate;
   }
   try {

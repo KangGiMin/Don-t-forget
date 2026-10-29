@@ -1,0 +1,15 @@
+export const settingsModalStyles = (colors) => ({
+  settingsModal: { backgroundColor: colors.surface, padding: 19, borderRadius: 18, borderWidth: 1, borderColor: colors.border },
+  settingsHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  closeText: { color: colors.muted, fontSize: 17, padding: 5 },
+  settingsLink: { minHeight: 48, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderTopWidth: 1, borderColor: colors.border },
+  settingsLinkText: { color: colors.text, fontSize: 14, fontWeight: '600' },
+  chevron: { color: colors.muted, fontSize: 22 },
+  themeOptions: { flexDirection: 'row', gap: 7, marginBottom: 13 },
+  themeOption: { flex: 1, minHeight: 44, justifyContent: 'center', paddingVertical: 10, alignItems: 'center', backgroundColor: colors.input, borderRadius: 9, borderWidth: 1, borderColor: colors.border },
+  themeOptionActive: { backgroundColor: colors.primary, borderColor: colors.primary },
+  themeOptionText: { color: colors.muted, fontSize: 11, fontWeight: '700' },
+  themeOptionTextActive: { color: '#fff' },
+  logout: { backgroundColor: colors.dangerSoft, borderRadius: 10, minHeight: 45, justifyContent: 'center', alignItems: 'center' },
+  logoutText: { color: colors.danger, fontWeight: '800' },
+});

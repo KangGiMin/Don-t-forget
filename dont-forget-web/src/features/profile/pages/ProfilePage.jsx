@@ -19,6 +19,7 @@ export default function ProfilePage() {
   const [statusMessage, setStatusMessage] = useState(localStorage.getItem("statusMessage") || PROFILE_DEFAULTS.statusMessage);
   const [profileImg, setProfileImg] = useState(localStorage.getItem("profileImg") || PROFILE_DEFAULTS.imageUrl);
   const [completedCount, setCompletedCount] = useState(0);
+  const [tier, setTier] = useState(null);
   const userId = localStorage.getItem("userId");
 
   useEffect(() => {
@@ -35,7 +36,22 @@ export default function ProfilePage() {
         console.log(error);
       }
     };
-    if (userId && userId !== "undefined") fetchCompletedTodos();
+    const fetchUserTier = async () => {
+      try {
+        const response = await fetch(apiUrl("/leaderboard/me"), {
+          headers: await getFirebaseAuthHeaders(),
+        });
+        const result = await response.json();
+        if (result.success) setTier(result.stats?.tier || null);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (userId && userId !== "undefined") {
+      fetchCompletedTodos();
+      fetchUserTier();
+    }
   }, [userId]);
 
   const handleSave = async () => {
@@ -66,19 +82,15 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="profile-container">
-      <div className="profile-box">
-        <div className="page-brand" aria-label="Don't Forget">
-          <span className="page-brand-mark" aria-hidden="true">✓</span>
-          <span>don't forget</span>
-        </div>
-        <ProfileHeader
-          isEditing={isEditing}
-          onBack={() => navigate(-1)}
-          onStartEdit={() => setIsEditing(true)}
-          onSave={handleSave}
-          translations={t}
-        />
+    <main className="profile-container">
+      <ProfileHeader
+        isEditing={isEditing}
+        onBack={() => navigate(-1)}
+        onStartEdit={() => setIsEditing(true)}
+        onSave={handleSave}
+        translations={t}
+      />
+      <section className="profile-box">
         <ProfileImageEditor
           image={profileImg}
           isEditing={isEditing}
@@ -94,8 +106,12 @@ export default function ProfilePage() {
           onStatusChange={setStatusMessage}
           translations={t}
         />
-        <ProfileStats completedCount={completedCount} translations={t} />
-      </div>
-    </div>
+        <ProfileStats completedCount={completedCount} tier={tier} translations={t} />
+      </section>
+    </main>
   );
 }
+
+
+
+

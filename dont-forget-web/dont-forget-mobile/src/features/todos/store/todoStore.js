@@ -3,8 +3,8 @@ import { createTodoAPI, deleteTodoAPI, getTodosAPI, updateTodoAPI } from "../api
 import { formatLocalDate } from "../../../shared/utils/date";
 import { getApiErrorMessage } from "../../../services/api/client";
 
-export const TODO_CATEGORIES = ["근무", "운동", "예약", "공부", "약속", "기타"];
-export const TODO_CATEGORY_EMOJIS = { 근무: "💼", 운동: "🏃", 예약: "📅", 공부: "📚", 약속: "🤝", 기타: "✨" };
+export const TODO_CATEGORIES = ["근무", "운동", "예약", "공부", "약속", "학교생활", "개발/프로젝트", "집안일", "쇼핑", "숙제/과제", "친목/모임", "기타"];
+export const TODO_CATEGORY_EMOJIS = { 근무: "💼", 운동: "🏃", 예약: "📅", 공부: "📚", 약속: "🤝", 학교생활: "🏫", "개발/프로젝트": "🧑‍💻", 집안일: "🏠", 쇼핑: "🛒", "숙제/과제": "📖", "친목/모임": "👥", 기타: "✨" };
 
 const useTodoStore = create((set, get) => ({
   todos: [],
@@ -88,3 +88,4 @@ const useTodoStore = create((set, get) => ({
 }));
 
 export default useTodoStore;
+

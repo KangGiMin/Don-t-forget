@@ -22,7 +22,7 @@ exports.upsertJournal = async (req, res) => {
     const journal = await Journal.findOneAndUpdate(
       { userId: req.auth.uid, date },
       { $set: { title: title.trim(), content: content.trim() } },
-      { upsert: true, new: true, runValidators: true, setDefaultsOnInsert: true }
+      { upsert: true, returnDocument: "after", runValidators: true, setDefaultsOnInsert: true }
     );
     return res.json({ success: true, journal });
   } catch (_) { return res.status(400).json({ success: false, message: "일기를 저장하지 못했습니다." }); }

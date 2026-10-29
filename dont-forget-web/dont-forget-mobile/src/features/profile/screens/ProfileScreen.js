@@ -1,16 +1,18 @@
+import { useMobileLayout, useReadableStyles } from "../../../shared/layout/useMobileLayout";
 import React, { useEffect, useState } from "react";
 import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { updateProfile } from "firebase/auth";
 import { auth } from "../../../services/firebase/firebase";
-import { ActionButton, FormField, LinkButton } from "../../../shared/components/FormControls";
-import { apiGet } from "../../../services/api/client";
+import { ActionButton, EditActionButton, FormField, LinkButton } from "../../../shared/components/FormControls";
+import { apiGet, getApiErrorMessage } from "../../../services/api/client";
 import { getProfile, saveProfile } from "../api/profileApi";
 import { useTheme } from "../../../shared/theme/ThemeContext";
 
 export default function ProfileScreen({ navigation }) {
   const { colors } = useTheme();
-  const styles = makeStyles(colors);
+  const layout = useMobileLayout();
+  const styles = useReadableStyles(makeStyles, colors);
   const user = auth.currentUser;
   const [name, setName] = useState(user?.displayName || "");
   const [statusMessage, setStatusMessage] = useState("");
@@ -32,6 +34,7 @@ export default function ProfileScreen({ navigation }) {
         setStatusMessage(profile.statusMessage || "");
         setProfileImg(profile.profileImg || "");
       }
+      if (profileResult.status === "rejected") setError(getApiErrorMessage(profileResult.reason));
       if (todosResult.status === "fulfilled" && Array.isArray(todosResult.value.data?.todos)) {
         setCompletedCount(todosResult.value.data.todos.filter((todo) => todo.completed).length);
       }
@@ -86,7 +89,7 @@ export default function ProfileScreen({ navigation }) {
 
   return (
     <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === "ios" ? "padding" : undefined}>
-      <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
+      <ScrollView contentContainerStyle={[styles.container, layout.pageContent]} keyboardShouldPersistTaps="handled">
         <View style={styles.form}>
           <Text style={styles.title}>내 프로필</Text>
           {profileImg
@@ -109,7 +112,7 @@ export default function ProfileScreen({ navigation }) {
                   <LinkButton title="수정 취소" onPress={() => { setEditing(false); setError(""); }} />
                 </>
               ) : (
-                <ActionButton title="프로필 수정" onPress={() => { setNotice(""); setEditing(true); }} />
+                <EditActionButton title="프로필 수정" onPress={() => { setNotice(""); setEditing(true); }} />
               )}
             </>
           )}

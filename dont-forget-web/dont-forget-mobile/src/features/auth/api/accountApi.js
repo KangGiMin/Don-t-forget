@@ -1,8 +1,6 @@
-import axios from "axios";
 import { createUserWithEmailAndPassword, sendPasswordResetEmail, updateProfile } from "firebase/auth";
 import { auth } from "../../../services/firebase/firebase";
-import { apiPut } from "../../../services/api/client";
-import { API_URL } from "../../../services/api/config";
+import { apiClient, apiPut } from "../../../services/api/client";
 
 export async function registerAccount({ email, password, name }) {
   const credential = await createUserWithEmailAndPassword(auth, email.trim(), password);
@@ -20,7 +18,7 @@ export function requestPasswordReset(email) {
 }
 
 export async function requestIdLookup(name) {
-  const { data } = await axios.post(API_URL + "/find-id", { name: name.trim() });
+  const { data } = await apiClient.post("/find-id", { name: name.trim() });
   return data;
 }
 

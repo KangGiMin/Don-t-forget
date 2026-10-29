@@ -18,8 +18,30 @@ export async function registerBrowserPush() {
   const keyResponse = await fetch(apiUrl("/notifications/vapid-public-key"));
   const keyResult = await keyResponse.json();
   if (!keyResult.publicKey) return { success: false, message: "서버 Web Push 키 설정이 필요합니다." };
-  const registration = await navigator.serviceWorker.register("/service-worker.js");
-  const subscription = await registration.pushManager.getSubscription() || await registration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: decodeVapidKey(keyResult.publicKey) });
+  await navigator.serviceWorker.register("/service-worker.js");
+  const registration = await navigator.serviceWorker.ready;
+  const applicationServerKey = decodeVapidKey(keyResult.publicKey);
+  let subscription = await registration.pushManager.getSubscription();
+
+  if (subscription) {
+    const currentKey = subscription.options?.applicationServerKey;
+    const currentKeyBytes = currentKey ? new Uint8Array(currentKey) : null;
+    const sameKey = currentKeyBytes
+      && currentKeyBytes.length === applicationServerKey.length
+      && currentKeyBytes.every((byte, index) => byte === applicationServerKey[index]);
+
+    if (!sameKey) {
+      await subscription.unsubscribe();
+      subscription = null;
+    }
+  }
+
+  if (!subscription) {
+    subscription = await registration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey,
+    });
+  }
   const response = await fetch(apiUrl("/notifications/web-subscription"), {
     method: "POST",
     headers: await getFirebaseAuthHeaders({ "Content-Type": "application/json" }),
@@ -41,3 +63,4 @@ export const sendNotification = (title, body) => {
     navigator.serviceWorker?.ready.then((registration) => registration.showNotification(title, { body, icon: "/favicon.png" })).catch(() => new Notification(title, { body, icon: "/favicon.png" }));
   }
 };
+

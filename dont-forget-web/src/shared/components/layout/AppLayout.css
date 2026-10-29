@@ -1,0 +1,157 @@
+.app-layout {
+  --main-bg: var(--bg, #f5f7fa);
+  --main-text: var(--text-h, #202b38);
+  --sub-text: var(--text, #667085);
+  --box-bg: #ffffff;
+  --box-border: var(--border, #e7eaf0);
+  --input-bg: var(--bg, #f5f7fa);
+  --accent-strong: var(--accent, #2b6cb0);
+  --accent-soft: var(--accent-bg, #e6f0fa);
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  flex-direction: column;
+  background: var(--main-bg);
+  color: var(--main-text);
+}
+
+html.dark .app-layout {
+  --box-bg: #202020;
+  --input-bg: #181818;
+  --accent-soft: #1e3550;
+}
+
+.app-layout-header {
+  position: sticky;
+  z-index: 20;
+  top: 0;
+  display: flex;
+  min-height: 64px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px clamp(16px, 4vw, 48px);
+  border-bottom: 1px solid var(--box-border, #e7eaf0);
+  background: var(--main-bg, #f5f7fa);
+  color: var(--main-text, #202b38);
+}
+
+.app-layout-brand,
+.app-layout-account,
+.app-layout-user,
+.app-layout-menu-button {
+  display: inline-flex;
+  align-items: center;
+}
+
+.app-layout-brand {
+  gap: 9px;
+  color: inherit;
+  font-size: 17px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.app-layout-brand > span:first-child {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border-radius: 9px;
+  background: var(--accent, #2b6cb0);
+  color: #fff;
+}
+
+.app-layout-account {
+  gap: 18px;
+}
+
+.app-layout-user {
+  gap: 8px;
+  color: var(--sub-text, #667085);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.app-layout-avatar {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent-soft, #e6f0fa);
+  color: var(--accent-strong, #245b95);
+  font-weight: 800;
+}
+
+.app-layout-menu-button {
+  min-height: 38px;
+  gap: 8px;
+  padding: 0 12px;
+  border: 1px solid var(--box-border, #d9dee7);
+  border-radius: 10px;
+  background: var(--box-bg, #fff);
+  color: var(--main-text, #202b38);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.app-layout-menu-button:hover {
+  border-color: var(--accent, #2b6cb0);
+}
+
+@media (max-width: 560px) {
+  .app-layout {
+  --main-bg: var(--bg, #f5f7fa);
+  --main-text: var(--text-h, #202b38);
+  --sub-text: var(--text, #667085);
+  --box-bg: #ffffff;
+  --box-border: var(--border, #e7eaf0);
+  --input-bg: var(--bg, #f5f7fa);
+  --accent-strong: var(--accent, #2b6cb0);
+  --accent-soft: var(--accent-bg, #e6f0fa);
+  min-height: 100vh;
+  background: var(--main-bg);
+  color: var(--main-text);
+}
+
+html.dark .app-layout {
+  --box-bg: #202020;
+  --input-bg: #181818;
+  --accent-soft: #1e3550;
+}
+
+.app-layout-header {
+    min-height: 56px;
+    padding: 8px 14px;
+  }
+
+  .app-layout > .feature-page {
+    min-height: calc(100dvh - 56px);
+  }
+
+  .app-layout-user > span:last-child {
+    display: none;
+  }
+
+  .app-layout-account {
+    gap: 10px;
+  }
+}
+
+.app-layout > .feature-page {
+  min-height: calc(100vh - 64px);
+  min-height: calc(100dvh - 64px);
+  flex: 1 0 auto;
+}
+
+@media (max-width: 560px) {
+  .app-layout > .feature-page {
+    min-height: calc(100vh - 56px);
+    min-height: calc(100dvh - 56px);
+  }
+}

@@ -1,0 +1,44 @@
+.dashboard-board {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(245px, 280px);
+  align-items: start;
+  gap: 20px;
+}
+.task-panel,
+.calendar-card {
+  min-width: 0;
+  padding: 17px;
+  border: 1px solid var(--box-border);
+  border-radius: 12px;
+  background: var(--box-bg);
+}
+.task-panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 14px;
+}
+.task-panel-heading .panel-eyebrow {
+  margin-bottom: 4px;
+}
+.task-panel-heading h2,
+.calendar-card-heading h2 {
+  margin: 0;
+  color: var(--main-text);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+.task-count {
+  display: grid;
+  min-width: 30px;
+  height: 30px;
+  place-items: center;
+  padding: 0 7px;
+  border-radius: 50px;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  font-size: 10px;
+  font-weight: 800;
+}

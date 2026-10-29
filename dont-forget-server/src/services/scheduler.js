@@ -17,14 +17,35 @@ async function processReminderJobs(now = new Date()) {
       const claimed = await Todo.findOneAndUpdate(
         { _id: todo._id, completed: false, dueAt: { $gt: now }, reminders: { $elemMatch: { offsetMinutes: reminder.offsetMinutes, sentAt: null, $or: [{ claimedAt: null }, { claimedAt: { $lt: staleClaim } }] } } },
         { $set: { "reminders.$.claimedAt": now } },
-        { new: true }
+        { returnDocument: "after" }
       );
       if (!claimed) continue;
       try {
+        console.info("Reminder push dispatching:", { todoId: String(todo._id), offsetMinutes: reminder.offsetMinutes, dueAt: todo.dueAt.toISOString() });
         const result = await sendToUser(todo.userId, { title: "할 일 마감이 가까워요", body: `${todo.text} · ${todo.dueDate} ${todo.dueTime}`, data: { todoId: String(todo._id), dueDate: todo.dueDate, dueTime: todo.dueTime, route: "todo" } });
-        if (result.sent > 0) await Todo.updateOne({ _id: todo._id, "reminders.offsetMinutes": reminder.offsetMinutes }, { $set: { "reminders.$.sentAt": now, "reminders.$.claimedAt": null } });
-        else await Todo.updateOne({ _id: todo._id, "reminders.offsetMinutes": reminder.offsetMinutes }, { $set: { "reminders.$.claimedAt": null } });
-      } catch (_) {
+        if (result.sent > 0) {
+          console.info("Reminder push delivered:", {
+            todoId: String(todo._id),
+            sent: result.sent,
+            targets: result.total,
+            webSent: result.webSent,
+            webTargets: result.webTargets,
+            expoSent: result.expoSent,
+            expoTargets: result.expoTargets,
+          });
+          await Todo.updateOne({ _id: todo._id, "reminders.offsetMinutes": reminder.offsetMinutes }, { $set: { "reminders.$.sentAt": now, "reminders.$.claimedAt": null } });
+        }
+        else {
+          console.warn("Reminder push was not delivered:", {
+            todoId: String(todo._id),
+            targets: result.total,
+            webTargets: result.webTargets,
+            expoTargets: result.expoTargets,
+          });
+          await Todo.updateOne({ _id: todo._id, "reminders.offsetMinutes": reminder.offsetMinutes }, { $set: { "reminders.$.claimedAt": null } });
+        }
+      } catch (error) {
+        console.error("Reminder scheduling failed:", { todoId: String(todo._id), name: error?.name, statusCode: error?.statusCode });
         await Todo.updateOne({ _id: todo._id, "reminders.offsetMinutes": reminder.offsetMinutes }, { $set: { "reminders.$.claimedAt": null } });
       }
     }
@@ -62,6 +83,7 @@ async function runScheduledWork() {
 
 function startSchedulers() {
   if (timer) return;
+  console.info("Reminder scheduler started (30-second interval).");
   runScheduledWork();
   timer = setInterval(runScheduledWork, 30000);
   timer.unref?.();

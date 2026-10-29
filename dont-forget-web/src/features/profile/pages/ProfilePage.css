@@ -1,1 +1,118 @@
 @import "../../../shared/styles/daylight-pages.css";
+
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0;
+  padding: 32px 18px 60px;
+}
+
+.profile-container > .profile-header {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  width: min(100%, 476px);
+  margin: 0 auto 22px;
+}
+
+.profile-container > .profile-box {
+  width: min(100%, 476px);
+  padding: 27px;
+}
+
+.profile-header .daylight-page-heading {
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.profile-header .daylight-page-heading p,
+.profile-header .daylight-page-heading h1,
+.profile-header .edit-btn,
+.profile-header .save-btn {
+  white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+  .profile-container {
+    padding: 18px 12px 40px;
+  }
+
+  .profile-container > .profile-box {
+    padding: 24px 19px;
+  }
+}
+
+@media (max-width: 380px) {
+  .profile-container > .profile-header {
+    gap: 8px;
+  }
+
+  .profile-header .edit-btn,
+  .profile-header .save-btn {
+    padding-inline: 8px;
+    font-size: 9px;
+  }
+}
+
+.stat-summary-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.profile-tier-tag {
+  --profile-tier-color: #9a6a3a;
+  padding: 5px 10px;
+  margin-top: 5px;
+  border: 1px solid color-mix(in srgb, var(--profile-tier-color) 40%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--profile-tier-color) 14%, var(--day-input));
+  color: var(--profile-tier-color);
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.profile-tier-tag--silver { --profile-tier-color: #73808d; }
+.profile-tier-tag--gold { --profile-tier-color: #9a7412; }
+.profile-tier-tag--platinum { --profile-tier-color: #3f6f99; }
+.profile-tier-tag--diamond { --profile-tier-color: #087b91; }
+.profile-tier-tag--emerald { --profile-tier-color: #167653; }
+.profile-tier-tag--master { --profile-tier-color: #7045a8; }
+.profile-tier-tag--grand-master { --profile-tier-color: #a23855; }
+.profile-tier-tag--challenger { --profile-tier-color: #b13029; }
+
+.stat-summary-row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.stat-summary-row .stat-number {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  line-height: 1;
+}
+
+.stat-summary-divider {
+  flex: 0 0 1px;
+  width: 1px;
+  height: 24px;
+  background: var(--day-border);
+}
+
+.profile-tier-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  box-sizing: border-box;
+}

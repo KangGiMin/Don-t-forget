@@ -12,11 +12,11 @@ import { formatLocalDate, getTodayString } from "@/shared/utils/date";
 import Header from "@/shared/components/layout/Header";
 import Sidebar from "@/shared/components/layout/Sidebar";
 import useTodoStore from "../store/todoStore";
-import TodoCalendarPanel from "../components/TodoCalendarPanel";
-import TodoComposer from "../components/TodoComposer";
-import TodoFilterControls from "../components/TodoFilterControls";
-import TodoList from "../components/TodoList";
-import TodoProgressPanel from "../components/TodoProgressPanel";
+import TodoCalendarPanel from "../components/calendar/TodoCalendarPanel";
+import TodoComposer from "../components/composer/TodoComposer";
+import TodoFilterControls from "../components/filters/TodoFilterControls";
+import TodoList from "../components/list/TodoList";
+import TodoProgressPanel from "../components/progress/TodoProgressPanel";
 import "./MainPage.css";
 import { ROUTES } from "@/shared/constants/app";
 
@@ -211,6 +211,10 @@ function MainPage() {
 
           <TodoComposer
             dueDate={dueDate}
+            dueTime={dueTime}
+            onDueTimeChange={setDueTime}
+            reminders={reminders}
+            onRemindersChange={setReminders}
             category={category}
             onCategoryChange={setCategory}
             text={newText}

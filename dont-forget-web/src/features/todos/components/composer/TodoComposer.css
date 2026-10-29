@@ -1,0 +1,145 @@
+.todo-form {
+  display: grid;
+  grid-template-columns: minmax(110px, auto) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 20px;
+  padding: 9px;
+  border: 1px solid var(--box-border);
+  border-radius: 10px;
+  background: var(--box-bg);
+  box-shadow: 0 3px 12px rgba(63, 44, 27, 0.035);
+}
+.form-top-row {
+  display: contents;
+}
+.selected-date-text {
+  display: none;
+}
+.select-box {
+  grid-column: 1;
+  grid-row: 1;
+  width: 100%;
+  min-height: 39px;
+  padding: 0 10px;
+  border: 1px solid var(--box-border);
+  border-radius: 7px;
+  background: var(--input-bg);
+  color: var(--main-text);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.form-input-row {
+  display: contents;
+}
+.text-input {
+  grid-column: 2;
+  grid-row: 1;
+  width: 100%;
+  min-width: 0;
+  min-height: 39px;
+  padding: 0 11px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  outline: none;
+  background: var(--input-bg);
+  color: var(--main-text);
+  font: inherit;
+  font-size: 12px;
+}
+.text-input:focus,
+.search-input:focus,
+.edit-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent);
+}
+.submit-btn {
+  grid-column: 3;
+  grid-row: 1;
+  min-height: 39px;
+  padding: 0 15px;
+  border: 0;
+  border-radius: 7px;
+  background: var(--accent);
+  color: white;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background-color 0.18s ease;
+}
+.submit-btn:hover {
+  background: var(--accent-hover);
+}
+
+
+.deadline-options {
+  display: grid;
+  grid-template-columns: minmax(120px, 0.65fr) minmax(220px, 1.35fr);
+  gap: 14px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--box-border);
+}
+.deadline-field,
+.reminder-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  color: var(--sub-text);
+  font-size: 11px;
+  font-weight: 700;
+}
+.deadline-field input,
+.reminder-controls input,
+.reminder-controls select {
+  min-height: 35px;
+  padding: 6px 9px;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  background: var(--input-bg);
+  color: var(--main-text);
+  font: inherit;
+}
+.reminder-controls {
+  display: flex;
+  gap: 6px;
+}
+.reminder-controls input {
+  width: 75px;
+}
+.reminder-controls select {
+  min-width: 72px;
+}
+.reminder-controls button,
+.reminder-chips button {
+  padding: 6px 9px;
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  font: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.reminder-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.reminder-chips button {
+  border-radius: 15px;
+}
+.reminder-chips span {
+  margin-left: 3px;
+}
+@media (max-width: 560px) {
+  .deadline-options {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Naver-inspired dark surfaces for the progress and account controls. */

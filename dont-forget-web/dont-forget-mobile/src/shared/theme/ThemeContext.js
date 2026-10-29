@@ -4,8 +4,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ThemeContext = createContext(null);
 const THEME_STORAGE_KEY = "dont-forget-theme";
-const lightColors = { background: "#f6f7f3", surface: "#ffffff", surfaceAlt: "#eef2ed", text: "#26352d", muted: "#78847c", primary: "#2f6b4f", primaryStrong: "#24543e", primarySoft: "#e8f1eb", border: "#dfe7df", input: "#f7f9f6", danger: "#bd6259", dangerSoft: "#f9ece9", success: "#2f6b4f", shadow: "#21392b" };
-const darkColors = { background: "#211d1a", surface: "#2c2722", surfaceAlt: "#352f29", text: "#f4eee7", muted: "#b6a99d", primary: "#2f6b4f", primaryStrong: "#9ecfab", primarySoft: "#293a30", border: "#423a32", input: "#25211d", danger: "#e49a91", dangerSoft: "#442e2a", success: "#9ecfab", shadow: "#000000" };
+const lightColors = { background: "#f5f5f5", surface: "#ffffff", surfaceAlt: "#f0f0f0", text: "#202124", muted: "#70757a", primary: "#2B6CB0", primaryStrong: "#245B95", primarySoft: "#E6F0FA", border: "#dadce0", input: "#f8f9fa", danger: "#bd6259", dangerSoft: "#f9ece9", success: "#2B6CB0", shadow: "#202124" };
+const darkColors = { background: "#111111", surface: "#202020", surfaceAlt: "#292929", text: "#f5f5f5", muted: "#a7a7a7", primary: "#2B6CB0", primaryStrong: "#2B6CB0", primarySoft: "#1E3550", border: "#303030", input: "#181818", danger: "#e49a91", dangerSoft: "#442e2a", success: "#2B6CB0", shadow: "#000000" };
 
 export function ThemeProvider({ children }) {
   const systemScheme = useColorScheme();
@@ -26,7 +26,7 @@ export function ThemeProvider({ children }) {
     try { await AsyncStorage.setItem(THEME_STORAGE_KEY, mode); } catch (_) { /* Keep the in-memory preference for this session. */ }
   };
   const resolvedTheme = themeMode === "system" ? (systemScheme === "dark" ? "dark" : "light") : themeMode;
-  useEffect(() => { Appearance.setColorScheme(themeMode === "system" ? null : themeMode); }, [themeMode]);
+  useEffect(() => { Appearance.setColorScheme(themeMode === "system" ? "auto" : themeMode); }, [themeMode]);
   const value = useMemo(() => ({ themeMode, setThemeMode, resolvedTheme, colors: resolvedTheme === "dark" ? darkColors : lightColors, loaded }), [themeMode, resolvedTheme, loaded]);
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }

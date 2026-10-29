@@ -1,0 +1,160 @@
+@media (max-width: 900px) {
+  .main-container {
+    padding: 25px 18px 42px;
+  }
+  .content-wrapper {
+    width: min(100%, 760px);
+  }
+  .dashboard-board {
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 260px);
+    gap: 13px;
+  }
+  .task-panel {
+    padding: 13px;
+  }
+  .calendar-card {
+    padding: 12px 9px;
+  }
+  .header-area {
+    padding-inline: 18px;
+  }
+}
+@media (max-width: 680px) {
+  .header-area {
+    grid-template-columns: 1fr auto;
+    min-height: 60px;
+  }
+  .header-nav {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-content: center;
+    padding: 0 0 8px;
+  }
+  .header-nav-item {
+    min-height: 31px;
+    padding-inline: 9px;
+    font-size: 10px;
+  }
+  .header-user {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .header-user-name {
+    display: none;
+  }
+  .main-container {
+    min-height: calc(100vh - 99px);
+    min-height: calc(100dvh - 99px);
+    padding: 22px 14px 36px;
+  }
+  .welcome-section {
+    align-items: flex-start;
+  }
+  .welcome-title {
+    font-size: 21px;
+  }
+  .welcome-subtitle {
+    max-width: 35ch;
+    font-size: 10px;
+  }
+  .stats-container {
+    padding: 14px 15px 13px;
+  }
+  .stats-info {
+    font-size: 10px;
+  }
+  .stats-percent {
+    font-size: 22px;
+  }
+  .todo-form {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .select-box {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+  .text-input {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .submit-btn {
+    grid-column: 2;
+    grid-row: 2;
+    padding-inline: 12px;
+  }
+  .dashboard-board {
+    grid-template-columns: 1fr;
+  }
+  .task-panel {
+    padding: 14px;
+  }
+  .calendar-column {
+    scroll-margin-top: 10px;
+  }
+  .calendar-card {
+    padding: 15px;
+  }
+  .react-calendar__tile {
+    max-width: none !important;
+  }
+  .calendar-summary {
+    display: none;
+  }
+}
+@media (max-width: 420px) {
+  .header-area {
+    padding-inline: 12px;
+  }
+  .brand-home {
+    font-size: 12px;
+  }
+  .header-nav {
+    gap: 1px;
+  }
+  .header-nav-item {
+    gap: 5px;
+    padding-inline: 7px;
+  }
+  .main-container {
+    padding-inline: 10px;
+  }
+  .welcome-section {
+    gap: 8px;
+  }
+  .welcome-title {
+    font-size: 18px;
+  }
+  .today-btn {
+    gap: 4px;
+    padding: 8px;
+    font-size: 10px;
+  }
+  .week-strip {
+    gap: 4px;
+  }
+  .week-day {
+    padding-block: 7px;
+  }
+  .todo-item {
+    align-items: flex-start;
+  }
+  .button-group {
+    gap: 3px;
+  }
+  .edit-btn,
+  .delete-btn {
+    min-height: 25px;
+    padding-inline: 6px;
+    font-size: 8px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Deadline and multiple reminder controls */

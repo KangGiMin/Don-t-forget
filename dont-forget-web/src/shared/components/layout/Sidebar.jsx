@@ -8,6 +8,10 @@ export default function Sidebar({ isSidebarOpen, setIsSidebarOpen, handleLogout,
   const { t, lang, changeLanguage } = useLanguage();
   const extra = getFeatureText(lang);
   const navigate = useNavigate();
+  const navigateTo = (path) => {
+    setIsSidebarOpen(false);
+    navigate(path);
+  };
 
   return (
     <>
@@ -16,7 +20,7 @@ export default function Sidebar({ isSidebarOpen, setIsSidebarOpen, handleLogout,
       )}
       <div className={`sidebar ${isSidebarOpen ? "open" : ""}`}>
         <div className="sidebar-menu">
-          <div className="menu-item" onClick={() => navigate(ROUTES.profile)}>{t.menuProfile}</div>
+          <div className="menu-item" onClick={() => navigateTo(ROUTES.profile)}>{t.menuProfile}</div>
           <div className="menu-item language-menu-item">
             <span className="language-menu-title">{t.menuLang}</span>
             <select value={lang} onChange={(event) => changeLanguage(event.target.value)} className="language-select">
@@ -25,11 +29,11 @@ export default function Sidebar({ isSidebarOpen, setIsSidebarOpen, handleLogout,
               ))}
             </select>
           </div>
-          <div className="menu-item" onClick={() => navigate(ROUTES.contact)}>{t.menuContact}</div>
+          <div className="menu-item" onClick={() => navigateTo(ROUTES.contact)}>{t.menuContact}</div>
           <button type="button" className="menu-item" onClick={onEnableNotifications}>{extra.menuEnableNotifications}</button>
-          <div className="menu-item" onClick={() => navigate(ROUTES.routines)}>{extra.navRoutines}</div>
-          <div className="menu-item" onClick={() => navigate(ROUTES.journal)}>{extra.navJournal}</div>
-          <div className="menu-item" onClick={() => navigate(ROUTES.leaderboard)}>{extra.navLeaderboard}</div>
+          <div className="menu-item" onClick={() => navigateTo(ROUTES.routines)}>{extra.navRoutines}</div>
+          <div className="menu-item" onClick={() => navigateTo(ROUTES.journal)}>{extra.navJournal}</div>
+          <div className="menu-item" onClick={() => navigateTo(ROUTES.leaderboard)}>{extra.navLeaderboard}</div>
           <div className="menu-item theme-menu-item">
             <span>{t.menuTheme}</span>
             <ThemeSelector />

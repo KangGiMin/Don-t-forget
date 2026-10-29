@@ -45,10 +45,6 @@ export default function ContactAdminPage() {
 
   return (
     <div className="contact-page">
-      <div className="page-brand" aria-label="Don't Forget">
-          <span className="page-brand-mark" aria-hidden="true">✓</span>
-          <span>don't forget</span>
-        </div>
       <ContactPageHeader
         backLabel={t.btnBack || "⬅ 뒤로"}
         title={t.contactTitle}

@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "expo": "^58.0.20"
+  },
+  "devDependencies": {
+    "vite-plugin-react-click-to-component": "^4.2.3"
+  }
+}

@@ -1,0 +1,121 @@
+.sidebar {
+  position: fixed;
+  z-index: 1001;
+  top: 0;
+  right: -370px;
+  display: flex;
+  flex-direction: column;
+  width: min(340px, calc(100vw - 34px));
+  height: 100dvh;
+  padding: 20px;
+  border-left: 1px solid var(--box-border);
+  border-radius: 18px 0 0 18px;
+  background: var(--box-bg);
+  color: var(--main-text);
+  box-shadow: -15px 0 50px rgba(53, 39, 26, 0.12);
+  transition: right 0.24s ease;
+}
+.sidebar.open {
+  right: 0;
+}
+html.dark .sidebar {
+  background: var(--box-bg);
+  color: var(--main-text);
+  box-shadow: -15px 0 50px rgba(0, 0, 0, 0.3);
+}
+.sidebar-menu {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 7px;
+  margin-top: 16px;
+}
+.menu-item {
+  display: flex;
+  align-items: center;
+  min-height: 43px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.18s ease;
+}
+.menu-item:hover {
+  background: var(--input-bg);
+}
+.language-menu-item {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+}
+.language-menu-title {
+  margin-bottom: 0;
+}
+.language-select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--box-border);
+  border-radius: 7px;
+  background: var(--input-bg);
+  color: var(--main-text);
+  font: inherit;
+  font-size: 11px;
+}
+.theme-menu-item {
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+}
+.theme-menu-item span {
+  flex-shrink: 0;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.theme-menu-item > div,
+.theme-menu-item > button {
+  margin: 0;
+  transform: scale(0.9);
+  transform-origin: right center;
+}
+.menu-item.logout-btn-sidebar {
+  justify-content: center;
+  margin-top: auto;
+  background: #f30707;
+  color: #f9f3f3;
+}
+.menu-item.logout-btn-sidebar:hover {
+  background: #9d2626;
+}
+.app-version {
+  margin-top: 15px;
+  color: var(--sub-text);
+  font-size: 10px;
+  text-align: center;
+}
+.sidebar-backdrop {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  background: rgba(35, 28, 22, 0.3);
+  cursor: pointer;
+}
+.todo-filter-tabs {
+  scrollbar-color: var(--box-border) transparent;
+}
+
+
+html.dark .menu-item.logout-btn-sidebar {
+  background: #f30707;
+  color: #faf6f6;
+}
+html.dark .menu-item.logout-btn-sidebar:hover {
+  background: #9d2626;
+}
+html.dark .sidebar-backdrop {
+  background: rgba(0, 0, 0, 0.58);
+}

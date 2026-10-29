@@ -14,7 +14,7 @@ export default function Header({
     <header className="header-area">
       <button type="button" className="brand-home" onClick={onShowToday} aria-label={t.btnToday}>
         <span className="brand-mark" aria-hidden="true">✓</span>
-        <span>don't forget</span>
+        <span>Don't forget</span>
       </button>
 
       <nav className="header-nav" aria-label={t.appTitle}>

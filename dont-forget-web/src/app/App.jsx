@@ -12,6 +12,7 @@ import ContactAdminPage from "@/features/admin/pages/ContactAdminPage";
 import RoutinePage from "@/features/extras/pages/RoutinePage";
 import JournalPage from "@/features/extras/pages/JournalPage";
 import LeaderboardPage from "@/features/extras/pages/LeaderboardPage";
+import AppLayout from "@/shared/components/layout/AppLayout";
 
 export default function App() {
   useLayoutEffect(() => {
@@ -38,7 +39,7 @@ export default function App() {
 
   return (
     <LanguageProvider>
-      <BrowserRouter>
+      <BrowserRouter future={{ v7_relativeSplatPath: true }}>
         <Routes>
           <Route path="/" element={<Navigate to={ROUTES.login} replace />} />
           <Route path={ROUTES.login} element={<LoginPage />} />
@@ -46,11 +47,11 @@ export default function App() {
           <Route path={ROUTES.findId} element={<FindIdPage />} />
           <Route path={ROUTES.findPassword} element={<FindPwPage />} />
           <Route path={ROUTES.todos} element={<MainPage />} />
-          <Route path={ROUTES.profile} element={<ProfilePage />} />
-          <Route path={ROUTES.contact} element={<ContactAdminPage />} />
-          <Route path={ROUTES.routines} element={<RoutinePage />} />
-          <Route path={ROUTES.journal} element={<JournalPage />} />
-          <Route path={ROUTES.leaderboard} element={<LeaderboardPage />} />
+          <Route path={ROUTES.profile} element={<AppLayout><ProfilePage /></AppLayout>} />
+          <Route path={ROUTES.contact} element={<AppLayout><ContactAdminPage /></AppLayout>} />
+          <Route path={ROUTES.routines} element={<AppLayout><RoutinePage /></AppLayout>} />
+          <Route path={ROUTES.journal} element={<AppLayout><JournalPage /></AppLayout>} />
+          <Route path={ROUTES.leaderboard} element={<AppLayout><LeaderboardPage /></AppLayout>} />
         </Routes>
       </BrowserRouter>
     </LanguageProvider>
